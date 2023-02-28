@@ -7,11 +7,13 @@ interface ListContainerProps {
 	items: CheckListItem[];
 	onUpdate: (list: CheckListItem) => void;
 	onDelete: (list: CheckListItem) => void;
+	title: string;
 }
 export default function ListContainer({
 	items,
 	onUpdate,
 	onDelete,
+	title,
 }: ListContainerProps) {
 	function ListItemsFilteredByStaged(isStaged: boolean) {
 		return items
@@ -35,6 +37,7 @@ export default function ListContainer({
 	}
 	return (
 		<div>
+			<h1>{title}</h1>
 			<h1>
 				<b>staged</b>
 			</h1>

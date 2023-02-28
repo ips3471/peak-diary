@@ -12,31 +12,32 @@ type DB = {
 	[id: string]: CheckListItem[];
 };
 
+export const db: DB = {
+	'1': [
+		{
+			id: '1',
+			name: 'first',
+			staged: true,
+			checked: false,
+		},
+		{
+			id: '2',
+			name: 'second',
+			staged: false,
+			checked: false,
+		},
+	],
+	'2': [
+		{
+			id: '1',
+			name: 'it is the item of tab2',
+			staged: true,
+			checked: false,
+		},
+	],
+};
+
 export default function CheckList() {
-	const db: DB = {
-		'1': [
-			{
-				id: '1',
-				name: 'first',
-				staged: true,
-				checked: false,
-			},
-			{
-				id: '2',
-				name: 'second',
-				staged: false,
-				checked: false,
-			},
-		],
-		'2': [
-			{
-				id: '1',
-				name: 'it is the item of tab2',
-				staged: true,
-				checked: false,
-			},
-		],
-	};
 	const [input, setInput] = useState<string>('');
 	const [toggle, setToggle] = useState<boolean>(true);
 	const [currentTab, setCurrentTab] = useState<TabItem>();
@@ -116,6 +117,7 @@ export default function CheckList() {
 					/>
 
 					<ListContainer
+						title={currentTab.name}
 						items={items}
 						onUpdate={handleUpdate}
 						onDelete={handleDelete}
