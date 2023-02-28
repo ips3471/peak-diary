@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import Navbar from './components/navbar/Navbar';
+import { AuthProvider } from './context/AuthContext';
+
+type Page = 'home' | 'checklist' | 'diary' | 'admin';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [page, setPage] = useState<Page>('home');
+
+	return (
+		<div className='border-2 border-red-500 h-full w-full'>
+			<AuthProvider>
+				<Navbar page={page} />
+				<div className='px-side py-4'>
+					<Outlet />
+				</div>
+			</AuthProvider>
+		</div>
+	);
 }
 
 export default App;
