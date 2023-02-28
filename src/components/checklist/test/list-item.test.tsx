@@ -1,18 +1,17 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import { MemoryRouter } from 'react-router-dom';
 import CheckList from '../../../pages/CheckList';
 
 describe('CheckList', () => {
 	let input: HTMLInputElement;
 	let button: HTMLButtonElement;
-	let checkbox: HTMLFormElement;
+	let toggle: HTMLFormElement;
 	beforeEach(() => {
 		render(<CheckList />);
-		input = screen.getByRole('textbox');
-		button = screen.getByRole('button');
-		checkbox = screen.getByRole('checkbox');
+		input = screen.getByTestId('input');
+		button = screen.getByTestId('submit');
+		toggle = screen.getByTestId('toggle');
 	});
 
 	/* 
@@ -22,10 +21,10 @@ describe('CheckList', () => {
 	it('renders correctly', () => {
 		expect(input).toBeInTheDocument();
 		expect(button).toBeInTheDocument();
-		expect(checkbox).toBeInTheDocument();
+		expect(toggle).toBeInTheDocument();
 	});
 	/* 
-	it('checkbox default true', async () => {
+	it('toggle default true', async () => {
 		userEvent.type(input, 'test');
 		userEvent.click(button);
 

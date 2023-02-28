@@ -21,3 +21,8 @@ export type CheckListItem = {
 	staged: boolean;
 	checked: boolean;
 };
+
+export type TabItem = {
+	id: string;
+	name: string;
+};

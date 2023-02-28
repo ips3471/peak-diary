@@ -1,26 +1,81 @@
-import React, { ChangeEvent, useState, FormEvent } from 'react';
+import React, { ChangeEvent, useState, FormEvent, useEffect } from 'react';
 import { AiOutlineEnter } from 'react-icons/ai';
 import Toggle from 'react-toggle';
-import ListItem from '../components/checklist/list-item';
-import { CheckListItem } from '../types/interfaces/interfaces';
+import AddForm from '../components/checklist/addForm';
+import ListContainer from '../components/checklist/list';
+import StagedItem from '../components/checklist/list-item-staged';
+import UnstagedItem from '../components/checklist/list-item-unstaged';
+import { CheckListItem, TabItem } from '../types/interfaces/interfaces';
+import Tab from './CheckList-tab';
+
+type DB = {
+	[id: string]: CheckListItem[];
+};
 
 export default function CheckList() {
-	const [input, setInput] = useState<string>();
+	const db: DB = {
+		'1': [
+			{
+				id: '1',
+				name: 'first',
+				staged: true,
+				checked: false,
+			},
+			{
+				id: '2',
+				name: 'second',
+				staged: false,
+				checked: false,
+			},
+		],
+		'2': [
+			{
+				id: '1',
+				name: 'it is the item of tab2',
+				staged: true,
+				checked: false,
+			},
+		],
+	};
+	const [input, setInput] = useState<string>('');
 	const [toggle, setToggle] = useState<boolean>(true);
-	const [items, setItems] = useState<CheckListItem[]>([
-		{
-			id: '1',
-			name: 'first',
-			staged: true,
-			checked: false,
-		},
-		{
-			id: '2',
-			name: 'second',
-			staged: false,
-			checked: false,
-		},
-	]);
+	const [currentTab, setCurrentTab] = useState<TabItem>();
+	const [items, setItems] = useState<CheckListItem[]>([]);
+
+	useEffect(() => {
+		console.log('current tab changed, load router object');
+		//fetch from db (checklists/currentTab.id)
+		const id = currentTab?.id;
+		if (!id) return;
+		const promise = db[id];
+		setItems(promise);
+	}, [currentTab]);
+
+	const handleSelectTab = (tab: any) => {
+		setCurrentTab(tab);
+	};
+
+	const handleInputToggle = () => {
+		setToggle(!toggle);
+	};
+
+	const handleUpdate = (list: CheckListItem) => {
+		// db에서 업데이트 (currentTab.id, list)
+		console.log('updated', list);
+		setItems(prev =>
+			prev.map(item => {
+				if (item.id !== list.id) {
+					return item;
+				}
+				return list;
+			}),
+		);
+	};
+
+	const handleDelete = (list: CheckListItem) => {
+		// db에서 제거
+		setItems(prev => prev.filter(item => item.id !== list.id));
+	};
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const val = e.currentTarget.value;
@@ -34,7 +89,7 @@ export default function CheckList() {
 		setItems(prev => [
 			...prev,
 			{
-				id: new Date().getSeconds().toString(),
+				id: Date.now().toString(),
 				checked: false,
 				name: input,
 				staged: toggle,
@@ -44,52 +99,29 @@ export default function CheckList() {
 		setInput('');
 	};
 
-	function ListItemsFilteredByStaged(isStaged: boolean) {
-		return items
-			.filter(i => i.staged === isStaged)
-			.map(filtered => <ListItem item={filtered} key={filtered.id} />);
-	}
-
 	return (
 		<>
-			<h1>checkList</h1>
-			<div>
-				<form onSubmit={handleSubmit} className='flex'>
-					<input
-						type='text'
-						autoComplete='off'
-						value={input || ''}
-						onChange={handleInputChange}
+			<nav>
+				<Tab onSelect={handleSelectTab} />
+			</nav>
+
+			{currentTab && (
+				<main>
+					<AddForm
+						onSubmit={handleSubmit}
+						text={input}
+						onInputChange={handleInputChange}
+						toggled={toggle}
+						onToggle={handleInputToggle}
 					/>
-					<button type='submit' className='border'>
-						<AiOutlineEnter />
-					</button>
-					<Toggle
-						id='toggle-status'
-						defaultChecked={toggle}
-						onChange={() => setToggle(!toggle)}
+
+					<ListContainer
+						items={items}
+						onUpdate={handleUpdate}
+						onDelete={handleDelete}
 					/>
-					<label htmlFor='toggle-status'>활성화시 스테이지에 등록</label>
-				</form>
-			</div>
-			<div>
-				<b>active</b>
-			</div>
-			<ul>
-				<li>체크박스: 누르면 체크표시</li>
-				<li>이름: 변경시마다 업데이트</li>
-				<li>제외버튼: unstaged로</li>
-				{ListItemsFilteredByStaged(true)}
-			</ul>
-			<div>
-				<b>unstaged</b>
-				<ul>
-					<li>추가버튼: active로</li>
-					<li>이름: 변경시마다 업데이트</li>
-					<li>삭제버튼: db에서 제거</li>
-					{ListItemsFilteredByStaged(false)}
-				</ul>
-			</div>
+				</main>
+			)}
 		</>
 	);
 }

@@ -12,7 +12,7 @@ function App() {
 		<div className='border-2 border-red-500 h-full w-full'>
 			<AuthProvider>
 				<Navbar page={page} />
-				<div className='px-side py-4'>
+				<div className=''>
 					<Outlet />
 				</div>
 			</AuthProvider>
