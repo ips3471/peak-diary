@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CheckListTabItem } from '../../../types/interfaces/interfaces';
 import { db } from '../../../pages/CheckList';
 import TabItem from './tab-item';
@@ -18,9 +18,10 @@ export default function Tab({ onSelect, current }: TabProps) {
 			name: 'tab2',
 		},
 	]);
+	const pageRef = useRef<HTMLUListElement>(null);
 
-	const handleTitleChange = (tab: CheckListTabItem) => {
-		console.log('제목을 변경할 탭', tab);
+	const handleScrollToElement = (element: HTMLLIElement) => {
+		element.scrollIntoView({ behavior: 'smooth', inline: 'center' });
 	};
 
 	const handleAdd = () => {
@@ -33,14 +34,17 @@ export default function Tab({ onSelect, current }: TabProps) {
 
 	return (
 		<div className='flex border-b'>
-			<ul className=' px-2 py-4 overflow-x-scroll scrollbar-hide whitespace-nowrap'>
+			<ul
+				ref={pageRef}
+				className=' px-2 py-4 overflow-x-scroll scrollbar-hide whitespace-nowrap'
+			>
 				{tabs.map(tab => (
 					<TabItem
 						current={current}
 						onSelect={onSelect}
 						key={tab.id}
 						item={tab}
-						onTitleChange={handleTitleChange}
+						onFocus={handleScrollToElement}
 					/>
 				))}
 			</ul>
