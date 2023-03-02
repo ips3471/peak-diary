@@ -1,12 +1,11 @@
 import React, { ChangeEvent, useState, FormEvent, useEffect } from 'react';
-import { AiOutlineEnter } from 'react-icons/ai';
-import Toggle from 'react-toggle';
 import AddForm from '../components/checklist/addForm';
 import ListContainer from '../components/checklist/list';
-import StagedItem from '../components/checklist/list-item-staged';
-import UnstagedItem from '../components/checklist/list-item-unstaged';
-import { CheckListItem, TabItem } from '../types/interfaces/interfaces';
-import Tab from './CheckList-tab';
+import Tab from '../components/checklist/tab/checkList-tab';
+import {
+	CheckListItem,
+	CheckListTabItem,
+} from '../types/interfaces/interfaces';
 
 type DB = {
 	[id: string]: CheckListItem[];
@@ -40,7 +39,7 @@ export const db: DB = {
 export default function CheckList() {
 	const [input, setInput] = useState<string>('');
 	const [toggle, setToggle] = useState<boolean>(true);
-	const [currentTab, setCurrentTab] = useState<TabItem>();
+	const [currentTab, setCurrentTab] = useState<CheckListTabItem>();
 	const [items, setItems] = useState<CheckListItem[]>([]);
 
 	useEffect(() => {
@@ -52,7 +51,7 @@ export default function CheckList() {
 		setItems(promise);
 	}, [currentTab]);
 
-	const handleSelectTab = (tab: any) => {
+	const handleSelectTab = (tab: CheckListTabItem) => {
 		setCurrentTab(tab);
 	};
 
@@ -103,7 +102,7 @@ export default function CheckList() {
 	return (
 		<>
 			<nav>
-				<Tab onSelect={handleSelectTab} />
+				<Tab onSelect={handleSelectTab} current={currentTab} />
 			</nav>
 
 			{currentTab && (

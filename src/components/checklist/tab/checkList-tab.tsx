@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { TabItem } from '../types/interfaces/interfaces';
-import { db } from './CheckList';
-
+import { CheckListTabItem } from '../../../types/interfaces/interfaces';
+import { db } from '../../../pages/CheckList';
+import TabItem from './tab-item';
 interface TabProps {
-	onSelect: (tab: TabItem) => void;
+	onSelect: (tab: CheckListTabItem) => void;
+	current?: CheckListTabItem;
 }
 
-export default function Tab({ onSelect }: TabProps) {
+export default function Tab({ onSelect, current }: TabProps) {
 	const [tabs, setTabs] = useState([
 		{
 			id: '1',
@@ -17,6 +18,10 @@ export default function Tab({ onSelect }: TabProps) {
 			name: 'tab2',
 		},
 	]);
+
+	const handleTitleChange = (tab: CheckListTabItem) => {
+		console.log('제목을 변경할 탭', tab);
+	};
 
 	const handleAdd = () => {
 		const name = prompt('새로운 탭의 이름을 입력하세요');
@@ -31,13 +36,13 @@ export default function Tab({ onSelect }: TabProps) {
 	return (
 		<ul className='border px-2 py-4'>
 			{tabs.map(tab => (
-				<li
-					onClick={() => onSelect(tab)}
-					className='inline-block my-2 mx-6'
+				<TabItem
+					current={current}
+					onSelect={onSelect}
 					key={tab.id}
-				>
-					{tab.name}
-				</li>
+					item={tab}
+					onTitleChange={handleTitleChange}
+				/>
 			))}
 			<li className='inline-block my-2 mx-6 w-8 border'>
 				<button onClick={handleAdd} className='w-full'>

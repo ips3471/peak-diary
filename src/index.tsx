@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound';
 import Admin from './pages/Admin';
 import ProtectedRoute from './pages/ProtectedRoute';
 import Diary from './pages/Diary';
-import Tab from './pages/CheckList-tab';
+import Tab from './components/checklist/tab/checkList-tab';
 
 const router = createBrowserRouter([
 	{

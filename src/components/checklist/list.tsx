@@ -39,7 +39,7 @@ export default function ListContainer({
 		<div>
 			<h1>{title}</h1>
 			<h1>
-				<b>staged</b>
+				<b>staged✔</b>
 			</h1>
 			<ul>{ListItemsFilteredByStaged(true)}</ul>
 

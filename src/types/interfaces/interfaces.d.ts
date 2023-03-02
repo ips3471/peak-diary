@@ -22,7 +22,7 @@ export type CheckListItem = {
 	checked: boolean;
 };
 
-export type TabItem = {
+export type CheckListTabItem = {
 	id: string;
 	name: string;
 };
