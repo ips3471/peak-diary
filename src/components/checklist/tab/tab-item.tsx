@@ -28,14 +28,9 @@ export default function TabItem({
 	const handleUpdate = () => {
 		setFreezed(true);
 		console.log('attach a update handler');
+		//(title) => //checklist db.updte({...item, title]})
 	};
 
-	console.log(item, current);
-
-	/* 
-	탭편집을 누르면 freezed => false
-	편집모드에서 다른곳을 누르면 update & freezed => true
-	*/
 	return (
 		<li className='inline-block my-2 mx-6'>
 			<div className='flex items-center gap-2'>
@@ -43,6 +38,7 @@ export default function TabItem({
 					<input
 						ref={inputRef}
 						type='text'
+						placeholder='새로운 카테고리'
 						onChange={e => setTitle(e.currentTarget.value)}
 						disabled={freezed}
 						value={title}

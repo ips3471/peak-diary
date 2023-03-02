@@ -24,9 +24,7 @@ export default function Tab({ onSelect, current }: TabProps) {
 	};
 
 	const handleAdd = () => {
-		const name = prompt('새로운 탭의 이름을 입력하세요');
-		if (name == null) return;
-		const element = { id: Date.now().toString(), name };
+		const element = { id: Date.now().toString(), name: '' };
 		// element를 db에 추가
 		db[element.id] = [];
 		setTabs(prev => [...prev, element]);
@@ -34,21 +32,23 @@ export default function Tab({ onSelect, current }: TabProps) {
 	};
 
 	return (
-		<ul className='border px-2 py-4'>
-			{tabs.map(tab => (
-				<TabItem
-					current={current}
-					onSelect={onSelect}
-					key={tab.id}
-					item={tab}
-					onTitleChange={handleTitleChange}
-				/>
-			))}
-			<li className='inline-block my-2 mx-6 w-8 border'>
+		<div className='flex border-b'>
+			<ul className=' px-2 py-4 overflow-x-scroll scrollbar-hide whitespace-nowrap'>
+				{tabs.map(tab => (
+					<TabItem
+						current={current}
+						onSelect={onSelect}
+						key={tab.id}
+						item={tab}
+						onTitleChange={handleTitleChange}
+					/>
+				))}
+			</ul>
+			<div className='w-20 flex bg-slate-500'>
 				<button onClick={handleAdd} className='w-full'>
 					+
 				</button>
-			</li>
-		</ul>
+			</div>
+		</div>
 	);
 }
