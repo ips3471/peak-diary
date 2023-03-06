@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 import { AiOutlineEnter } from 'react-icons/ai';
+import { BsPlus } from 'react-icons/bs';
 import Toggle from 'react-toggle';
 
 interface AddFormProps {
@@ -18,26 +19,36 @@ export default function AddForm({
 	onToggle,
 }: AddFormProps) {
 	return (
-		<div>
-			<form onSubmit={onSubmit} className='flex'>
-				<input
-					className='border'
-					data-testid='input'
-					type='text'
-					autoComplete='off'
-					value={text}
-					onChange={onInputChange}
-				/>
-				<button type='submit' data-testid='submit' className='border'>
-					<AiOutlineEnter />
-				</button>
+		<div className='border border-red-500 p-checkList'>
+			<div className='flex items-center justify-end py-1'>
 				<Toggle
 					id='toggle-status'
 					data-testid='toggle'
 					defaultChecked={toggled}
 					onChange={onToggle}
 				/>
-				<label htmlFor='toggle-status'>활성화시 스테이지에 등록</label>
+				<label htmlFor='toggle-status'>❔</label>
+			</div>
+			<form onSubmit={onSubmit} className='flex'>
+				<div className='flex border flex-1 bg-pureWhite justify-between p-3 rounded-lg overflow-hidden'>
+					<input
+						className='flex-1'
+						placeholder='New list'
+						data-testid='input'
+						type='text'
+						autoComplete='off'
+						value={text}
+						onChange={onInputChange}
+					/>
+					<button
+						type='submit'
+						data-testid='submit'
+						className='flex items-center text-gray-400 pl-8  '
+					>
+						<BsPlus />
+						Add
+					</button>
+				</div>
 			</form>
 		</div>
 	);
