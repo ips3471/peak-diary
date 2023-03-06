@@ -15,6 +15,7 @@ module.exports = {
 			},
 			padding: {
 				side: '2rem',
+				checkList: '1rem',
 			},
 		},
 	},

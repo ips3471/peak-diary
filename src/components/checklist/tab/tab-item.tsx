@@ -36,6 +36,7 @@ export default function TabItem({
 
 	const handleUpdate = () => {
 		setFreezed(true);
+		onSelect({ ...item, name: title });
 		console.log('attach a update handler');
 		//(title) => //checklist db.updte({...item, title]})
 	};
@@ -54,13 +55,13 @@ export default function TabItem({
 						onBlur={handleUpdate}
 					/>
 				</button>
-				{item === current && (
-					<button onClick={() => setFreezed(false)}>
-						<span className='text-xs'>
-							<BsFillPencilFill />
-						</span>
-					</button>
-				)}
+				<button onClick={() => setFreezed(false)}>
+					<span
+						className={`text-xs ${item === current ? 'visible' : 'invisible'}`}
+					>
+						<BsFillPencilFill />
+					</span>
+				</button>
 			</div>
 		</li>
 	);
