@@ -19,11 +19,8 @@ export default function UnstagedItem({
 			<button onClick={() => onUpdate({ ...item, staged: true })}>
 				<BsArrowUpCircle />
 			</button>
-			<input
-				type='text'
-				value={item.name}
-				onChange={e => onUpdate({ ...item, name: e.currentTarget.value })}
-			/>
+			<span>{item.name}</span>
+
 			<button onClick={() => onDelete(item)}>
 				<MdDeleteOutline />
 			</button>
