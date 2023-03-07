@@ -8,6 +8,7 @@ module.exports = {
 				softBlack: '#55443a',
 				pureWhite: '#ffffff',
 				grey: '#60666d',
+				darkGreen: '#1e3932',
 			},
 			backgroundColor: {
 				ivory: '#f6f5ef',
