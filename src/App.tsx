@@ -9,10 +9,10 @@ function App() {
 	const [page, setPage] = useState<Page>('home');
 
 	return (
-		<div className='border-2 border-red-500 h-full w-full'>
+		<div className='border-2 border-red-500 h-full w-full flex flex-col'>
 			<AuthProvider>
 				<Navbar page={page} />
-				<div className=''>
+				<div className='flex-1'>
 					<Outlet />
 				</div>
 			</AuthProvider>
