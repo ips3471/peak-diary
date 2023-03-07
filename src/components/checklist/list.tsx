@@ -7,13 +7,11 @@ interface ListContainerProps {
 	items: CheckListItem[];
 	onUpdate: (list: CheckListItem) => void;
 	onDelete: (list: CheckListItem) => void;
-	title: string;
 }
 export default function ListContainer({
 	items,
 	onUpdate,
 	onDelete,
-	title,
 }: ListContainerProps) {
 	function ListItemsFilteredByStaged(isStaged: boolean) {
 		return items
@@ -36,17 +34,14 @@ export default function ListContainer({
 			});
 	}
 	return (
-		<div>
-			<h1>{title}</h1>
-			<h1>
-				<b>staged✔</b>
-			</h1>
-			<ul>{ListItemsFilteredByStaged(true)}</ul>
-
-			<h1>
-				<b>unstaged</b>
-			</h1>
-			<ul>{ListItemsFilteredByStaged(false)}</ul>
+		<div className=' overflow-y-scroll scrollbar-hide'>
+			<ul className='overflow-y-scroll scrollbar-hide'>
+				{ListItemsFilteredByStaged(true)}
+			</ul>
+			<hr className='my-4' />
+			<ul className='overflow-y-scroll scrollbar-hide'>
+				{ListItemsFilteredByStaged(false)}
+			</ul>
 		</div>
 	);
 }

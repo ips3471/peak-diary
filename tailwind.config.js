@@ -7,6 +7,7 @@ module.exports = {
 				brand: '#046241',
 				softBlack: '#55443a',
 				pureWhite: '#ffffff',
+				grey: '#60666d',
 			},
 			backgroundColor: {
 				ivory: '#f6f5ef',

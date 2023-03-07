@@ -2,10 +2,7 @@ import React, { ChangeEvent, useState, FormEvent, useEffect } from 'react';
 import AddForm from '../components/checklist/addForm';
 import ListContainer from '../components/checklist/list';
 import Tab from '../components/checklist/tab/checkList-tab';
-import {
-	CheckListItem,
-	CheckListTabItem,
-} from '../types/interfaces/interfaces';
+import { CheckListItem } from '../types/interfaces/interfaces';
 
 type DB = {
 	[id: string]: CheckListItem[];
@@ -25,6 +22,90 @@ export const db: DB = {
 			staged: false,
 			checked: false,
 		},
+		{
+			id: '2w',
+			name: 'test',
+			staged: false,
+			checked: false,
+		},
+		{
+			id: '2e',
+			name: 'test',
+			staged: false,
+			checked: false,
+		},
+		{
+			id: '2t',
+			name: 'test',
+			staged: false,
+			checked: false,
+		},
+		{
+			id: '26',
+			name: 'test',
+			staged: true,
+			checked: false,
+		},
+		{
+			id: '27',
+			name: 'test',
+			staged: true,
+			checked: false,
+		},
+		{
+			id: '28',
+			name: 'test',
+			staged: true,
+			checked: false,
+		},
+		{
+			id: '29',
+			name: 'test',
+			staged: true,
+			checked: false,
+		},
+		{
+			id: '2333',
+			name: 'test',
+			staged: true,
+			checked: false,
+		},
+		{
+			id: '24242',
+			name: 'test',
+			staged: true,
+			checked: false,
+		},
+		{
+			id: '462',
+			name: 'test',
+			staged: false,
+			checked: false,
+		},
+		{
+			id: '257',
+			name: 'test',
+			staged: true,
+			checked: false,
+		},
+		{
+			id: '2f57',
+			name: 'test',
+			staged: true,
+			checked: false,
+		},
+		{
+			id: '2gdg57',
+			name: 'test',
+			staged: true,
+			checked: false,
+		},
+		{
+			id: '2s57',
+			name: 'test',
+			staged: true,
+			checked: false,
+		},
 	],
 	'2': [
 		{
@@ -39,20 +120,19 @@ export const db: DB = {
 export default function CheckList() {
 	const [input, setInput] = useState<string>('');
 	const [toggle, setToggle] = useState<boolean>(true);
-	const [currentTab, setCurrentTab] = useState<CheckListTabItem>();
+	const [currentTab, setCurrentTab] = useState<string>();
 	const [items, setItems] = useState<CheckListItem[]>([]);
 
 	useEffect(() => {
 		console.log('current tab changed, load router object');
 		//fetch from db (checklists/currentTab.id)
-		const id = currentTab?.id;
-		if (!id) return;
-		const promise = db[id];
+		if (!currentTab) return;
+		const promise = db[currentTab];
 		setItems(promise);
 	}, [currentTab]);
 
-	const handleSelectTab = (tab: CheckListTabItem) => {
-		setCurrentTab(tab);
+	const handleSelectTab = (id: string) => {
+		setCurrentTab(id);
 	};
 
 	const handleInputToggle = () => {
@@ -100,13 +180,13 @@ export default function CheckList() {
 	};
 
 	return (
-		<>
+		<div className='bg-red-50 h-full flex flex-col p-checkList'>
 			<nav>
 				<Tab onSelect={handleSelectTab} current={currentTab} />
 			</nav>
 
 			{currentTab && (
-				<main>
+				<main className='relative flex flex-col flex-1 overflow-y-clip '>
 					<AddForm
 						onSubmit={handleSubmit}
 						text={input}
@@ -116,13 +196,12 @@ export default function CheckList() {
 					/>
 
 					<ListContainer
-						title={currentTab.name}
 						items={items}
 						onUpdate={handleUpdate}
 						onDelete={handleDelete}
 					/>
 				</main>
 			)}
-		</>
+		</div>
 	);
 }

@@ -1,7 +1,6 @@
-import React, { ChangeEvent } from 'react';
 import { CheckListItem } from '../../types/interfaces/interfaces';
 import { MdDeleteOutline } from 'react-icons/md';
-import { BsArrowUpCircle } from 'react-icons/bs';
+import { GrAdd } from 'react-icons/gr';
 
 interface ListItemProps {
 	item: CheckListItem;
@@ -15,13 +14,17 @@ export default function UnstagedItem({
 	onUpdate,
 }: ListItemProps) {
 	return (
-		<li>
-			<button onClick={() => onUpdate({ ...item, staged: true })}>
-				<BsArrowUpCircle />
+		<li className='flex px-checkList p-1'>
+			<button
+				className='p-1'
+				onClick={() => onUpdate({ ...item, staged: true })}
+			>
+				<GrAdd />
 			</button>
-			<span>{item.name}</span>
 
-			<button onClick={() => onDelete(item)}>
+			<span className='flex-1 mx-4'>{item.name}</span>
+
+			<button className='p-1 text-red-600' onClick={() => onDelete(item)}>
 				<MdDeleteOutline />
 			</button>
 		</li>

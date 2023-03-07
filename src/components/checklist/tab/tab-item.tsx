@@ -3,9 +3,9 @@ import { BsFillPencilFill } from 'react-icons/bs';
 import { CheckListTabItem } from '../../../types/interfaces/interfaces';
 
 interface TabItemProps {
-	onSelect: (tab: CheckListTabItem) => void;
+	onSelect: (tab: string) => void;
 	item: CheckListTabItem;
-	current?: CheckListTabItem;
+	current?: string;
 	onFocus: (item: HTMLLIElement) => void;
 }
 
@@ -27,7 +27,7 @@ export default function TabItem({
 	}, [freezed]);
 
 	useEffect(() => {
-		if (current?.id === item.id) {
+		if (current === item.id) {
 			const element = listRef.current;
 
 			element && onFocus(element);
@@ -36,7 +36,7 @@ export default function TabItem({
 
 	const handleUpdate = () => {
 		setFreezed(true);
-		onSelect({ ...item, name: title });
+		onSelect(item.id);
 		console.log('attach a update handler');
 		//(title) => //checklist db.updte({...item, title]})
 	};
@@ -44,7 +44,7 @@ export default function TabItem({
 	return (
 		<li ref={listRef} className='inline-block my-2 mx-6'>
 			<div className='flex items-center gap-2'>
-				<button onClick={() => onSelect(item)}>
+				<button onClick={() => onSelect(item.id)}>
 					<input
 						ref={inputRef}
 						type='text'
@@ -57,7 +57,9 @@ export default function TabItem({
 				</button>
 				<button onClick={() => setFreezed(false)}>
 					<span
-						className={`text-xs ${item === current ? 'visible' : 'invisible'}`}
+						className={`text-xs ${
+							item.id === current ? 'visible' : 'invisible'
+						}`}
 					>
 						<BsFillPencilFill />
 					</span>

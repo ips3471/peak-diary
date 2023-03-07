@@ -1,15 +1,16 @@
 import { CheckListItem } from '../../types/interfaces/interfaces';
-import { MdOutlineArrowDropDownCircle } from 'react-icons/md';
+import { BsArrowDownCircle } from 'react-icons/bs';
 
 interface ListItemProps {
 	item: CheckListItem;
 	onUpdate: (list: CheckListItem) => void;
+	type: 'staged' | 'unstaged';
 }
 
-export default function StagedItem({ item, onUpdate }: ListItemProps) {
+export default function ListItem({ type, item, onUpdate }: ListItemProps) {
 	return (
-		<li className='flex px-checkList '>
-			<div className='checkbox-wrapper-11 flex-1  flex'>
+		<li className='flex'>
+			<div className='checkbox-wrapper-11'>
 				<input
 					id={item.id}
 					type='checkbox'
@@ -17,15 +18,12 @@ export default function StagedItem({ item, onUpdate }: ListItemProps) {
 					value='2'
 					onChange={() => onUpdate({ ...item, checked: !item.checked })}
 				/>
-				<label className='' htmlFor={item.id}>
-					{' '}
-					<h2 className='w-full'>{item.name}</h2>{' '}
-				</label>
+				<label htmlFor={item.id}>{item.name}</label>
 			</div>
 			<button
 				onClick={() => onUpdate({ ...item, staged: false, checked: false })}
 			>
-				<MdOutlineArrowDropDownCircle />
+				<BsArrowDownCircle />
 			</button>
 		</li>
 	);

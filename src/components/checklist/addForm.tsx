@@ -1,5 +1,4 @@
 import React, { ChangeEvent, FormEvent } from 'react';
-import { AiOutlineEnter } from 'react-icons/ai';
 import { BsPlus } from 'react-icons/bs';
 import Toggle from 'react-toggle';
 
@@ -19,7 +18,7 @@ export default function AddForm({
 	onToggle,
 }: AddFormProps) {
 	return (
-		<div className='border border-red-500 p-checkList'>
+		<div className='py-2 sticky top-0'>
 			<div className='flex items-center justify-end py-1'>
 				<Toggle
 					id='toggle-status'
@@ -27,10 +26,9 @@ export default function AddForm({
 					defaultChecked={toggled}
 					onChange={onToggle}
 				/>
-				<label htmlFor='toggle-status'>❔</label>
 			</div>
 			<form onSubmit={onSubmit} className='flex'>
-				<div className='flex border flex-1 bg-pureWhite justify-between p-3 rounded-lg overflow-hidden'>
+				<div className='flex flex-1 bg-pureWhite justify-between p-3 rounded-lg overflow-hidden shadow-sm'>
 					<input
 						className='flex-1'
 						placeholder='New list'

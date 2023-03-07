@@ -12,7 +12,7 @@ function App() {
 		<div className='border-2 border-red-500 h-full w-full flex flex-col'>
 			<AuthProvider>
 				<Navbar page={page} />
-				<div className='flex-1'>
+				<div className='flex-1 overflow-hidden'>
 					<Outlet />
 				</div>
 			</AuthProvider>
