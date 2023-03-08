@@ -8,8 +8,6 @@ export default function Login() {
 		user ? logout() : login();
 	};
 
-	console.log(user);
-
 	return (
 		<button className='whitespace-nowrap' onClick={handleLogin}>
 			{user ? '로그아웃' : '로그인'}

@@ -16,6 +16,7 @@ export interface AuthContextProviderProps {
 }
 
 export type CheckListItem = {
+	category: string;
 	id: string;
 	name: string;
 	staged: boolean;
@@ -26,3 +27,5 @@ export type CheckListTabItem = {
 	id: string;
 	name: string;
 };
+
+export type CheckListTab = CheckListTabItem & { items: CheckListItem[] };

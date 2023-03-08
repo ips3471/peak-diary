@@ -1,7 +1,6 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 import { BsPlus } from 'react-icons/bs';
 import Toggle from 'react-toggle';
-import { TiInputCheckedOutline } from 'react-icons/ti';
 
 interface AddFormProps {
 	onSubmit: (e: FormEvent<HTMLFormElement>) => void;

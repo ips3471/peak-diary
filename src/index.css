@@ -19,7 +19,6 @@ body {
 }
 
 #root {
-	border: 4px solid blue;
 	@apply w-full h-full max-w-screen-xl;
 }
 

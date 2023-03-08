@@ -9,17 +9,17 @@ interface ListItemProps {
 export default function StagedItem({ item, onUpdate }: ListItemProps) {
 	return (
 		<li className='flex px-checkList '>
-			<div className='checkbox-wrapper-11 flex-1  flex'>
+			<div className='checkbox-wrapper-11 flex-1  flex '>
 				<input
 					id={item.id}
 					type='checkbox'
+					checked={item.checked}
 					name='r'
 					value='2'
 					onChange={() => onUpdate({ ...item, checked: !item.checked })}
 				/>
-				<label className='' htmlFor={item.id}>
-					{' '}
-					<h2 className='w-full'>{item.name}</h2>{' '}
+				<label className='w-full' htmlFor={item.id}>
+					{item.name}
 				</label>
 			</div>
 			<button

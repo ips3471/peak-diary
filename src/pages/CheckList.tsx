@@ -2,136 +2,22 @@ import React, { ChangeEvent, useState, FormEvent, useEffect } from 'react';
 import AddForm from '../components/checklist/addForm';
 import ListContainer from '../components/checklist/list';
 import Tab from '../components/checklist/tab/checkList-tab';
-import { CheckListItem } from '../types/interfaces/interfaces';
-
-type DB = {
-	[id: string]: CheckListItem[];
-};
-
-export const db: DB = {
-	'1': [
-		{
-			id: '1',
-			name: 'first',
-			staged: true,
-			checked: false,
-		},
-		{
-			id: '2',
-			name: 'second',
-			staged: false,
-			checked: false,
-		},
-		{
-			id: '2w',
-			name: 'test',
-			staged: false,
-			checked: false,
-		},
-		{
-			id: '2e',
-			name: 'test',
-			staged: false,
-			checked: false,
-		},
-		{
-			id: '2t',
-			name: 'test',
-			staged: false,
-			checked: false,
-		},
-		{
-			id: '26',
-			name: 'test',
-			staged: true,
-			checked: false,
-		},
-		{
-			id: '27',
-			name: 'test',
-			staged: true,
-			checked: false,
-		},
-		{
-			id: '28',
-			name: 'test',
-			staged: true,
-			checked: false,
-		},
-		{
-			id: '29',
-			name: 'test',
-			staged: true,
-			checked: false,
-		},
-		{
-			id: '2333',
-			name: 'test',
-			staged: true,
-			checked: false,
-		},
-		{
-			id: '24242',
-			name: 'test',
-			staged: true,
-			checked: false,
-		},
-		{
-			id: '462',
-			name: 'test',
-			staged: false,
-			checked: false,
-		},
-		{
-			id: '257',
-			name: 'test',
-			staged: true,
-			checked: false,
-		},
-		{
-			id: '2f57',
-			name: 'test',
-			staged: true,
-			checked: false,
-		},
-		{
-			id: '2gdg57',
-			name: 'test',
-			staged: true,
-			checked: false,
-		},
-		{
-			id: '2s57',
-			name: 'test',
-			staged: true,
-			checked: false,
-		},
-	],
-	'2': [
-		{
-			id: '1',
-			name: 'it is the item of tab2',
-			staged: true,
-			checked: false,
-		},
-	],
-};
+import database from '../database/database';
+import { CheckListItem, CheckListTab } from '../types/interfaces/interfaces';
 
 export default function CheckList() {
 	const [input, setInput] = useState<string>('');
 	const [toggle, setToggle] = useState<boolean>(true);
 	const [currentTab, setCurrentTab] = useState<string>();
-	const [items, setItems] = useState<CheckListItem[]>([]);
+	const [tabs, setTabs] = useState<CheckListTab[]>([]);
 
 	useEffect(() => {
-		console.log('current tab changed, load router object');
-		//fetch from db (checklists/currentTab.id)
-		if (!currentTab) return;
-		const promise = db[currentTab];
-		setItems(promise);
-	}, [currentTab]);
+		database.checkList.getTabs().then(setTabs);
+		console.log('load tabs from database');
+	}, []);
 
 	const handleSelectTab = (id: string) => {
+		console.log('selected tab', id);
 		setCurrentTab(id);
 	};
 
@@ -139,22 +25,46 @@ export default function CheckList() {
 		setToggle(!toggle);
 	};
 
-	const handleUpdate = (list: CheckListItem) => {
-		// db에서 업데이트 (currentTab.id, list)
-		console.log('updated', list);
-		setItems(prev =>
-			prev.map(item => {
-				if (item.id !== list.id) {
-					return item;
+	const handleAddTab = async (name = '') => {
+		const element = await database.checkList.addTab(name);
+		setTabs(prev => [...prev, element]);
+		handleSelectTab(element.id);
+	};
+
+	const handleUpdateItem = (list: CheckListItem) => {
+		database.checkList.updateItem(list);
+		setTabs(prev =>
+			prev.map(tab => {
+				if (tab.id === list.category) {
+					console.log(
+						'update item',
+						list,
+						{
+							...tab,
+							items: tab.items.map(item => (item.id === list.id ? list : item)),
+						},
+						list.checked,
+					);
+					return {
+						...tab,
+						items: tab.items.map(item => (item.id === list.id ? list : item)),
+					};
+				} else {
+					return tab;
 				}
-				return list;
 			}),
 		);
 	};
 
 	const handleDelete = (list: CheckListItem) => {
-		// db에서 제거
-		setItems(prev => prev.filter(item => item.id !== list.id));
+		database.checkList.deleteItem(list);
+		setTabs(prev =>
+			prev.map(tab =>
+				tab.id === list.category
+					? { ...tab, items: tab.items.filter(item => item.id !== list.id) }
+					: tab,
+			),
+		);
 	};
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -162,19 +72,28 @@ export default function CheckList() {
 		setInput(val);
 	};
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (input == null) return;
+		if (currentTab == null) return;
 
-		setItems(prev => [
-			...prev,
-			{
-				id: Date.now().toString(),
-				checked: false,
-				name: input,
-				staged: toggle,
-			},
-		]);
+		const element = await database.checkList.addList({
+			category: currentTab,
+			checked: false,
+			name: input,
+			staged: toggle,
+		});
+
+		setTabs(prev =>
+			prev.map(tab =>
+				tab.id === element.category
+					? {
+							...tab,
+							items: [...tab.items, element],
+					  }
+					: tab,
+			),
+		);
 
 		setInput('');
 	};
@@ -182,7 +101,12 @@ export default function CheckList() {
 	return (
 		<div className='bg-red-50 h-full flex flex-col p-checkList'>
 			<nav>
-				<Tab onSelect={handleSelectTab} current={currentTab} />
+				<Tab
+					tabs={tabs}
+					onAddTab={handleAddTab}
+					onSelect={handleSelectTab}
+					current={currentTab}
+				/>
 			</nav>
 
 			{currentTab && (
@@ -196,8 +120,9 @@ export default function CheckList() {
 					/>
 
 					<ListContainer
-						items={items}
-						onUpdate={handleUpdate}
+						current={currentTab}
+						tabs={tabs}
+						onUpdate={handleUpdateItem}
 						onDelete={handleDelete}
 					/>
 				</main>
