@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 import { BsPlus } from 'react-icons/bs';
 import Toggle from 'react-toggle';
+import { TiInputCheckedOutline } from 'react-icons/ti';
 
 interface AddFormProps {
 	onSubmit: (e: FormEvent<HTMLFormElement>) => void;
@@ -20,6 +21,12 @@ export default function AddForm({
 	return (
 		<div className='py-2 sticky top-0'>
 			<div className='flex items-center justify-end py-1'>
+				<label
+					htmlFor='toggle-status'
+					className='text-xs text-grey mr-1 font-extralight'
+				>
+					체크시 챙겨야할 목록에 추가
+				</label>
 				<Toggle
 					id='toggle-status'
 					data-testid='toggle'

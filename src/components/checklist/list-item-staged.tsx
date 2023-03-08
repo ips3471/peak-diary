@@ -23,6 +23,7 @@ export default function StagedItem({ item, onUpdate }: ListItemProps) {
 				</label>
 			</div>
 			<button
+				className='p-1'
 				onClick={() => onUpdate({ ...item, staged: false, checked: false })}
 			>
 				<MdOutlineArrowDropDownCircle />
