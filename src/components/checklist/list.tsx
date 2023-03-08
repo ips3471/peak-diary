@@ -1,37 +1,49 @@
 import React from 'react';
-import { CheckListItem } from '../../types/interfaces/interfaces';
+import { CheckListItem, CheckListTab } from '../../types/interfaces/interfaces';
 import StagedItem from './list-item-staged';
 import UnstagedItem from './list-item-unstaged';
 
 interface ListContainerProps {
-	items: CheckListItem[];
 	onUpdate: (list: CheckListItem) => void;
 	onDelete: (list: CheckListItem) => void;
+	current: string;
+	tabs: CheckListTab[];
 }
 export default function ListContainer({
-	items,
 	onUpdate,
 	onDelete,
+	current,
+	tabs,
 }: ListContainerProps) {
 	function ListItemsFilteredByStaged(isStaged: boolean) {
-		return items
-			.filter(i => i.staged === isStaged)
-			.map(filtered => {
-				if (isStaged) {
-					return (
-						<StagedItem onUpdate={onUpdate} item={filtered} key={filtered.id} />
-					);
-				} else {
-					return (
-						<UnstagedItem
-							onUpdate={onUpdate}
-							onDelete={onDelete}
-							item={filtered}
-							key={filtered.id}
-						/>
-					);
-				}
-			});
+		const currentTab = tabs.find(t => t.id === current);
+		const items = currentTab?.items;
+		return (
+			items &&
+			items
+				.filter(i => i.staged === isStaged)
+				.sort((x, y) => (x.checked === y.checked ? 0 : x.checked ? 1 : -1))
+				.map(filtered => {
+					if (isStaged) {
+						return (
+							<StagedItem
+								onUpdate={onUpdate}
+								item={filtered}
+								key={filtered.id}
+							/>
+						);
+					} else {
+						return (
+							<UnstagedItem
+								onUpdate={onUpdate}
+								onDelete={onDelete}
+								item={filtered}
+								key={filtered.id}
+							/>
+						);
+					}
+				})
+		);
 	}
 	return (
 		<div className=' overflow-y-scroll scrollbar-hide'>
