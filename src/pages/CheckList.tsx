@@ -16,9 +16,13 @@ export default function CheckList() {
 		console.log('load tabs from database');
 	}, []);
 
+	const handleUpdateTab = (tab: CheckListTab) => {
+		database.checkList.updateTab(tab);
+		setTabs(prev => prev.map(item => (item.id === tab.id ? tab : item)));
+	};
+
 	const handleSelectTab = (id: string) => {
-		console.log('selected tab', id);
-		setCurrentTab(id);
+		setCurrentTab(prev => id);
 	};
 
 	const handleInputToggle = () => {
@@ -104,6 +108,7 @@ export default function CheckList() {
 				<Tab
 					tabs={tabs}
 					onAddTab={handleAddTab}
+					onUpdateTab={handleUpdateTab}
 					onSelect={handleSelectTab}
 					current={currentTab}
 				/>

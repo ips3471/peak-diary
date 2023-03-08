@@ -15,9 +15,16 @@ interface TabProps {
 	current?: string;
 	tabs: CheckListTab[];
 	onAddTab: (name: string) => void;
+	onUpdateTab: (tab: CheckListTab) => void;
 }
 
-export default function Tab({ onSelect, current, tabs, onAddTab }: TabProps) {
+export default function Tab({
+	onSelect,
+	current,
+	tabs,
+	onAddTab,
+	onUpdateTab,
+}: TabProps) {
 	const [dialog, setDialog] = useState(false);
 	const [input, setInput] = useState<string>();
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -32,18 +39,13 @@ export default function Tab({ onSelect, current, tabs, onAddTab }: TabProps) {
 	};
 
 	const handleUpdate = () => {
-		// current가 있으면 수정, 없으면 생성
 		if (current) {
-			console.log('change tab name', current);
 			setInput(tabs.find(t => t.id === current)?.name);
 			setDialog(true);
 		} else {
-			console.log('new tab', current);
 			setInput('');
 			setDialog(true);
 		}
-		const found = tabs.find(t => t.id === current);
-		if (!found) return;
 	};
 
 	useEffect(() => {
@@ -58,26 +60,12 @@ export default function Tab({ onSelect, current, tabs, onAddTab }: TabProps) {
 		e.preventDefault();
 		if (!input) return;
 
-		if (current) {
-			// update db
+		const found = tabs.find(tab => tab.id === current);
+		if (found) {
+			onUpdateTab({ ...found, name: input });
 		} else {
-			// set db
-			// console.log('add new tab', input);
-			// const element = await database.checkList.addTab(input);
-			// setTabs(prev => [...prev, element]);
 			onAddTab(input);
 		}
-
-		/* setTabs(prev =>
-			prev.map(item => {
-				if (item.id === current) {
-					return { ...item, name: input };
-				} else {
-					return item;
-				}
-			}),
-		); */
-		//db에 업데이트
 
 		setDialog(false);
 	};
@@ -91,6 +79,7 @@ export default function Tab({ onSelect, current, tabs, onAddTab }: TabProps) {
 							const selected = e.currentTarget.value;
 							onSelect(selected);
 						}}
+						value={current}
 						className=' rounded-lg  px-2 py-2  text-grey shadow-sm flex-1'
 						name='tabs'
 						id='tab-select'

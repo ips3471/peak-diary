@@ -56,7 +56,6 @@ const database = {
 						return { ...i, items: [] };
 					}
 				});
-				console.log(mapped);
 				return data.map(i =>
 					i.items
 						? { ...i, items: Object.values(i.items) }
@@ -84,6 +83,7 @@ const database = {
 
 		updateTab(tab: CheckListTabItem) {
 			update(ref(db, `/checklists/${tab.id}`), tab);
+			console.log('tab updated in db', tab);
 		},
 
 		updateItem(item: CheckListItem) {
