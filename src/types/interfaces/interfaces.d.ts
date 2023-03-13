@@ -28,4 +28,29 @@ export type CheckListTabItem = {
 	name: string;
 };
 
+type IsRoute = boolean;
+
+export type NavItemType = 'route' | 'profile' | 'login';
+
+interface INavItem {
+	type: NavItemType;
+	id: string;
+	isPrivate: boolean;
+	isRequireAdmin: boolean;
+}
+type Route = INavItem & {
+	type: 'route';
+	path: string;
+	title: string;
+};
+type Login = INavItem & {
+	type: 'login';
+};
+type Profile = INavItem & {
+	type: 'profile';
+};
+export type NavMenuItem<T extends NavItemType> = (Route | Login | Profile) & {
+	type: T;
+};
+
 export type CheckListTab = CheckListTabItem & { items: CheckListItem[] };
