@@ -21,6 +21,12 @@ export default function CheckList() {
 		setTabs(prev => prev.map(item => (item.id === tab.id ? tab : item)));
 	};
 
+	const handleDeleteTab = () => {
+		currentTab && database.checkList.deleteTab(currentTab);
+		setTabs(prev => prev.filter(item => item.id !== currentTab));
+		setCurrentTab('');
+	};
+
 	const handleSelectTab = (id: string) => {
 		setCurrentTab(prev => id);
 	};
@@ -111,6 +117,7 @@ export default function CheckList() {
 					onUpdateTab={handleUpdateTab}
 					onSelect={handleSelectTab}
 					current={currentTab}
+					onDeleteTab={handleDeleteTab}
 				/>
 			</nav>
 

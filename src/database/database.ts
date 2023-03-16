@@ -70,7 +70,7 @@ const database = {
 			const id = uuid();
 			const element: CheckListItem = { ...list, id };
 			set(ref(db, `/checklists/${list.category}/items/${id}`), element);
-			console.log('add list in db', list);
+			console.log('add list in db', element);
 			return element;
 		},
 
@@ -94,6 +94,11 @@ const database = {
 		deleteItem(item: CheckListItem) {
 			remove(ref(db, `/checklists/${item.category}/items/${item.id}`));
 			console.log('removed item', item.id, item.name);
+		},
+
+		deleteTab(tabId: string) {
+			remove(ref(db, `/checklists/${tabId}`));
+			console.log('removed tab', tabId);
 		},
 	},
 };

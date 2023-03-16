@@ -1,14 +1,25 @@
 import React from 'react';
 import { useAuthContext } from '../../../context/AuthContext';
+import { selectedDelay } from '../../navbar/utils/utils';
 
-interface UserProps {}
+interface UserProps {
+	delay: number;
+}
 
-export default function User({}: UserProps) {
+export default function User({ delay }: UserProps) {
 	const { user } = useAuthContext();
 
+	console.log('user', delay);
+
 	return (
-		<button className={'overflow-x-scroll scrollbar-hide'}>
-			<div className='flex items-center '>
+		<button
+			className={`w-full opacity-0 animate-appear ${selectedDelay(delay)}`}
+		>
+			<div
+				className={`flex justify-end items-center animate-show-orderly ${selectedDelay(
+					delay,
+				)}`}
+			>
 				<div className='w-6'>
 					{user?.photoURL && (
 						<img

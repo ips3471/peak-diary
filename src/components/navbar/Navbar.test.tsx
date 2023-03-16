@@ -11,7 +11,7 @@ describe('Navbar rendering', () => {
 		let page: Page;
 		render(
 			<AuthProvider>
-				<Navbar page='home' />,
+				<Navbar menuOpen={false} toggleMenuOpen={() => {}} />,
 			</AuthProvider>,
 			{ wrapper: MemoryRouter },
 		);

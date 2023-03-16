@@ -3,34 +3,31 @@ import { useAuthContext } from '../../context/AuthContext';
 import Login from '../buttons/login/Login';
 import NavItem from '../buttons/nav-item/NavItem';
 import User from '../buttons/user/User';
-import { useEffect, useState } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { AiOutlineClose } from 'react-icons/ai';
 import controls from '../../controls/controls';
 import { NavMenuItem } from '../../types/interfaces/interfaces';
 
 interface NavbarProps {
-	page: 'home' | 'checklist' | 'diary' | 'admin';
+	toggleMenuOpen: () => void;
+	menuOpen: boolean;
 }
 
-const Navbar = ({ page }: NavbarProps) => {
+const Navbar = ({ toggleMenuOpen, menuOpen }: NavbarProps) => {
 	const { user } = useAuthContext();
-	const [menuOpen, setMenuOpen] = useState(false);
+	const menuItems = controls.menu.items;
 
-	useEffect(() => {
-		console.log('menu open', menuOpen);
-		if (!menuOpen) {
-			return;
-		}
-	}, [menuOpen]);
-
-	function displayMenu(menuItem: NavMenuItem<'login' | 'profile' | 'route'>) {
+	function displayMenu(
+		menuItem: NavMenuItem<'login' | 'profile' | 'route'>,
+		delay: number,
+	) {
+		console.log(menuItem.id, delay * 100);
 		switch (menuItem.type) {
 			case 'login':
-				return <Login />;
+				return <Login delay={delay * 100} />;
 				break;
 			case 'profile':
-				return <User />;
+				return <User delay={delay * 100} />;
 				break;
 			case 'route':
 				return (
@@ -38,6 +35,7 @@ const Navbar = ({ page }: NavbarProps) => {
 						href={menuItem.path}
 						title={menuItem.title}
 						key={menuItem.id}
+						delay={delay * 100}
 					/>
 				);
 			default:
@@ -58,24 +56,23 @@ const Navbar = ({ page }: NavbarProps) => {
 				 */}
 				<div className={` flex justify-end flex-1`}>
 					<button
-						onClick={() => {
-							setMenuOpen(!menuOpen);
-						}}
+						onClick={() => toggleMenuOpen()}
 						className='text-brand text-2xl z-50'
 					>
 						{menuOpen ? <AiOutlineClose /> : <GiHamburgerMenu />}
 					</button>
 				</div>
 				<nav
-					className={`absolute w-full opacity-95 z-10 text-right top-0 left-0 p-4 bg-pureWhite ${
-						menuOpen ? 'h-full pt-20' : 'h-0 hidden'
+					className={`transition-[height] absolute w-full opacity-95 z-10 text-right top-0 left-0  bg-pureWhite ${
+						menuOpen ? 'h-full pt-20 p-4' : 'h-0'
 					} scrollbar-hide sm:flex sm:overflow-x-scroll items-center gap-4 font-semibold`}
 				>
-					<ul className=''>
-						{controls.menu.items.map(item => {
+					<ul className={`${menuOpen ? 'block' : 'hidden'}`}>
+						{menuItems.map(item => {
+							const delay = menuItems.indexOf(item) + 1;
 							return (
 								<li
-									onClick={() => setMenuOpen(false)}
+									onClick={() => toggleMenuOpen()}
 									className={`
 									
 									${
@@ -87,7 +84,7 @@ const Navbar = ({ page }: NavbarProps) => {
 									p-1`}
 									key={item.id}
 								>
-									{displayMenu(item)}
+									{displayMenu(item, delay)}
 								</li>
 							);
 						})}

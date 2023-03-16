@@ -25,14 +25,14 @@ const controls: Controls = {
 				isPrivate: true,
 				isRequireAdmin: false,
 			},
-			{
+			/* {
 				id: '3',
 				title: '산행일기',
 				path: 'diary',
 				type: 'route',
 				isPrivate: true,
 				isRequireAdmin: false,
-			},
+			}, */
 			{ id: '4', type: 'profile', isPrivate: true, isRequireAdmin: false },
 			{ id: '5', type: 'login', isPrivate: false, isRequireAdmin: false },
 		],

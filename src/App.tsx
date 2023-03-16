@@ -3,16 +3,22 @@ import { Outlet } from 'react-router-dom';
 import Navbar from './components/navbar/Navbar';
 import { AuthProvider } from './context/AuthContext';
 
-type Page = 'home' | 'checklist' | 'diary' | 'admin';
-
 function App() {
-	const [page, setPage] = useState<Page>('home');
+	const [menuOpen, setMenuOpen] = useState(false);
+
+	function toggleMenuOpen() {
+		setMenuOpen(!menuOpen);
+	}
 
 	return (
 		<div className='h-full w-full flex flex-col '>
 			<AuthProvider>
-				<Navbar page={page} />
-				<div className='flex-1 overflow-hidden'>
+				<Navbar menuOpen={menuOpen} toggleMenuOpen={toggleMenuOpen} />
+				<div
+					className={`transition-[filter] ${
+						menuOpen && 'blur-sm'
+					} flex-1 overflow-hidden`}
+				>
 					<Outlet />
 				</div>
 			</AuthProvider>

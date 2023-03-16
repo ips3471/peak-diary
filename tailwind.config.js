@@ -20,7 +20,32 @@ module.exports = {
 				side: '2rem',
 				checkList: '1rem',
 			},
+			animation: {
+				'show-orderly': 'slideIn 0.5s forwards',
+				appear: 'appear 1s forwards',
+			},
+			keyframes: {
+				slideIn: {
+					'0%': {
+						transform: 'translateX(2%)',
+					},
+					'100%': {
+						transform: 'translateX(0)',
+					},
+				},
+				appear: {
+					'0%': {
+						opacity: 0,
+					},
+					'100%': {
+						opacity: 1,
+					},
+				},
+			},
 		},
 	},
-	plugins: [require('tailwind-scrollbar-hide')],
+	plugins: [
+		require('tailwind-scrollbar-hide'),
+		require('tailwindcss-animation-delay'),
+	],
 };

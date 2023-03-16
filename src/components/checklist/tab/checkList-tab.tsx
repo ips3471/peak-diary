@@ -16,6 +16,7 @@ interface TabProps {
 	tabs: CheckListTab[];
 	onAddTab: (name: string) => void;
 	onUpdateTab: (tab: CheckListTab) => void;
+	onDeleteTab: () => void;
 }
 
 export default function Tab({
@@ -24,6 +25,7 @@ export default function Tab({
 	tabs,
 	onAddTab,
 	onUpdateTab,
+	onDeleteTab,
 }: TabProps) {
 	const [dialog, setDialog] = useState(false);
 	const [input, setInput] = useState<string>();
@@ -36,6 +38,11 @@ export default function Tab({
 			inline: 'center',
 			block: 'nearest',
 		});
+	};
+
+	const handleDeleteTab = () => {
+		onDeleteTab();
+		setDialog(false);
 	};
 
 	const handleUpdate = () => {
@@ -117,7 +124,9 @@ export default function Tab({
 			</div>
 			{dialog && (
 				<PromptDialog
-					title={current ? '탭 이름 수정' : '새로운 탭 생성'}
+					onDeleteTab={handleDeleteTab}
+					title={current ? '기존 탭을 변경' : '새로운 탭 생성'}
+					current={current}
 					onSubmit={handleSubmit}
 					onCancel={() => setDialog(false)}
 				>
