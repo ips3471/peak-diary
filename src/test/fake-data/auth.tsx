@@ -2,7 +2,6 @@ import { createContext, useState, useContext, useEffect } from 'react';
 import {
 	AuthContextProviderProps,
 	AuthContextValue,
-	AuthUser,
 } from '../../types/interfaces/interfaces';
 // import { fakeUser } from './user';
 

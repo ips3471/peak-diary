@@ -4,12 +4,13 @@ export interface AuthContextValue {
 	logout(): void;
 }
 
-export interface AuthUser {
+/* export interface AuthUser {
 	uid: string;
 	isAdmin: boolean;
 	displayName: string;
 	photoURL: string;
-}
+	name?: string;
+} */
 
 export interface AuthContextProviderProps {
 	children: ReactNode;
@@ -48,6 +49,7 @@ type Login = INavItem & {
 };
 type Profile = INavItem & {
 	type: 'profile';
+	path: string;
 };
 export type NavMenuItem<T extends NavItemType> = (Route | Login | Profile) & {
 	type: T;

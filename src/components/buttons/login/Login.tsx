@@ -9,14 +9,16 @@ interface LoginProps {
 export default function Login({ delay }: LoginProps) {
 	const { user, login, logout } = useAuthContext();
 
-	console.log('login', delay);
-
 	const handleLogin = () => {
 		user ? logout() : login();
 	};
 
 	return (
-		<div className={`opacity-0 animate-appear ${selectedDelay(delay)}`}>
+		<div
+			className={`opacity-0 animate-appear animation-del ${selectedDelay(
+				delay,
+			)}`}
+		>
 			<button
 				className={`animate-show-orderly ${selectedDelay(delay)}`}
 				onClick={handleLogin}

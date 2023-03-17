@@ -125,7 +125,7 @@ export default function Tab({
 			{dialog && (
 				<PromptDialog
 					onDeleteTab={handleDeleteTab}
-					title={current ? '기존 탭을 변경' : '새로운 탭 생성'}
+					title={current ? '기존 탭 이름을 변경' : '새로운 탭 생성'}
 					current={current}
 					onSubmit={handleSubmit}
 					onCancel={() => setDialog(false)}
@@ -134,6 +134,7 @@ export default function Tab({
 						ref={inputRef}
 						value={input}
 						onChange={handleChange}
+						spellCheck='false'
 						type='text'
 						required
 						className='bg-red-100 text-brand text-center border-b border-dotted text-xl mb-6 border-b-red-300'

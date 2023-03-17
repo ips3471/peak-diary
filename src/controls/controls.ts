@@ -33,7 +33,13 @@ const controls: Controls = {
 				isPrivate: true,
 				isRequireAdmin: false,
 			}, */
-			{ id: '4', type: 'profile', isPrivate: true, isRequireAdmin: false },
+			{
+				id: '4',
+				type: 'profile',
+				path: 'mypage',
+				isPrivate: true,
+				isRequireAdmin: false,
+			},
 			{ id: '5', type: 'login', isPrivate: false, isRequireAdmin: false },
 		],
 	},

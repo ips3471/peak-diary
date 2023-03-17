@@ -9,6 +9,7 @@ import auth from '../auth/auth';
 import { User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import database from '../database/database';
+import { get } from '../presenter/profile/ProfilePresenter';
 
 interface AuthContextValue {
 	user: AuthUser | null;
@@ -16,7 +17,7 @@ interface AuthContextValue {
 	logout(): void;
 }
 
-type AuthUser = User & { isAdmin: Promise<boolean> };
+export type AuthUser = User & { isAdmin: Promise<boolean>; name?: string };
 
 interface AuthContextProviderProps {
 	children: ReactNode;
@@ -36,8 +37,13 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
 		auth.onUserStateChanged(async user => {
 			if (!user) return;
 			const isAdmin = await database.isAdmin(user);
+			const profile = await get(user.uid);
 
-			setUser({ ...user, isAdmin });
+			setUser({
+				...user,
+				isAdmin,
+				name: profile?.name ? profile.name : user.displayName,
+			});
 		});
 	}, []);
 

@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState, FormEvent, useEffect } from 'react';
+import Container from '../components/body/container';
 import AddForm from '../components/checklist/addForm';
 import ListContainer from '../components/checklist/list';
 import Tab from '../components/checklist/tab/checkList-tab';
@@ -109,7 +110,7 @@ export default function CheckList() {
 	};
 
 	return (
-		<div className='bg-red-50 h-full flex flex-col p-checkList'>
+		<Container>
 			<nav>
 				<Tab
 					tabs={tabs}
@@ -139,6 +140,6 @@ export default function CheckList() {
 					/>
 				</main>
 			)}
-		</div>
+		</Container>
 	);
 }

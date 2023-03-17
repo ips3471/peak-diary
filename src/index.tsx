@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound';
 import Admin from './pages/Admin';
 import ProtectedRoute from './pages/ProtectedRoute';
 import Diary from './pages/Diary';
-import Tab from './components/checklist/tab/checkList-tab';
+import Profile from './pages/Profile';
 
 const router = createBrowserRouter([
 	{
@@ -23,6 +23,14 @@ const router = createBrowserRouter([
 				element: (
 					<ProtectedRoute requireAdmin={false}>
 						<CheckList />
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: '/mypage',
+				element: (
+					<ProtectedRoute requireAdmin={false}>
+						<Profile />
 					</ProtectedRoute>
 				),
 			},

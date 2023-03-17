@@ -21,13 +21,12 @@ const Navbar = ({ toggleMenuOpen, menuOpen }: NavbarProps) => {
 		menuItem: NavMenuItem<'login' | 'profile' | 'route'>,
 		delay: number,
 	) {
-		console.log(menuItem.id, delay * 100);
 		switch (menuItem.type) {
 			case 'login':
 				return <Login delay={delay * 100} />;
 				break;
 			case 'profile':
-				return <User delay={delay * 100} />;
+				return <User href={menuItem.path} delay={delay * 100} />;
 				break;
 			case 'route':
 				return (

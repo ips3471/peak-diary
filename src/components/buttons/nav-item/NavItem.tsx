@@ -6,12 +6,7 @@ export default function NavItem({ title, href, delay }: NavItemProps) {
 	return (
 		<div className={`opacity-0 animate-appear ${selectedDelay(delay)}`}>
 			<div className={`animate-show-orderly ${selectedDelay(delay)}`}>
-				<Link
-					onClick={() => {
-						console.log('click');
-					}}
-					to={href}
-				>
+				<Link to={href}>
 					<span className={`whitespace-nowrap`}>{title}</span>
 				</Link>
 			</div>

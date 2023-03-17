@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 import { BsPlus } from 'react-icons/bs';
 import Toggle from 'react-toggle';
+import Rounded from '../form/rounded';
 
 interface AddFormProps {
 	onSubmit: (e: FormEvent<HTMLFormElement>) => void;
@@ -34,13 +35,14 @@ export default function AddForm({
 				/>
 			</div>
 			<form onSubmit={onSubmit} className='flex'>
-				<div className='flex flex-1 bg-pureWhite justify-between p-3 rounded-lg overflow-hidden shadow-sm'>
+				<Rounded color='light' isStretched={true}>
 					<input
 						className='flex-1'
 						placeholder='New list'
 						data-testid='input'
 						type='text'
 						autoComplete='off'
+						spellCheck='false'
 						value={text}
 						onChange={onInputChange}
 					/>
@@ -52,7 +54,7 @@ export default function AddForm({
 						<BsPlus />
 						Add
 					</button>
-				</div>
+				</Rounded>
 			</form>
 		</div>
 	);

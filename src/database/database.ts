@@ -1,3 +1,4 @@
+import { UserProfile } from './../types/components/profile.d';
 import {
 	CheckListItem,
 	CheckListTab,
@@ -99,6 +100,19 @@ const database = {
 		deleteTab(tabId: string) {
 			remove(ref(db, `/checklists/${tabId}`));
 			console.log('removed tab', tabId);
+		},
+	},
+	users: {
+		updateProfile(uid: string, profile: UserProfile) {
+			update(ref(db, `/users/${uid}`), profile);
+			console.log('profile updated', profile);
+		},
+		async getProfile(uid: string) {
+			return get(ref(db, `users/${uid}`)).then(snapshot => {
+				if (snapshot.exists()) {
+					return snapshot.val();
+				}
+			});
 		},
 	},
 };

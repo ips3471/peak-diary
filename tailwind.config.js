@@ -9,6 +9,9 @@ module.exports = {
 				pureWhite: '#ffffff',
 				grey: '#60666d',
 				darkGreen: '#1e3932',
+				body: 'rgb(254, 242, 242)',
+				input_light: '#ffffff',
+				input_dark: '#60666d',
 			},
 			backgroundColor: {
 				ivory: '#f6f5ef',
@@ -19,6 +22,8 @@ module.exports = {
 			padding: {
 				side: '2rem',
 				checkList: '1rem',
+				container: '1rem',
+				input: '0.75rem',
 			},
 			animation: {
 				'show-orderly': 'slideIn 0.5s forwards',
