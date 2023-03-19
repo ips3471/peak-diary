@@ -19,10 +19,15 @@ export default function GroupAccount() {
 	const [dialog, setDialog] = useState(false);
 	const [input, setInput] = useState({ title: '', date: '', userLength: 4 });
 	const { user } = useAuthContext();
+	const [numpad, setNumpad] = useState<GroupAccountItem | null>(null);
 
 	useEffect(() => {
 		init(setAccountItems);
 	}, []);
+
+	const handleNumpad = (item: GroupAccountItem | null) => {
+		setNumpad(item);
+	};
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { id, value } = e.currentTarget;
@@ -70,7 +75,13 @@ export default function GroupAccount() {
 					{user &&
 						accountItems &&
 						accountItems.map(item => (
-							<GroupAccountCard item={item} user={user} key={item.id} />
+							<GroupAccountCard
+								toggleNumpad={handleNumpad}
+								numpadTarget={numpad?.id}
+								item={item}
+								user={user}
+								key={item.id}
+							/>
 						))}
 				</ul>
 			</BodyContainer>

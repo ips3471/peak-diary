@@ -1,16 +1,30 @@
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthUser } from '../../context/AuthContext';
 import { GroupAccountItem } from '../../types/components/group-account';
+import NumPad from '../../util/Numpad';
 
 interface GroupAccountItemProps {
 	user: AuthUser;
 	item: GroupAccountItem;
+	numpadTarget?: string;
+	toggleNumpad: (item: GroupAccountItem | null) => void;
 }
 
 export default function GroupAccountCard({
 	user,
 	item,
+	numpadTarget,
+	toggleNumpad,
 }: GroupAccountItemProps) {
+	const navigate = useNavigate();
+	const handleEnter = (inputValue: number) => {
+		//코드확인
+		toggleNumpad(null);
+		if (inputValue !== item.code) return;
+
+		navigate('/group-account/' + item.id);
+	};
+
 	return (
 		<li className='flex flex-col p-2 w-full bg-pureWhite/50 py-1 h-28 mb-3 rounded-lg gap-1'>
 			<section className='flex justify-between mb-1 items-center'>
@@ -26,14 +40,36 @@ export default function GroupAccountCard({
 			</section>
 			<section className='flex-1 border-b text-sm'>{item.title}</section>
 			<section className='flex justify-between items-center'>
-				<p className='text-sm'>
-					참여인원{' '}
-					<span className='text-brand/80 text-base font-semibold'>
-						{item.userLength}
-					</span>
-				</p>
-				<button className='p-1 text-sm text-brand/70 font-semibold'>
-					입장하기
+				<div className='text-sm flex gap-2'>
+					<p>
+						<span>참여인원 </span>
+						<span className='text-brand/80 text-base font-semibold'>
+							{item.userLength}
+						</span>
+					</p>
+					{item.host === user.uid && (
+						<p>
+							<span>참여코드 </span>
+							<span className='text-brand/80 text-base font-semibold'>
+								{item.code}
+							</span>
+						</p>
+					)}
+				</div>
+				<button
+					onClick={() => !numpadTarget && toggleNumpad(item)}
+					className='relative p-1 text-sm text-brand/70 font-semibold'
+				>
+					<span>입장하기</span>
+					<div className='max-w-xs absolute right-0'>
+						{numpadTarget === item.id && (
+							<NumPad
+								onCancel={() => toggleNumpad(null)}
+								type='password'
+								onSubmit={handleEnter}
+							/>
+						)}
+					</div>
 				</button>
 			</section>
 		</li>
