@@ -14,7 +14,7 @@ export default function Rounded({
 	return (
 		<div
 			className={`flex justify-between p-input rounded-lg overflow-hidden shadow-sm ${
-				color === 'light' ? 'bg-input_light' : 'bg-input_dark'
+				color === 'light' ? 'bg-input_light opacity-80' : 'bg-input_dark'
 			} ${isStretched ? 'flex-1' : 'w-min'}`}
 		>
 			{children}

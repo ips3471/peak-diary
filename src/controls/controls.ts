@@ -25,6 +25,14 @@ const controls: Controls = {
 				isPrivate: true,
 				isRequireAdmin: false,
 			},
+			{
+				id: '3',
+				title: '공동정산',
+				path: 'group-account',
+				type: 'route',
+				isPrivate: true,
+				isRequireAdmin: false,
+			},
 			/* {
 				id: '3',
 				title: '산행일기',

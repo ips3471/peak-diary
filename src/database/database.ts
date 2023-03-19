@@ -17,6 +17,7 @@ import {
 } from 'firebase/database';
 import { firebaseApp } from '../service/firebase/firebase';
 import { v4 as uuid } from 'uuid';
+import { GroupAccountItem } from '../types/components/group-account';
 
 const db = getDatabase(firebaseApp);
 const dbRef = ref(db);
@@ -113,6 +114,24 @@ const database = {
 					return snapshot.val();
 				}
 			});
+		},
+	},
+	groupAccounts: {
+		async add(form: Omit<GroupAccountItem, 'id' | 'code'>) {
+			const id = uuid();
+			const code = Math.floor(Math.random() * 9999);
+			const element: GroupAccountItem = { ...form, id, code };
+			set(ref(db, `/groupAccounts/${id}`), element);
+			console.log('add group-account in db', element);
+			return element;
+		},
+		async get(): Promise<GroupAccountItem[]> {
+			const snapshot = await get(ref(db, `groupAccounts`));
+			if (snapshot.exists()) {
+				return Object.values(snapshot.val());
+			} else {
+				return [];
+			}
 		},
 	},
 };

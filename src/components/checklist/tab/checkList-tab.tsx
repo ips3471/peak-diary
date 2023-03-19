@@ -15,8 +15,8 @@ interface TabProps {
 	current?: string;
 	tabs: CheckListTab[];
 	onAddTab: (name: string) => void;
-	onUpdateTab: (tab: CheckListTab) => void;
-	onDeleteTab: () => void;
+	setDialog: (state: boolean) => void;
+	onEditClick: (value: string) => void;
 }
 
 export default function Tab({
@@ -24,14 +24,9 @@ export default function Tab({
 	current,
 	tabs,
 	onAddTab,
-	onUpdateTab,
-	onDeleteTab,
+	setDialog,
+	onEditClick,
 }: TabProps) {
-	const [dialog, setDialog] = useState(false);
-	const [input, setInput] = useState<string>();
-	const inputRef = useRef<HTMLInputElement>(null);
-	const pageRef = useRef<HTMLUListElement>(null);
-
 	const handleScrollToElement = (element: HTMLLIElement) => {
 		element.scrollIntoView({
 			behavior: 'smooth',
@@ -40,46 +35,19 @@ export default function Tab({
 		});
 	};
 
-	const handleDeleteTab = () => {
-		onDeleteTab();
-		setDialog(false);
-	};
-
 	const handleUpdate = () => {
 		if (current) {
-			setInput(tabs.find(t => t.id === current)?.name);
+			onEditClick(tabs.find(t => t.id === current)?.name || '');
 			setDialog(true);
 		} else {
-			setInput('');
+			onEditClick('');
 			setDialog(true);
 		}
-	};
-
-	useEffect(() => {
-		dialog && inputRef.current?.select();
-	}, [dialog]);
-
-	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setInput(e.currentTarget.value);
-	};
-
-	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		if (!input) return;
-
-		const found = tabs.find(tab => tab.id === current);
-		if (found) {
-			onUpdateTab({ ...found, name: input });
-		} else {
-			onAddTab(input);
-		}
-
-		setDialog(false);
 	};
 
 	return (
 		<>
-			<div className={`flex flex-col items-center sm:flex-row sm:border-b `}>
+			<div className={` flex flex-col items-center sm:flex-row sm:border-b `}>
 				<div className='flex sm:hidden w-full bg-red-50 text-center'>
 					<select
 						onChange={e => {
@@ -102,10 +70,7 @@ export default function Tab({
 						<BsFillPencilFill />
 					</button>
 				</div>
-				<ul
-					ref={pageRef}
-					className='hidden sm:block px-2 py-4 overflow-x-scroll scrollbar-hide whitespace-nowrap'
-				>
+				<ul className='hidden sm:block px-2 py-4 overflow-x-scroll scrollbar-hide whitespace-nowrap'>
 					{tabs.map(tab => (
 						<TabItem
 							current={current}
@@ -122,25 +87,6 @@ export default function Tab({
 					</button>
 				</div>
 			</div>
-			{dialog && (
-				<PromptDialog
-					onDeleteTab={handleDeleteTab}
-					title={current ? '기존 탭 이름을 변경' : '새로운 탭 생성'}
-					current={current}
-					onSubmit={handleSubmit}
-					onCancel={() => setDialog(false)}
-				>
-					<input
-						ref={inputRef}
-						value={input}
-						onChange={handleChange}
-						spellCheck='false'
-						type='text'
-						required
-						className='bg-red-100 text-brand text-center border-b border-dotted text-xl mb-6 border-b-red-300'
-					/>
-				</PromptDialog>
-			)}
 		</>
 	);
 }

@@ -10,6 +10,7 @@ import Admin from './pages/Admin';
 import ProtectedRoute from './pages/ProtectedRoute';
 import Diary from './pages/Diary';
 import Profile from './pages/Profile';
+import GroupAccount from './pages/GroupAccount';
 
 const router = createBrowserRouter([
 	{
@@ -47,6 +48,14 @@ const router = createBrowserRouter([
 				element: (
 					<ProtectedRoute requireAdmin={false}>
 						<Diary />
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: '/group-account',
+				element: (
+					<ProtectedRoute requireAdmin={false}>
+						<GroupAccount />
 					</ProtectedRoute>
 				),
 			},

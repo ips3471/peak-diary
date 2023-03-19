@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import Container from '../components/body/container';
+import BodyContainer from '../components/body/container';
 import { useAuthContext } from '../context/AuthContext';
 import { MdOutlinePhotoCameraFront } from 'react-icons/md';
 import Rounded from '../components/form/rounded';
@@ -30,7 +30,7 @@ export default function Profile() {
 	};
 
 	return (
-		<Container>
+		<BodyContainer>
 			<form className='flex flex-col' onSubmit={handleSubmit}>
 				<section className='text-right'>
 					<button type='submit'>저장</button>
@@ -56,6 +56,6 @@ export default function Profile() {
 					/>
 				</Rounded>
 			</form>
-		</Container>
+		</BodyContainer>
 	);
 }
