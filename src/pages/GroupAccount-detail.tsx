@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { useLocation, useParams } from 'react-router-dom';
 import BodyContainer from '../components/body/container';
+import FormContainer from '../components/form/form-container';
 import ReceiptsByCategory from '../components/group-account/receipt/category-component';
 import { useAuthContext } from '../context/AuthContext';
 import controls from '../controls/controls';
@@ -16,85 +17,22 @@ export default function GroupAccountDetail() {
 	const location = useLocation();
 	const categories = controls.receiptCategory;
 	const { user } = useAuthContext();
+	const receiptsMap = new Map<Category, ReceiptItem[]>([]);
 
-	const { code, date, host, id, isDone, title, userLength, users } =
+	const { code, date, host, id, isDone, title, userLength, users, receipts } =
 		location.state as GroupAccountItem;
 
-	const receipts: ReceiptItem[] = [
-		{
-			category: 'booking',
-			coordinatorUid: user?.uid ? user.uid : '',
-			description: '숙소예약',
-			id: '1',
-			total: 10000,
-			url: '',
-			exceptedUsers: [],
-		},
-		{
-			category: 'driving',
-			coordinatorUid: user?.uid ? user.uid : '',
-			description: '카풀',
-			id: '2',
-			total: 50000,
-			url: '',
-			exceptedUsers: [],
-		},
-		{
-			category: 'eating',
-			coordinatorUid: user?.uid ? user.uid : '',
-			description: '식당',
-			id: '3',
-			total: 10000,
-			url: '',
-			exceptedUsers: ['test4'],
-		},
-		{
-			category: 'eating',
-			coordinatorUid: user?.uid ? user.uid : '',
-			description: '식당',
-			id: '3',
-			total: 10000,
-			url: '',
-			exceptedUsers: ['test4'],
-		},
-		{
-			category: 'eating',
-			coordinatorUid: user?.uid ? user.uid : '',
-			description: '식당',
-			id: '3',
-			total: 10000,
-			url: '',
-			exceptedUsers: ['test4'],
-		},
-		{
-			category: 'eating',
-			coordinatorUid: user?.uid ? user.uid : '',
-			description: '식당',
-			id: '3',
-			total: 10000,
-			url: '',
-			exceptedUsers: ['test4'],
-		},
-		{
-			category: 'eating',
-			coordinatorUid: user?.uid ? user.uid : '',
-			description: '꽈배기',
-			id: '4',
-			total: 20000,
-			url: '',
-			exceptedUsers: ['test2', 'test3', 'test4'],
-		},
-	];
+	useEffect(() => {
+		receipts &&
+			receipts.forEach(receipt => {
+				const container = receiptsMap.get(receipt.category) || [];
+				receiptsMap.set(receipt.category, [...container, receipt]);
+			});
+	}, []);
 
 	const setDialog = () => {
 		// receipt 추가 dialog open
 	};
-
-	const receiptsMap = new Map<Category, ReceiptItem[]>([]);
-	receipts.forEach(receipt => {
-		const container = receiptsMap.get(receipt.category) || [];
-		receiptsMap.set(receipt.category, [...container, receipt]);
-	});
 
 	console.log(receiptsMap.keys());
 
