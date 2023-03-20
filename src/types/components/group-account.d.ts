@@ -1,6 +1,6 @@
 import { AuthUser } from '../../context/AuthContext';
 
-type Category = 'driving' | 'eating' | 'buying' | 'etc' | 'booking';
+type Category = 'driving' | 'eating' | 'shopping' | 'etc' | 'booking';
 
 export type ReceiptItem = {
 	id: string;
@@ -9,6 +9,7 @@ export type ReceiptItem = {
 	url: string;
 	description: string;
 	coordinatorUid: string;
+	exceptedUsers: string[];
 };
 
 export type GroupAccountItem = {
@@ -21,6 +22,11 @@ export type GroupAccountItem = {
 	isDone: boolean;
 	title: string;
 	receipts: ReceiptItem[];
+};
+
+export type ReceiptCategory = {
+	id: Category;
+	name: string;
 };
 
 export type GroupAccountState = 'in-progress' | 'done';
