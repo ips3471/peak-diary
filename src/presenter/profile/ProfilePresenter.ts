@@ -8,19 +8,19 @@ export function update(
 	profile: UserProfile,
 	setState: Dispatch<SetStateAction<UserProfile>>,
 ) {
-	database.users.updateProfile(uid, profile);
+	database.users.update(uid, profile);
 	setState(profile);
 }
 
 export async function get(uid: string) {
-	return await database.users.getProfile(uid);
+	return await database.users.get(uid);
 }
 
 export async function init(
 	user: AuthUser,
 	setState: Dispatch<SetStateAction<UserProfile>>,
 ) {
-	database.users.getProfile(user.uid).then(profile => {
+	database.users.get(user.uid).then(profile => {
 		if (profile) {
 			setState(profile);
 		} else {

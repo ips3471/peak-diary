@@ -8,6 +8,7 @@ interface GroupAccountItemProps {
 	item: GroupAccountItem;
 	numpadTarget?: string;
 	toggleNumpad: (item: GroupAccountItem | null) => void;
+	onUpdate: (item: GroupAccountItem) => void;
 }
 
 export default function GroupAccountCard({
@@ -15,15 +16,32 @@ export default function GroupAccountCard({
 	item,
 	numpadTarget,
 	toggleNumpad,
+	onUpdate,
 }: GroupAccountItemProps) {
 	const navigate = useNavigate();
 	const handleEnter = (inputValue: number) => {
-		//코드확인
 		toggleNumpad(null);
+
 		if (inputValue !== item.code) return;
 
-		navigate('/group-account/' + item.id);
+		const updated: GroupAccountItem = {
+			...item,
+			users: [...item.users, user.uid],
+		};
+
+		onUpdate(updated);
+		moveToDetail();
 	};
+
+	const handlePass = () => {
+		if (item.users.includes(user.uid)) {
+			moveToDetail();
+		}
+		!numpadTarget && toggleNumpad(item);
+	};
+
+	const moveToDetail = () =>
+		navigate('/group-account/' + item.id, { state: item });
 
 	return (
 		<li className='flex flex-col p-2 w-full bg-pureWhite/50 py-1 h-28 mb-3 rounded-lg gap-1'>
@@ -57,7 +75,7 @@ export default function GroupAccountCard({
 					)}
 				</div>
 				<button
-					onClick={() => !numpadTarget && toggleNumpad(item)}
+					onClick={handlePass}
 					className='relative p-1 text-sm text-brand/70 font-semibold'
 				>
 					<span>입장하기</span>

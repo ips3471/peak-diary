@@ -20,8 +20,7 @@ export default function FormContainer({
 					<AiOutlineClose />
 				</button>
 			</section>
-
-			{children}
+			<>{children}</>
 		</article>
 	);
 }

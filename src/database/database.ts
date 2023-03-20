@@ -1,3 +1,4 @@
+import { GroupAccountItem } from './../types/components/group-account.d';
 import { UserProfile } from './../types/components/profile.d';
 import {
 	CheckListItem,
@@ -17,7 +18,6 @@ import {
 } from 'firebase/database';
 import { firebaseApp } from '../service/firebase/firebase';
 import { v4 as uuid } from 'uuid';
-import { GroupAccountItem } from '../types/components/group-account';
 
 const db = getDatabase(firebaseApp);
 const dbRef = ref(db);
@@ -104,11 +104,11 @@ const database = {
 		},
 	},
 	users: {
-		updateProfile(uid: string, profile: UserProfile) {
+		update(uid: string, profile: UserProfile) {
 			update(ref(db, `/users/${uid}`), profile);
 			console.log('profile updated', profile);
 		},
-		async getProfile(uid: string) {
+		async get(uid: string) {
 			return get(ref(db, `users/${uid}`)).then(snapshot => {
 				if (snapshot.exists()) {
 					return snapshot.val();
@@ -132,6 +132,10 @@ const database = {
 			} else {
 				return [];
 			}
+		},
+		update(id: string, item: GroupAccountItem) {
+			update(ref(db, `/groupAccounts/${id}`), item);
+			console.log('groupAccount updated', item);
 		},
 	},
 };

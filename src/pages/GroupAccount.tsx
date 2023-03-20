@@ -9,7 +9,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import FormContainer from '../components/form/form-container';
 import Rounded from '../components/form/rounded';
 import { useAuthContext } from '../context/AuthContext';
-import { add, init } from '../presenter/group-account/GroupAccountPresenter';
+import GroupAccountPresenter from '../presenter/group-account/GroupAccountPresenter';
 import GroupAccountCard from '../components/group-account/group-account-item';
 
 export default function GroupAccount() {
@@ -22,8 +22,12 @@ export default function GroupAccount() {
 	const [numpad, setNumpad] = useState<GroupAccountItem | null>(null);
 
 	useEffect(() => {
-		init(setAccountItems);
+		GroupAccountPresenter.init(setAccountItems);
 	}, []);
+
+	const updateItem = (updated: GroupAccountItem) => {
+		GroupAccountPresenter.update(updated, setAccountItems);
+	};
 
 	const handleNumpad = (item: GroupAccountItem | null) => {
 		setNumpad(item);
@@ -39,7 +43,10 @@ export default function GroupAccount() {
 		if (!user) throw new Error(`Not Found User: ${user}`);
 		console.log(input);
 		// controller
-		add({ ...input, host: user.uid, users: [user.uid] }, setAccountItems);
+		GroupAccountPresenter.add(
+			{ ...input, host: user.uid, users: [user.uid] },
+			setAccountItems,
+		);
 		setDialog(false);
 	};
 
@@ -76,6 +83,7 @@ export default function GroupAccount() {
 						accountItems &&
 						accountItems.map(item => (
 							<GroupAccountCard
+								onUpdate={updateItem}
 								toggleNumpad={handleNumpad}
 								numpadTarget={numpad?.id}
 								item={item}
