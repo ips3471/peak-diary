@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useState } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import FormContainer from '../components/form/form-container';
 
 type NumPadType = 'currency' | 'password';

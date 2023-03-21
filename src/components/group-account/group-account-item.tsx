@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { AuthUser } from '../../context/AuthContext';
 import { GroupAccountItem } from '../../types/components/group-account';
+import { UserProfile } from '../../types/components/profile';
 import NumPad from '../../util/Numpad';
 
 interface GroupAccountItemProps {
-	user: AuthUser;
+	user: UserProfile;
 	item: GroupAccountItem;
 	numpadTarget?: string;
 	toggleNumpad: (item: GroupAccountItem | null) => void;
@@ -52,7 +52,7 @@ export default function GroupAccountCard({
 						src={user?.photoURL || process.env.PUBLIC_URL + 'logo192.png'}
 						alt='host'
 					/>
-					<p className='text-sm'>{user?.profile.name || 'null'}</p>
+					<p className='text-sm'>{user?.name || 'null'}</p>
 				</span>
 				<span className='text-sm font-thin'>{item.date}</span>
 			</section>

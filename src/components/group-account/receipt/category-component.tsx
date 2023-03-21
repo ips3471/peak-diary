@@ -1,6 +1,5 @@
 import React from 'react';
 import { ReceiptItem } from '../../../types/components/group-account';
-import { BsArrowReturnRight } from 'react-icons/bs';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { MdArrowRightAlt } from 'react-icons/md';
 

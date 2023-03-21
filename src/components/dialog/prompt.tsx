@@ -1,5 +1,4 @@
 import React, { FormEvent, ReactNode } from 'react';
-import { AiOutlineClose } from 'react-icons/ai';
 import FormContainer from '../form/form-container';
 
 interface PromptDialogProps {

@@ -6,22 +6,17 @@ import React, {
 	useEffect,
 } from 'react';
 import auth from '../auth/auth';
-import { User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import database from '../database/database';
 import ProfilePresenter from '../presenter/profile/ProfilePresenter';
 import { UserProfile } from '../types/components/profile';
 
 interface AuthContextValue {
-	user: AuthUser | null;
+	user: UserProfile | null;
 	login(): void;
 	logout(): void;
+	update(profile: UserProfile): void;
 }
-
-export type AuthUser = User & {
-	isAdmin: Promise<boolean>;
-	profile: UserProfile;
-};
 
 interface AuthContextProviderProps {
 	children: ReactNode;
@@ -31,23 +26,32 @@ const AuthContext = createContext<AuthContextValue>({
 	user: null,
 	login: () => {},
 	logout: () => {},
+	update: () => {},
 });
 
 export function AuthProvider({ children }: AuthContextProviderProps) {
-	const [user, setUser] = useState<AuthUser | null>(null);
+	const [user, setUser] = useState<UserProfile | null>(null);
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		auth.onUserStateChanged(async user => {
 			if (!user) return;
-			const isAdmin = await database.isAdmin(user);
 			const userFound = await ProfilePresenter.get(user.uid);
 
-			setUser({
-				...user,
-				isAdmin,
-				profile: userFound ? userFound : ProfilePresenter.init(user),
-			});
+			if (userFound) {
+				console.log('user founded', userFound);
+				return setUser(userFound);
+			}
+
+			const profileInit: UserProfile = {
+				name: user.displayName || 'User',
+				photoURL: user.photoURL,
+				uid: user.uid,
+				account: null,
+				isAdmin: await database.isAdmin(user),
+			};
+
+			ProfilePresenter.update(profileInit, setUser);
 		});
 	}, []);
 
@@ -61,8 +65,12 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
 		navigate('/');
 	}
 
+	function update(profile: UserProfile) {
+		ProfilePresenter.update(profile, setUser);
+	}
+
 	return (
-		<AuthContext.Provider value={{ user, login, logout }}>
+		<AuthContext.Provider value={{ user, login, logout, update }}>
 			{children}
 		</AuthContext.Provider>
 	);

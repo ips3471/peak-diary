@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthContext } from '../../../context/AuthContext';
 import { selectedDelay } from '../../navbar/utils/utils';
@@ -23,14 +22,12 @@ export default function User({ delay, href }: UserProps) {
 						{user?.photoURL && (
 							<img
 								src={user.photoURL}
-								alt={user.profile.name}
+								alt={user.name}
 								className='rounded-full whitespace-nowrap'
 							/>
 						)}
 					</div>
-					<p className='whitespace-nowrap lg:block'>
-						{user?.profile.name || 'null'}
-					</p>
+					<p className='whitespace-nowrap lg:block'>{user?.name || 'null'}</p>
 				</div>
 			</Link>
 		</div>

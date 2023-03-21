@@ -4,34 +4,25 @@ import { useAuthContext } from '../context/AuthContext';
 import { MdOutlinePhotoCameraFront } from 'react-icons/md';
 import Rounded from '../components/form/rounded';
 import { UserProfile } from '../types/components/profile';
-import ProfilePresenter, {
-	update,
-	init,
-} from '../presenter/profile/ProfilePresenter';
 
 export default function Profile() {
-	const { user, login, logout } = useAuthContext();
-	const [profile, setProfile] = useState<UserProfile>({ uid: '', name: '' });
+	const { user, update } = useAuthContext();
+	const [input, setInput] = useState<string>('');
 
 	useEffect(() => {
-		user &&
-			ProfilePresenter.get(user.uid).then(profile => {
-				profile && setProfile(profile);
-			});
+		user && setInput(user.name);
 	}, []);
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const { id, value } = e.currentTarget;
-		setProfile(prev => ({ ...prev, [id]: value }));
+		const { value } = e.currentTarget;
+		setInput(value);
 	};
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+		if (!user) throw new Error(`User Not Found`);
 		e.preventDefault();
-		if (!user?.uid) {
-			throw new Error(`Not Found User: ${user}`);
-		}
-
-		ProfilePresenter.update(profile, setProfile);
+		const updated: UserProfile = { ...user, name: input };
+		update(updated);
 	};
 
 	return (
@@ -56,7 +47,7 @@ export default function Profile() {
 						spellCheck='false'
 						id='name'
 						type='text'
-						value={profile?.name}
+						value={input}
 						onChange={handleChange}
 					/>
 				</Rounded>

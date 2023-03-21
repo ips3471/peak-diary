@@ -8,7 +8,6 @@ import {
 import { User } from 'firebase/auth';
 import {
 	getDatabase,
-	onValue,
 	get,
 	child,
 	ref,
