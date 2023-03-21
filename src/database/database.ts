@@ -111,7 +111,7 @@ const database = {
 		async get(uid: string) {
 			return get(ref(db, `users/${uid}`)).then(snapshot => {
 				if (snapshot.exists()) {
-					return snapshot.val();
+					return snapshot.val() as UserProfile;
 				}
 			});
 		},

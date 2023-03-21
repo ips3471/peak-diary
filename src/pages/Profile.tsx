@@ -4,14 +4,20 @@ import { useAuthContext } from '../context/AuthContext';
 import { MdOutlinePhotoCameraFront } from 'react-icons/md';
 import Rounded from '../components/form/rounded';
 import { UserProfile } from '../types/components/profile';
-import { update, init } from '../presenter/profile/ProfilePresenter';
+import ProfilePresenter, {
+	update,
+	init,
+} from '../presenter/profile/ProfilePresenter';
 
 export default function Profile() {
 	const { user, login, logout } = useAuthContext();
-	const [profile, setProfile] = useState<UserProfile>({ name: '' });
+	const [profile, setProfile] = useState<UserProfile>({ uid: '', name: '' });
 
 	useEffect(() => {
-		user && init(user, setProfile);
+		user &&
+			ProfilePresenter.get(user.uid).then(profile => {
+				profile && setProfile(profile);
+			});
 	}, []);
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -24,9 +30,8 @@ export default function Profile() {
 		if (!user?.uid) {
 			throw new Error(`Not Found User: ${user}`);
 		}
-		if (profile.name !== user?.name) {
-			update(user?.uid, profile, setProfile);
-		}
+
+		ProfilePresenter.update(profile, setProfile);
 	};
 
 	return (

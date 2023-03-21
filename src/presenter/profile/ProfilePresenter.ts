@@ -1,7 +1,28 @@
+import { User } from 'firebase/auth';
 import { Dispatch, SetStateAction } from 'react';
 import { AuthUser } from '../../context/AuthContext';
 import database from '../../database/database';
 import { UserProfile } from '../../types/components/profile';
+
+const ProfilePresenter = {
+	init(user: User) {
+		const element: UserProfile = {
+			name: user.displayName || 'User',
+			uid: user.uid,
+		};
+		database.users.update(user.uid, element);
+		return element;
+	},
+
+	async get(uid: string) {
+		return await database.users.get(uid);
+	},
+
+	update(profile: UserProfile, update: Dispatch<SetStateAction<UserProfile>>) {
+		database.users.update(profile.uid, profile);
+		update(profile);
+	},
+};
 
 export function update(
 	uid: string,
@@ -24,7 +45,9 @@ export async function init(
 		if (profile) {
 			setState(profile);
 		} else {
-			setState({ name: user.displayName || 'null' });
+			setState({ uid: user.uid, name: user.displayName || 'null' });
 		}
 	});
 }
+
+export default ProfilePresenter;

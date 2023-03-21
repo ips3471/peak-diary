@@ -23,12 +23,14 @@ export default function User({ delay, href }: UserProps) {
 						{user?.photoURL && (
 							<img
 								src={user.photoURL}
-								alt={user.name}
+								alt={user.profile.name}
 								className='rounded-full whitespace-nowrap'
 							/>
 						)}
 					</div>
-					<p className='whitespace-nowrap lg:block'>{user?.name || 'null'}</p>
+					<p className='whitespace-nowrap lg:block'>
+						{user?.profile.name || 'null'}
+					</p>
 				</div>
 			</Link>
 		</div>

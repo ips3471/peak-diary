@@ -52,7 +52,7 @@ export default function GroupAccountCard({
 						src={user?.photoURL || process.env.PUBLIC_URL + 'logo192.png'}
 						alt='host'
 					/>
-					<p className='text-sm'>{user?.name || 'null'}</p>
+					<p className='text-sm'>{user?.profile.name || 'null'}</p>
 				</span>
 				<span className='text-sm font-thin'>{item.date}</span>
 			</section>
