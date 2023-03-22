@@ -44,7 +44,7 @@ export default function GroupAccount() {
 		console.log(input);
 		// controller
 		GroupAccountPresenter.add(
-			{ ...input, host: user.uid, users: [user.uid] },
+			{ ...input, host: user.uid, users: [user] },
 			setAccountItems,
 		);
 		setDialog(false);

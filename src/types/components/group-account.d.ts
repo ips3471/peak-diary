@@ -1,3 +1,4 @@
+import { UserProfile } from './profile.d';
 import { AuthUser } from '../../context/AuthContext';
 
 type Category = 'driving' | 'eating' | 'shopping' | 'etc' | 'booking';
@@ -5,8 +6,8 @@ type Category = 'driving' | 'eating' | 'shopping' | 'etc' | 'booking';
 export type ReceiptItem = {
 	id: string;
 	category: Category;
-	total: number;
-	url: string;
+	total?: string | number;
+	receiptURL: string;
 	description: string;
 	coordinatorUid: string;
 	exceptedUsers: string[];
@@ -18,7 +19,7 @@ export type GroupAccountItem = {
 	date: string;
 	host: string;
 	userLength: number;
-	users: string[];
+	users: UserProfile[];
 	isDone: boolean;
 	title: string;
 	receipts: ReceiptItem[];

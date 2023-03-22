@@ -19,6 +19,7 @@ export default function GroupAccountCard({
 	onUpdate,
 }: GroupAccountItemProps) {
 	const navigate = useNavigate();
+
 	const handleEnter = (inputValue: number) => {
 		toggleNumpad(null);
 
@@ -26,7 +27,7 @@ export default function GroupAccountCard({
 
 		const updated: GroupAccountItem = {
 			...item,
-			users: [...item.users, user.uid],
+			users: item?.users ? [...item.users, user] : [user],
 		};
 
 		onUpdate(updated);
@@ -34,7 +35,8 @@ export default function GroupAccountCard({
 	};
 
 	const handlePass = () => {
-		if (item.users.includes(user.uid)) {
+		const uids = item.users?.map(user => user.uid) || [];
+		if (uids.includes(user.uid)) {
 			moveToDetail();
 		}
 		!numpadTarget && toggleNumpad(item);
@@ -62,7 +64,7 @@ export default function GroupAccountCard({
 					<p>
 						<span>참여인원 </span>
 						<span className='text-brand/80 text-base font-semibold'>
-							{item.userLength}
+							{item.users?.length || 0}/{item.userLength}
 						</span>
 					</p>
 					{item.host === user.uid && (
@@ -82,6 +84,7 @@ export default function GroupAccountCard({
 					<div className='max-w-xs absolute right-0'>
 						{numpadTarget === item.id && (
 							<NumPad
+								title='참여코드 입력'
 								onCancel={() => toggleNumpad(null)}
 								type='password'
 								onSubmit={handleEnter}

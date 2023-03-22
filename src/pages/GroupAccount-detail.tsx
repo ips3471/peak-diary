@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { BiCalculator } from 'react-icons/bi';
 import { useLocation, useParams } from 'react-router-dom';
 import BodyContainer from '../components/body/container';
 import FormContainer from '../components/form/form-container';
@@ -13,24 +14,44 @@ import {
 	ReceiptCategory,
 	ReceiptItem,
 } from '../types/components/group-account';
-import { UserProfile } from '../types/components/profile';
-import database from '../database/database';
+import NumPad from '../util/Numpad';
 
 export default function GroupAccountDetail() {
-	const param = useParams();
+	const { user } = useAuthContext();
 	const location = useLocation();
 	const categories = controls.receiptCategory;
-	const { user } = useAuthContext();
 	const receiptsMap = new Map<Category, ReceiptItem[]>([]);
-	const usersMap = new Map<string, UserProfile>();
-
 	const [selectedCategory, setSelectedCategory] =
 		useState<ReceiptCategory | null>(null);
+	const [formInputs, setFormInputs] = useState<
+		Omit<ReceiptItem, 'id' | 'category'>
+	>({
+		coordinatorUid: user?.uid || '',
+		description: '',
+		exceptedUsers: [],
+		receiptURL: '',
+		total: '',
+	});
+	const [displayCalc, setDisplayCalc] = useState(false);
+
+	useEffect(() => {
+		selectedCategory == null &&
+			setFormInputs({
+				coordinatorUid: user?.uid || '',
+				description: '',
+				exceptedUsers: [],
+				receiptURL: '',
+				total: '',
+			});
+	}, [selectedCategory]);
 
 	const { code, date, host, id, isDone, title, userLength, users, receipts } =
 		location.state as GroupAccountItem;
 
-	const usernames = users;
+	/* 
+	mount - db로부터 receipts를 받아옴
+	onchange - state update + db update
+	*/
 
 	useEffect(() => {
 		receipts &&
@@ -38,22 +59,30 @@ export default function GroupAccountDetail() {
 				const container = receiptsMap.get(receipt.category) || [];
 				receiptsMap.set(receipt.category, [...container, receipt]);
 			});
-		console.log(users);
-
-		users.forEach(user => {
-			database.users.get(user).then(profile => {
-				console.log(profile);
-
-				profile && usersMap.set(user, profile);
-			});
-		});
 	}, []);
 
-	const setDialog = () => {
-		// receipt 추가 dialog open
+	const handleAdd = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		if (!selectedCategory) {
+			return;
+		}
+		const element: Omit<ReceiptItem, 'id'> = {
+			...formInputs,
+			category: selectedCategory.id,
+		};
+		console.log('tobe added', element);
+		// db와 state에 업데이트
+		setSelectedCategory(null);
 	};
 
-	console.log(usersMap);
+	const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+		e.preventDefault();
+		const { value } = e.currentTarget;
+	};
+
+	const handleInputChange = (name: keyof ReceiptItem, value: any) => {
+		setFormInputs(formInputs => ({ ...formInputs, [name]: value }));
+	};
 
 	return (
 		<BodyContainer>
@@ -67,7 +96,10 @@ export default function GroupAccountDetail() {
 									{category.name}
 								</h1>
 								<button
-									// onClick={() => setDialog(true)}
+									onClick={() => {
+										setSelectedCategory(category);
+										displayCalc && setDisplayCalc(false);
+									}}
 									className={`flex items-center text-gray-500 p-1`}
 								>
 									<AiOutlinePlus />
@@ -85,22 +117,90 @@ export default function GroupAccountDetail() {
 					))}
 				</ul>
 			</div>
-			<FormContainer
-				title={selectedCategory?.name + '추가'}
-				onCancel={() => setSelectedCategory(null)}
-			>
-				<>
-					<Rounded isStretched={true} color='light'>
-						<select>{}</select>
-					</Rounded>
-					<Rounded isStretched={true} color='light'>
-						<input placeholder='사용처' />
-					</Rounded>
-					<Rounded isStretched={true} color='light'>
-						<input placeholder='금액' />
-					</Rounded>
-				</>
-			</FormContainer>
+			{selectedCategory && (
+				<FormContainer
+					title={selectedCategory.name + ' 지출내역 추가'}
+					onCancel={() => setSelectedCategory(null)}
+				>
+					<form onSubmit={handleAdd}>
+						<section>
+							<Rounded isStretched={true} color='light'>
+								<label htmlFor='user-select'>결제한 사람</label>
+								<select
+									value={formInputs.coordinatorUid}
+									onChange={e =>
+										handleInputChange('coordinatorUid', e.currentTarget.value)
+									}
+									name='coordinatorUid'
+									id='user-select'
+								>
+									{users.map(user => (
+										<option key={user.uid} id={user.uid} value={user.uid}>
+											{user.name}
+										</option>
+									))}
+								</select>
+							</Rounded>
+							<Rounded isStretched={true} color='light'>
+								<input
+									required
+									autoComplete='disable'
+									name='description'
+									placeholder='사용처'
+									value={formInputs.description}
+									onChange={e =>
+										handleInputChange('description', e.currentTarget.value)
+									}
+								/>
+							</Rounded>
+							<Rounded isStretched={true} color='light'>
+								<input
+									required
+									autoComplete='disable'
+									name='total'
+									placeholder='금액'
+									value={formInputs.total}
+									onChange={e =>
+										handleInputChange('total', e.currentTarget.value)
+									}
+								/>
+								<button
+									type='button'
+									onClick={() => setDisplayCalc(curr => !curr)}
+									className='p-1'
+								>
+									<BiCalculator />
+								</button>
+							</Rounded>
+							{displayCalc && (
+								<div
+									className={`relative ${
+										displayCalc ? 'h-full opacity-100' : 'h-0 opacity-50'
+									} transition-all`}
+								>
+									<NumPad
+										title='금액 입력'
+										onCancel={() => setDisplayCalc(false)}
+										onSubmit={value => {
+											setDisplayCalc(false);
+											handleInputChange('total', value);
+										}}
+										type='currency'
+									/>
+								</div>
+							)}
+						</section>
+						<section className='flex justify-between text-center mt-2'>
+							<button
+								className='flex-1 text-body bg-brand/70 rounded-2xl py-3 font-semibold'
+								type='submit'
+							>
+								추가하기
+							</button>
+						</section>
+					</form>
+				</FormContainer>
+			)}
 		</BodyContainer>
 	);
 }

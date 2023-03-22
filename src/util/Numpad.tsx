@@ -1,5 +1,5 @@
 import React, { MouseEvent, useState } from 'react';
-import FormContainer from '../components/form/form-container';
+import { AiOutlineClose } from 'react-icons/ai';
 
 type NumPadType = 'currency' | 'password';
 type NumPadOptions = {
@@ -29,6 +29,7 @@ interface NumPadProps {
 	onSubmit: (value: number) => void;
 	options?: NumPadOptions;
 	onCancel: () => void;
+	title: string;
 }
 
 const PADS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
@@ -45,6 +46,7 @@ export default function NumPad({
 	onSubmit,
 	onCancel,
 	options = defaultOptions,
+	title,
 }: NumPadProps) {
 	const [input, setInput] = useState<string>('');
 
@@ -66,32 +68,33 @@ export default function NumPad({
 	};
 
 	const styles: NumPadStyles = {
-		numpad__wrapper: {},
+		numpad__wrapper: {
+			padding: '0.5rem',
+		},
 		input__container: {
 			display: 'flex',
 			padding: '0 0.5rem',
-			height: '2.8rem',
-			flex: '1 1 0%',
+			height: '2.2rem',
 			gap: options.buttonGap,
 		},
 		numpad__input: {
-			flex: '1 1 70%',
-			height: '100%',
+			flex: '1 1 80%',
 			'border-radius': '7px',
 			border: '1px solid #777',
 			'text-align': 'right',
-			padding: '0 1rem',
+			padding: '0 0.5rem',
+			height: '100%',
 			'font-size': '1.1rem',
 			color: type === 'password' ? 'tomato' : 'black',
 		},
 		numpad__input__clear: {
 			'background-color': options.clearColor,
 			'border-radius': options.buttonRadius,
-			flex: '1 1 30%',
+			height: '100%',
+			flex: '1 1 20%',
 			cursor: 'pointer',
 		},
 		numpad__container: {
-			width: '20rem',
 			display: 'grid',
 			'grid-template-columns': 'repeat(3, 1fr)',
 			gap: options.buttonGap,
@@ -99,9 +102,9 @@ export default function NumPad({
 		},
 
 		numpad__pad: {
-			flex: '1 1 3rem',
+			flex: '1 1 1rem',
 			'background-color': options.numColor,
-			height: '4rem',
+			'min-height': '2rem',
 			display: 'flex',
 			'justify-content': 'space-around',
 			'align-items': 'center',
@@ -118,9 +121,19 @@ export default function NumPad({
 	};
 
 	return (
-		<FormContainer title='참야코드 입력' onCancel={onCancel}>
-			<div className='numpad__wrapper' style={styles.numpad__wrapper}>
-				<div style={styles.input__container} className='input__container'>
+		<div className={`flex-1 bg-red-100 rounded-lg`}>
+			<header className='text-grey flex justify-between mb-1'>
+				<h1 className=''>{title}</h1>
+				<button type='button' onClick={onCancel} className={'text-xl'}>
+					<AiOutlineClose />
+				</button>
+			</header>
+
+			<article className='numpad__wrapper ' style={styles.numpad__wrapper}>
+				<section
+					style={styles.input__container}
+					className='input__container items-center'
+				>
 					<input
 						value={input}
 						style={styles.numpad__input}
@@ -129,16 +142,19 @@ export default function NumPad({
 						readOnly
 					/>
 					<button
-						style={styles.numpad__input__clear}
-						className='numpad__pad numpad__pad__clear'
+						type='button'
+						style={{ ...styles.numpad__pad, ...styles.numpad__input__clear }}
+						className='px-5 numpad__pad numpad__pad__clear'
 						onClick={onInputClear}
 					>
 						C
 					</button>
-				</div>
+				</section>
+
 				<div style={styles.numpad__container} className='numpad__container'>
 					{PADS.map((num, index) => (
 						<button
+							type='button'
 							style={styles.numpad__pad}
 							className='numpad__pad'
 							key={index}
@@ -148,6 +164,7 @@ export default function NumPad({
 						</button>
 					))}
 					<button
+						type='button'
 						style={{ ...styles.numpad__pad, ...styles.numpad__pad__00 }}
 						className='numpad__pad numpad__pad__00'
 						onClick={onInputChange}
@@ -155,6 +172,7 @@ export default function NumPad({
 						00
 					</button>
 					<button
+						type='button'
 						style={{ ...styles.numpad__pad, ...styles.numpad__pad__enter }}
 						className='numpad__pad numpad__pad__enter'
 						onClick={handleSubmit}
@@ -162,7 +180,7 @@ export default function NumPad({
 						ENTER
 					</button>
 				</div>
-			</div>
-		</FormContainer>
+			</article>
+		</div>
 	);
 }

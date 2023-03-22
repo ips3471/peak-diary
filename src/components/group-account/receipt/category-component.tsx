@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ReceiptItem } from '../../../types/components/group-account';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { MdArrowRightAlt } from 'react-icons/md';
@@ -8,6 +8,8 @@ interface ReceiptItemProps {
 }
 
 export default function ReceiptsByCategory({ receipts }: ReceiptItemProps) {
+	const [receiptItems, setReceiptItems] = useState(receipts);
+
 	return (
 		<ul className=''>
 			{receipts.map(receipt => (
@@ -19,7 +21,9 @@ export default function ReceiptsByCategory({ receipts }: ReceiptItemProps) {
 							</div>
 							<div className=''>{receipt.description}</div>
 						</div>
-						<div className='ml-2'>{receipt.total.toLocaleString('ko')}</div>
+						<div className='ml-2'>
+							{receipt.total?.toLocaleString('ko') || 0}
+						</div>
 					</li>
 					{receipt.exceptedUsers.length !== 0 && (
 						<div className='text-orange-700 text-xs flex gap-1 ml-2 items-center'>
