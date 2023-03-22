@@ -3,6 +3,8 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@cloudinary/react": "^1.11.2",
+		"@cloudinary/url-gen": "^1.9.2",
 		"@types/firebase": "^3.2.1",
 		"@types/node": "^16.7.13",
 		"@types/react": "^18.0.0",

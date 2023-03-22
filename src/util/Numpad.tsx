@@ -79,7 +79,7 @@ export default function NumPad({
 		},
 		numpad__input: {
 			flex: '1 1 80%',
-			'border-radius': '7px',
+			borderRadius: '7px',
 			border: '1px solid #777',
 			'text-align': 'right',
 			padding: '0 0.5rem',

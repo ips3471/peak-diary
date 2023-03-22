@@ -1,5 +1,11 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
+import React, {
+	ChangeEvent,
+	FormEvent,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
+import { AiOutlineDownload, AiOutlinePlus } from 'react-icons/ai';
 import { BiCalculator } from 'react-icons/bi';
 import { useLocation, useParams } from 'react-router-dom';
 import BodyContainer from '../components/body/container';
@@ -8,6 +14,7 @@ import Rounded from '../components/form/rounded';
 import ReceiptsByCategory from '../components/group-account/receipt/category-component';
 import { useAuthContext } from '../context/AuthContext';
 import controls from '../controls/controls';
+import { uploadImage } from '../service/cloudinary/cloudinary';
 import {
 	Category,
 	GroupAccountItem,
@@ -23,6 +30,7 @@ export default function GroupAccountDetail() {
 	const location = useLocation();
 	const categories = controls.receiptCategory;
 	const receiptsMap = new Map<Category, ReceiptItem[]>([]);
+	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const [selectedCategory, setSelectedCategory] =
 		useState<ReceiptCategory | null>(null);
 	const [formInputs, setFormInputs] = useState<FormInputs>({
@@ -120,13 +128,22 @@ export default function GroupAccountDetail() {
 		setFormInputs(formInputs => ({ ...formInputs, [name]: value }));
 	};
 
+	const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+		e.preventDefault();
+		const file = e.currentTarget.files && e.currentTarget.files[0];
+		uploadImage(file).then(url => handleInputChange('receiptURL', url));
+	};
+
 	return (
 		<BodyContainer>
 			<div className='h-full overflow-y-scroll scrollbar-hide'>
 				<h1 className='font-bold mb-2'>{title}</h1>
 				<ul>
 					{categories.map(category => (
-						<li className='mb-6 bg-pureWhite/50 p-2 rounded-md'>
+						<li
+							key={category.id}
+							className='mb-6 bg-pureWhite/50 p-2 rounded-md'
+						>
 							<div className='flex justify-between'>
 								<h1 className=' text-brand font-medium mb-1'>
 									{category.name}
@@ -248,11 +265,35 @@ export default function GroupAccountDetail() {
 									))}
 								</ul>
 							</Rounded>
+							<div className='flex my-3 '>
+								<button
+									onClick={() => fileInputRef && fileInputRef.current?.click()}
+									type='button'
+									className={`flex shadow-sm items-center ${
+										formInputs.receiptURL ? 'bg-brand/80' : 'bg-bodyAccent/90'
+									} py-1 px-2 text-pureWhite/95 text-sm`}
+								>
+									{!formInputs.receiptURL && <AiOutlineDownload />}
+									<span>
+										{formInputs.receiptURL ? '첨부완료' : '영수증 첨부'}
+									</span>
+								</button>
+								<input
+									ref={fileInputRef}
+									className='w-0'
+									type='file'
+									accept='image/*'
+									onChange={handleFileChange}
+								/>
+							</div>
 						</section>
+
 						<section className='flex justify-between text-center mt-2'>
 							<button
 								className={`flex-1 text-body rounded-2xl py-3 font-semibold ${
-									isFormComplated ? 'bg-brand/70' : 'bg-button_disabled/70'
+									isFormComplated
+										? 'bg-brand/70'
+										: 'bg-button_disabled/70 pointer-events-none'
 								}`}
 								type='submit'
 							>
