@@ -16,6 +16,8 @@ import {
 } from '../types/components/group-account';
 import NumPad from '../util/Numpad';
 
+type FormInputs = Omit<ReceiptItem, 'id' | 'category'>;
+
 export default function GroupAccountDetail() {
 	const { user } = useAuthContext();
 	const location = useLocation();
@@ -23,16 +25,42 @@ export default function GroupAccountDetail() {
 	const receiptsMap = new Map<Category, ReceiptItem[]>([]);
 	const [selectedCategory, setSelectedCategory] =
 		useState<ReceiptCategory | null>(null);
-	const [formInputs, setFormInputs] = useState<
-		Omit<ReceiptItem, 'id' | 'category'>
-	>({
+	const [formInputs, setFormInputs] = useState<FormInputs>({
 		coordinatorUid: user?.uid || '',
 		description: '',
-		exceptedUsers: [],
+		exceptedUsers: [
+			'W98yFENuuEcSWhCWftRYQAeGxhs1',
+			'oH3PBnV9wOTffmaePhiqwaO0Mwl1',
+		],
 		receiptURL: '',
 		total: '',
 	});
 	const [displayCalc, setDisplayCalc] = useState(false);
+	const [isFormComplated, setIsFormCompleted] = useState(false);
+
+	const [items, setItems] = useState<Map<Category, ReceiptItem[]>>();
+
+	useEffect(() => {
+		const essentialInputs = ['total', 'coordinatorUid', 'description'];
+		const inputsMap = new Map(Object.entries(formInputs));
+		const inputStates = {
+			total: !!inputsMap.get('total'),
+			coordinatorUid: !!inputsMap.get('coordinatorUid'),
+			description: !!inputsMap.get('description'),
+		};
+
+		for (let property of inputsMap.keys()) {
+			if (!essentialInputs.includes(property)) {
+				return;
+			}
+
+			inputStates[property as keyof typeof inputStates] =
+				!!inputsMap.get(property);
+
+			const isCompleted = Object.values(inputStates).every(val => val === true);
+			setIsFormCompleted(isCompleted);
+		}
+	}, [formInputs]);
 
 	useEffect(() => {
 		selectedCategory == null &&
@@ -48,17 +76,13 @@ export default function GroupAccountDetail() {
 	const { code, date, host, id, isDone, title, userLength, users, receipts } =
 		location.state as GroupAccountItem;
 
-	/* 
-	mount - db로부터 receipts를 받아옴
-	onchange - state update + db update
-	*/
-
 	useEffect(() => {
 		receipts &&
 			receipts.forEach(receipt => {
 				const container = receiptsMap.get(receipt.category) || [];
 				receiptsMap.set(receipt.category, [...container, receipt]);
 			});
+		setItems(receiptsMap);
 	}, []);
 
 	const handleAdd = (e: FormEvent<HTMLFormElement>) => {
@@ -75,9 +99,21 @@ export default function GroupAccountDetail() {
 		setSelectedCategory(null);
 	};
 
-	const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		e.preventDefault();
-		const { value } = e.currentTarget;
+	const handleSelectToPays = (uid: string) => {
+		const { exceptedUsers } = formInputs;
+
+		if (exceptedUsers.includes(uid)) {
+			setFormInputs(prev => ({
+				...prev,
+				exceptedUsers: prev.exceptedUsers.filter(u => u !== uid),
+			}));
+		}
+		if (!exceptedUsers.includes(uid)) {
+			setFormInputs(prev => ({
+				...prev,
+				exceptedUsers: [...exceptedUsers, uid],
+			}));
+		}
 	};
 
 	const handleInputChange = (name: keyof ReceiptItem, value: any) => {
@@ -110,7 +146,7 @@ export default function GroupAccountDetail() {
 							</div>
 							<ReceiptsByCategory
 								key={category.id}
-								receipts={receiptsMap.get(category.id) || []}
+								receipts={items?.get(category.id) || []}
 							/>
 							<hr className='mt-5' />
 						</li>
@@ -153,6 +189,7 @@ export default function GroupAccountDetail() {
 									}
 								/>
 							</Rounded>
+
 							<Rounded isStretched={true} color='light'>
 								<input
 									required
@@ -189,10 +226,34 @@ export default function GroupAccountDetail() {
 									/>
 								</div>
 							)}
+							<Rounded isStretched={true} color='light'>
+								<ul className='w-full flex justify-evenly overflow-x-scroll'>
+									{users.map(user => (
+										<li
+											key={user.uid}
+											className={`border overflow-hidden rounded-lg ${
+												formInputs.exceptedUsers.includes(user.uid)
+													? 'text-button_disabled'
+													: 'bg-brand/90 text-pureWhite'
+											} `}
+										>
+											<button
+												className='p-2'
+												type='button'
+												onClick={() => handleSelectToPays(user.uid)}
+											>
+												{user.name}
+											</button>
+										</li>
+									))}
+								</ul>
+							</Rounded>
 						</section>
 						<section className='flex justify-between text-center mt-2'>
 							<button
-								className='flex-1 text-body bg-brand/70 rounded-2xl py-3 font-semibold'
+								className={`flex-1 text-body rounded-2xl py-3 font-semibold ${
+									isFormComplated ? 'bg-brand/70' : 'bg-button_disabled/70'
+								}`}
 								type='submit'
 							>
 								추가하기

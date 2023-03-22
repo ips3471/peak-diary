@@ -8,6 +8,7 @@ module.exports = {
 				softBlack: '#55443a',
 				pureWhite: '#ffffff',
 				grey: '#60666d',
+				button_disabled: '#848687',
 				darkGreen: '#1e3932',
 				body: 'rgb(254, 242, 242)',
 				input_light: '#ffffff',
