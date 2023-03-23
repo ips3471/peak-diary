@@ -1,4 +1,7 @@
-import { GroupAccountItem } from './../types/components/group-account.d';
+import {
+	GroupAccountItem,
+	ReceiptItem,
+} from './../types/components/group-account.d';
 import { UserProfile } from './../types/components/profile.d';
 import {
 	CheckListItem,
@@ -116,7 +119,7 @@ const database = {
 		},
 	},
 	groupAccounts: {
-		async add(form: Omit<GroupAccountItem, 'id' | 'code'>) {
+		async addList(form: Omit<GroupAccountItem, 'id' | 'code'>) {
 			const id = uuid();
 			const code = Math.floor(Math.random() * 9999);
 			const element: GroupAccountItem = { ...form, id, code };
@@ -124,7 +127,7 @@ const database = {
 			console.log('add group-account in db', element);
 			return element;
 		},
-		async get(): Promise<GroupAccountItem[]> {
+		async getLists(): Promise<GroupAccountItem[]> {
 			const snapshot = await get(ref(db, `groupAccounts`));
 			if (snapshot.exists()) {
 				return Object.values(snapshot.val());
@@ -132,9 +135,18 @@ const database = {
 				return [];
 			}
 		},
-		update(id: string, item: GroupAccountItem) {
+		updateList(id: string, item: GroupAccountItem) {
 			update(ref(db, `/groupAccounts/${id}`), item);
 			console.log('groupAccount updated', item);
+		},
+		receipts: {
+			async addItem(listId: string, form: Omit<ReceiptItem, 'id'>) {
+				const id = uuid();
+				const element: ReceiptItem = { ...form, id };
+				set(ref(db, `/groupAccounts/${listId}/items/${id}`), element);
+				console.log('add new receipt in db', element);
+				return element;
+			},
 		},
 	},
 };

@@ -7,7 +7,10 @@ import React, {
 } from 'react';
 import { AiOutlineDownload, AiOutlinePlus } from 'react-icons/ai';
 import { BiCalculator } from 'react-icons/bi';
-import { useLocation, useParams } from 'react-router-dom';
+import { ImSpinner3 } from 'react-icons/im';
+import { BsCheck } from 'react-icons/bs';
+import { useLocation } from 'react-router-dom';
+
 import BodyContainer from '../components/body/container';
 import FormContainer from '../components/form/form-container';
 import Rounded from '../components/form/rounded';
@@ -43,6 +46,7 @@ export default function GroupAccountDetail() {
 		receiptURL: '',
 		total: '',
 	});
+	const [isUploading, setIsUploading] = useState<boolean>(false);
 	const [displayCalc, setDisplayCalc] = useState(false);
 	const [isFormComplated, setIsFormCompleted] = useState(false);
 
@@ -131,7 +135,12 @@ export default function GroupAccountDetail() {
 	const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault();
 		const file = e.currentTarget.files && e.currentTarget.files[0];
-		uploadImage(file).then(url => handleInputChange('receiptURL', url));
+		if (file) {
+			setIsUploading(true);
+			uploadImage(file)
+				.then(url => handleInputChange('receiptURL', url))
+				.then(() => setIsUploading(false));
+		}
 	};
 
 	return (
@@ -269,14 +278,20 @@ export default function GroupAccountDetail() {
 								<button
 									onClick={() => fileInputRef && fileInputRef.current?.click()}
 									type='button'
-									className={`flex shadow-sm items-center ${
-										formInputs.receiptURL ? 'bg-brand/80' : 'bg-bodyAccent/90'
+									className={`rounded-lg flex w-28 justify-center shadow-sm items-center ${
+										formInputs.receiptURL ? 'bg-brand' : 'bg-bodyAccent/90'
 									} py-1 px-2 text-pureWhite/95 text-sm`}
 								>
-									{!formInputs.receiptURL && <AiOutlineDownload />}
-									<span>
-										{formInputs.receiptURL ? '첨부완료' : '영수증 첨부'}
-									</span>
+									{isUploading ? (
+										<span className='animate-[spin_0.5s_ease-in-out_infinite]'>
+											<ImSpinner3 />
+										</span>
+									) : (
+										<>
+											{!formInputs.receiptURL && <AiOutlineDownload />}
+											{formInputs.receiptURL ? <BsCheck /> : '영수증 첨부'}
+										</>
+									)}
 								</button>
 								<input
 									ref={fileInputRef}
@@ -291,7 +306,7 @@ export default function GroupAccountDetail() {
 						<section className='flex justify-between text-center mt-2'>
 							<button
 								className={`flex-1 text-body rounded-2xl py-3 font-semibold ${
-									isFormComplated
+									isFormComplated && !isUploading
 										? 'bg-brand/70'
 										: 'bg-button_disabled/70 pointer-events-none'
 								}`}

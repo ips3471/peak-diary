@@ -39,7 +39,6 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
 			const userFound = await ProfilePresenter.get(user.uid);
 
 			if (userFound) {
-				console.log('user founded', userFound);
 				return setUser(userFound);
 			}
 

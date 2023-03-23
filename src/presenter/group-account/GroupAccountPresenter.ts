@@ -1,9 +1,12 @@
 import { Dispatch, SetStateAction } from 'react';
-import { GroupAccountItem } from './../../types/components/group-account.d';
+import {
+	GroupAccountItem,
+	ReceiptItem,
+} from './../../types/components/group-account.d';
 import database from '../../database/database';
 
 const GroupAccountPresenter = {
-	add(
+	addList(
 		form: Pick<
 			GroupAccountItem,
 			'title' | 'date' | 'host' | 'userLength' | 'users'
@@ -16,22 +19,34 @@ const GroupAccountPresenter = {
 			receipts: [],
 		};
 		database.groupAccounts
-			.add(element)
+			.addList(element)
 			.then(data => update(prev => [...prev, data]));
 	},
 
 	async init(update: Dispatch<SetStateAction<GroupAccountItem[]>>) {
-		database.groupAccounts.get().then(items => update(items));
+		database.groupAccounts.getLists().then(items => update(items));
 	},
 
-	update(
+	updateList(
 		updated: GroupAccountItem,
 		update: Dispatch<SetStateAction<GroupAccountItem[]>>,
 	) {
-		database.groupAccounts.update(updated.id, updated);
+		database.groupAccounts.updateList(updated.id, updated);
 		update(items =>
 			items.map(item => (item.id === updated.id ? updated : item)),
 		);
+	},
+
+	receipts: {
+		addItem(
+			listId: string,
+			form: Omit<ReceiptItem, 'id'>,
+			update: Dispatch<SetStateAction<ReceiptItem[]>>,
+		) {
+			database.groupAccounts.receipts
+				.addItem(listId, form)
+				.then(data => update(prev => [...prev, data]));
+		},
 	},
 };
 

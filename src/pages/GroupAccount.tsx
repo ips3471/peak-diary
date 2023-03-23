@@ -26,7 +26,7 @@ export default function GroupAccount() {
 	}, []);
 
 	const updateItem = (updated: GroupAccountItem) => {
-		GroupAccountPresenter.update(updated, setAccountItems);
+		GroupAccountPresenter.updateList(updated, setAccountItems);
 	};
 
 	const handleNumpad = (item: GroupAccountItem | null) => {
@@ -43,7 +43,7 @@ export default function GroupAccount() {
 		if (!user) throw new Error(`Not Found User: ${user}`);
 		console.log(input);
 		// controller
-		GroupAccountPresenter.add(
+		GroupAccountPresenter.addList(
 			{ ...input, host: user.uid, users: [user] },
 			setAccountItems,
 		);
