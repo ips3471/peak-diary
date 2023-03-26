@@ -51,12 +51,13 @@ const GroupAccountPresenter = {
 			form: Omit<ReceiptItem, 'id'>,
 			update: Dispatch<SetStateAction<ReceiptItem[]>>,
 		) {
-			database.groupAccounts.receipts.addItem(listId, form).then(data =>
-				update(prev => {
-					console.log(prev);
-					return [...prev, data];
-				}),
-			);
+			database.groupAccounts.receipts
+				.addItem(listId, { ...form, total: Number(form.total) })
+				.then(data =>
+					update(prev => {
+						return [...prev, data];
+					}),
+				);
 		},
 		async init(
 			listId: string,
@@ -66,6 +67,14 @@ const GroupAccountPresenter = {
 			database.groupAccounts.receipts
 				.getListsByCategory(listId, category)
 				.then(update);
+		},
+		deleteItem(
+			listId: string,
+			target: ReceiptItem,
+			update: Dispatch<SetStateAction<ReceiptItem[]>>,
+		) {
+			database.groupAccounts.receipts.deleteItem(listId, target);
+			update(items => items.filter(item => item.id !== target.id));
 		},
 		updateReceipt(
 			listId: string,

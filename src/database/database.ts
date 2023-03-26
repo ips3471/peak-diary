@@ -161,9 +161,20 @@ const database = {
 				console.log('add new receipt in db', element);
 				return element;
 			},
+			deleteItem(listId: string, item: ReceiptItem) {
+				remove(
+					ref(
+						db,
+						`/groupAccounts/receipts/${listId}/${item.category}/${item.id}`,
+					),
+				);
+			},
 			updateItem(listId: string, item: ReceiptItem) {
 				update(
-					ref(db, `/groupAccounts/receipts/${listId}/${item.category}`),
+					ref(
+						db,
+						`/groupAccounts/receipts/${listId}/${item.category}/${item.id}`,
+					),
 					item,
 				);
 				console.log('receipt-item updated', item);

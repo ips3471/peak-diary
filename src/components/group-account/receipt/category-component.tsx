@@ -74,12 +74,6 @@ export default function ReceiptsByCategory({
 
 	useEffect(() => {
 		const essentialInputs = ['total', 'coordinatorUid', 'description'];
-		/* const isCompleted = essentialInputs.every((property) => {
-			if(!Object.hasOwn(formInputs, property)) {
-				throw Error(`Not valid property for ReceitItem, ${property}`)
-			}
-			return formInputs?[property as keyof typeof formInputs].length > 0
-		}) */
 		const mapped = essentialInputs.map(
 			key => formInputs[key as keyof typeof formInputs],
 		);
@@ -159,11 +153,19 @@ export default function ReceiptsByCategory({
 		inputReset();
 	};
 
+	const handleDelete = () => {
+		listId &&
+			GroupAccountPresenter.receipts.deleteItem(
+				listId,
+				formInputs,
+				setReceiptsByCategory,
+			);
+		inputReset();
+	};
+
 	const handleUpdate = (receiptItem: ReceiptItem) => {
 		setFormInputs(receiptItem);
 		onSetDialog(category);
-
-		// listId && GroupAccountPresenter.receipts.updateReceipt(listId, updated, setReceiptsByCategory);
 	};
 
 	function inputReset() {
@@ -258,7 +260,7 @@ export default function ReceiptsByCategory({
 									autoComplete='disable'
 									name='total'
 									placeholder='금액'
-									value={formInputs.total}
+									value={formInputs.total?.toLocaleString('ko')}
 									onChange={e =>
 										handleInputChange('total', e.currentTarget.value)
 									}
@@ -341,7 +343,7 @@ export default function ReceiptsByCategory({
 							</div>
 						</section>
 
-						<section className='flex justify-between text-center mt-2'>
+						<section className='flex gap-1 flex-col justify-between text-center mt-2'>
 							<button
 								className={`flex-1 text-body rounded-2xl py-3 font-semibold ${
 									isFormComplated && !isUploading
@@ -352,6 +354,15 @@ export default function ReceiptsByCategory({
 							>
 								추가하기
 							</button>
+							{formInputs.id && (
+								<button
+									onClick={handleDelete}
+									className={`flex-1 text-body rounded-2xl py-3 font-semibold bg-bodyAccent`}
+									type='button'
+								>
+									삭제
+								</button>
+							)}
 						</section>
 					</form>
 				</FormContainer>
