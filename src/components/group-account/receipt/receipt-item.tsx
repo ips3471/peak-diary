@@ -2,6 +2,7 @@ import React from 'react';
 import { MdArrowRightAlt } from 'react-icons/md';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { useLocation } from 'react-router-dom';
+import { useAuthContext } from '../../../context/AuthContext';
 import {
 	GroupAccountItem,
 	ReceiptItem,
@@ -13,6 +14,7 @@ interface ReceiptProps {
 
 export default function Receipt({ receipt }: ReceiptProps) {
 	const location = useLocation();
+	const { user } = useAuthContext();
 	const { code, date, host, id, isDone, title, userLength, users } =
 		location.state as GroupAccountItem;
 
@@ -21,7 +23,7 @@ export default function Receipt({ receipt }: ReceiptProps) {
 			<div className='flex justify-between text-sm text-dark/90'>
 				<div className='flex flex-1 gap-2'>
 					<div className='basis-20 relative'>
-						<span className='whitespace-nowrap'>한대승</span>
+						<span className='whitespace-nowrap'>{user?.name}</span>
 					</div>
 					<div className=''>{receipt.description}</div>
 				</div>

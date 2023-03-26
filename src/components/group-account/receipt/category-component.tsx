@@ -42,8 +42,6 @@ export default function ReceiptsByCategory({
 	onTargetReset: onCategoryReset,
 	isSelected,
 }: ReceiptItemProps) {
-	console.log(category.id);
-
 	const location = useLocation();
 	const { code, date, host, id, isDone, title, userLength, users } =
 		location.state as GroupAccountItem;
