@@ -6,7 +6,14 @@ import {
 import { AiOutlineDownload, AiOutlinePlus } from 'react-icons/ai';
 import { ImSpinner3 } from 'react-icons/im';
 import { useLocation, useParams } from 'react-router-dom';
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import {
+	ChangeEvent,
+	FormEvent,
+	useEffect,
+	useReducer,
+	useRef,
+	useState,
+} from 'react';
 import GroupAccountPresenter from '../../../presenter/group-account/GroupAccountPresenter';
 import { useAuthContext } from '../../../context/AuthContext';
 import { uploadImage } from '../../../service/cloudinary/cloudinary';
@@ -16,6 +23,7 @@ import { BiCalculator } from 'react-icons/bi';
 import NumPad from '../../../util/Numpad';
 import { BsCheck } from 'react-icons/bs';
 import Receipt from './receipt-item';
+import calcReducer from '../../../reducer/calcReducer';
 
 type FormInputs = Omit<ReceiptItem, 'id'>;
 
@@ -23,6 +31,7 @@ interface ReceiptItemProps {
 	category: ReceiptCategory;
 	onSetDialog: (target: ReceiptCategory | null) => void;
 	isDialogOpen: boolean;
+	isSelected: boolean;
 	onTargetReset: () => void;
 }
 
@@ -31,6 +40,7 @@ export default function ReceiptsByCategory({
 	onSetDialog,
 	isDialogOpen,
 	onTargetReset: onCategoryReset,
+	isSelected,
 }: ReceiptItemProps) {
 	console.log(category.id);
 
@@ -39,7 +49,7 @@ export default function ReceiptsByCategory({
 		location.state as GroupAccountItem;
 	const { user: me } = useAuthContext();
 	const { id: listId } = useParams();
-	const [displayCalc, setDisplayCalc] = useState(false);
+	const [calcState, calcDispatch] = useReducer(calcReducer, { isOpen: false });
 	const [receiptsByCategory, setReceiptsByCategory] = useState<ReceiptItem[]>(
 		[],
 	);
@@ -174,7 +184,7 @@ export default function ReceiptsByCategory({
 				</ul>
 				<hr className='mt-5' />
 			</li>
-			{isDialogOpen && (
+			{isSelected && (
 				<FormContainer
 					title={category.name + ' 지출내역 추가'}
 					onCancel={inputReset}
@@ -227,7 +237,7 @@ export default function ReceiptsByCategory({
 									name={category.id}
 									onClick={e => {
 										if (e.currentTarget.name === category.id) {
-											setDisplayCalc(curr => !curr);
+											calcDispatch({ type: 'toggle_visible' });
 										}
 									}}
 									className='p-1'
@@ -235,17 +245,13 @@ export default function ReceiptsByCategory({
 									<BiCalculator />
 								</button>
 							</Rounded>
-							{displayCalc && (
-								<div
-									className={`relative ${
-										displayCalc ? 'h-full opacity-100' : 'h-0 opacity-50'
-									} transition-all`}
-								>
+							{calcState.isOpen && (
+								<div className={`relative`}>
 									<NumPad
 										title='금액 입력'
-										onCancel={() => setDisplayCalc(false)}
+										onCancel={() => calcDispatch({ type: 'toggle_visible' })}
 										onSubmit={value => {
-											setDisplayCalc(false);
+											calcDispatch({ type: 'toggle_visible' });
 											handleInputChange('total', value);
 										}}
 										type='currency'

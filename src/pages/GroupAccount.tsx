@@ -1,4 +1,10 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import React, {
+	ChangeEvent,
+	FormEvent,
+	useEffect,
+	useReducer,
+	useState,
+} from 'react';
 import BodyContainer from '../components/body/container';
 import TabItem from '../components/buttons/tab/tab-item';
 import {
@@ -11,19 +17,42 @@ import Rounded from '../components/form/rounded';
 import { useAuthContext } from '../context/AuthContext';
 import GroupAccountPresenter from '../presenter/group-account/GroupAccountPresenter';
 import GroupAccountList from '../components/group-account/group-account-list';
+import NumPad from '../util/Numpad';
+import { BiCalculator } from 'react-icons/bi';
+import calcReducer from '../reducer/calcReducer';
+
+type UserInputs = {
+	title: string;
+	date: string;
+	userLength?: number;
+};
+
+const defaultInputForm = {
+	title: '',
+	date: '',
+	userLength: undefined,
+};
 
 export default function GroupAccount() {
 	const [accountItems, setAccountItems] = useState<GroupAccountItem[]>([]);
 	const [activeState, setActiveState] =
 		useState<GroupAccountState>('in-progress');
 	const [dialog, setDialog] = useState(false);
-	const [input, setInput] = useState({ title: '', date: '', userLength: 4 });
+	const [input, setInput] = useState<UserInputs>(defaultInputForm);
 	const { user } = useAuthContext();
 	const [numpad, setNumpad] = useState<GroupAccountItem | null>(null);
+
+	const [calcState, calcDispatch] = useReducer(calcReducer, { isOpen: false });
 
 	useEffect(() => {
 		GroupAccountPresenter.init(setAccountItems);
 	}, []);
+
+	useEffect(() => {
+		if (!dialog) {
+			setInput(defaultInputForm);
+		}
+	}, [dialog]);
 
 	const updateItem = (updated: GroupAccountItem) => {
 		GroupAccountPresenter.updateList(updated, setAccountItems);
@@ -33,18 +62,22 @@ export default function GroupAccount() {
 		setNumpad(item);
 	};
 
-	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const { id, value } = e.currentTarget;
+	const handleInputChange = (
+		e: ChangeEvent<HTMLInputElement>,
+		target?: { id: string; value: string | number },
+	) => {
+		const { id, value } = target || e.currentTarget;
 		setInput(prev => ({ ...prev, [id]: value }));
 	};
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (!user) throw new Error(`Not Found User: ${user}`);
-		console.log(input);
-		// controller
+		if (!input.userLength)
+			throw new Error(`Not Found UserLength: ${input.userLength}`);
+
 		GroupAccountPresenter.addList(
-			{ ...input, host: user.uid, users: [user] },
+			{ ...input, host: user.uid, users: [user], userLength: input.userLength },
 			setAccountItems,
 		);
 		setDialog(false);
@@ -137,6 +170,7 @@ export default function GroupAccount() {
 							<label className='block mb-1' htmlFor='date'>
 								모임인원:
 							</label>
+
 							<Rounded isStretched={false} color='light'>
 								<input
 									required
@@ -148,7 +182,30 @@ export default function GroupAccount() {
 									value={input.userLength}
 									onChange={handleInputChange}
 								/>
+								{
+									<button
+										className='pl-4'
+										type='button'
+										onClick={() => calcDispatch({ type: 'toggle_visible' })}
+									>
+										<BiCalculator />
+									</button>
+								}
 							</Rounded>
+							{calcState.isOpen && (
+								<NumPad
+									onCancel={() => {
+										calcDispatch({ type: 'toggle_visible' });
+										setInput(defaultInputForm);
+									}}
+									onSubmit={val => {
+										setInput(prev => ({ ...prev, ['userLength']: val }));
+										calcDispatch({ type: 'toggle_visible' });
+									}}
+									title={'참여자 수'}
+									type='currency'
+								/>
+							)}
 						</section>
 						<section className='flex justify-between text-center'>
 							<button

@@ -45,7 +45,8 @@ export default function GroupAccountDetail() {
 									onSetDialog={handleDisplayDialog}
 									category={category}
 									onTargetReset={() => handleDisplayDialog(null)}
-									isDialogOpen={dialogTarget === category}
+									isDialogOpen={!!dialogTarget}
+									isSelected={dialogTarget === category}
 								/>
 							);
 						})}
