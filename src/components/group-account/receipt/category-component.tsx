@@ -216,6 +216,7 @@ export default function ReceiptsByCategory({
 							</Rounded>
 							<Rounded isStretched={true} color='light'>
 								<input
+									className='w-full'
 									required
 									autoComplete='disable'
 									name='description'
@@ -266,7 +267,7 @@ export default function ReceiptsByCategory({
 							)}
 							<Rounded isStretched={true} color='light'>
 								<span className='text-placeHolder'>정산에 포함</span>
-								<ul className='w-full flex justify-evenly overflow-x-scroll'>
+								<ul className='w-full flex justify-end overflow-x-scroll gap-2'>
 									{users.map(user => (
 										<li
 											key={user.uid}

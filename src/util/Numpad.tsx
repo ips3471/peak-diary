@@ -106,7 +106,6 @@ export default function NumPad({
 			display: 'grid',
 			'grid-template-columns': 'repeat(3, 1fr)',
 			gap: options.buttonGap,
-			border: '1px solid yellow',
 		},
 
 		numpad__pad: {
