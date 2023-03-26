@@ -44,7 +44,7 @@ export default function GroupAccountDetail() {
 									key={category.id}
 									onSetDialog={handleDisplayDialog}
 									category={category}
-									onTargetReset={() => handleDisplayDialog(null)}
+									onCategoryReset={() => handleDisplayDialog(null)}
 									isDialogOpen={!!dialogTarget}
 									isSelected={dialogTarget === category}
 								/>

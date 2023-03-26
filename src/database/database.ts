@@ -161,6 +161,13 @@ const database = {
 				console.log('add new receipt in db', element);
 				return element;
 			},
+			updateItem(listId: string, item: ReceiptItem) {
+				update(
+					ref(db, `/groupAccounts/receipts/${listId}/${item.category}`),
+					item,
+				);
+				console.log('receipt-item updated', item);
+			},
 			getListsByCategory: async (listId: string, category: Category) =>
 				getLists<ReceiptItem>('receipts', `${listId}/${category}`),
 		},

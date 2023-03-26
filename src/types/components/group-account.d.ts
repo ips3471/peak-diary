@@ -4,7 +4,7 @@ import { AuthUser } from '../../context/AuthContext';
 type Category = 'driving' | 'eating' | 'shopping' | 'etc' | 'booking';
 
 export type ReceiptItem = {
-	id: string;
+	id?: string;
 	category: Category;
 	total?: number;
 	receiptURL: string;

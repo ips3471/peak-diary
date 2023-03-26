@@ -25,21 +25,19 @@ import { BsCheck } from 'react-icons/bs';
 import Receipt from './receipt-item';
 import calcReducer from '../../../reducer/calcReducer';
 
-type FormInputs = Omit<ReceiptItem, 'id'>;
-
 interface ReceiptItemProps {
 	category: ReceiptCategory;
 	onSetDialog: (target: ReceiptCategory | null) => void;
 	isDialogOpen: boolean;
 	isSelected: boolean;
-	onTargetReset: () => void;
+	onCategoryReset: () => void;
 }
 
 export default function ReceiptsByCategory({
 	category,
 	onSetDialog,
 	isDialogOpen,
-	onTargetReset: onCategoryReset,
+	onCategoryReset,
 	isSelected,
 }: ReceiptItemProps) {
 	const location = useLocation();
@@ -52,13 +50,14 @@ export default function ReceiptsByCategory({
 		[],
 	);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
-	const [formInputs, setFormInputs] = useState<FormInputs>({
+	const [formInputs, setFormInputs] = useState<ReceiptItem>({
 		coordinatorUid: me?.uid || '',
 		description: '',
 		exceptedUsers: [],
 		receiptURL: '',
 		total: undefined,
 		category: category.id,
+		id: undefined,
 	});
 	const [isUploading, setIsUploading] = useState<boolean>(false);
 	const [isFormComplated, setIsFormCompleted] = useState(false);
@@ -70,28 +69,28 @@ export default function ReceiptsByCategory({
 		receiptURL: '',
 		total: undefined,
 		category: category.id,
+		id: undefined,
 	};
 
 	useEffect(() => {
 		const essentialInputs = ['total', 'coordinatorUid', 'description'];
-		const inputsMap = new Map(Object.entries(formInputs));
-		const inputStates = {
-			total: !!inputsMap.get('total'),
-			coordinatorUid: !!inputsMap.get('coordinatorUid'),
-			description: !!inputsMap.get('description'),
-		};
-
-		for (let property of inputsMap.keys()) {
-			if (!essentialInputs.includes(property)) {
-				return;
+		/* const isCompleted = essentialInputs.every((property) => {
+			if(!Object.hasOwn(formInputs, property)) {
+				throw Error(`Not valid property for ReceitItem, ${property}`)
 			}
-
-			inputStates[property as keyof typeof inputStates] =
-				!!inputsMap.get(property);
-
-			const isCompleted = Object.values(inputStates).every(val => val === true);
-			setIsFormCompleted(isCompleted);
-		}
+			return formInputs?[property as keyof typeof formInputs].length > 0
+		}) */
+		const mapped = essentialInputs.map(
+			key => formInputs[key as keyof typeof formInputs],
+		);
+		const isComplated = mapped.every(val => {
+			if (typeof val === 'number') {
+				return val > 0;
+			} else if (typeof val === 'string') {
+				return val.length > 0;
+			}
+		});
+		setIsFormCompleted(isComplated);
 	}, [formInputs]);
 
 	useEffect(() => {
@@ -130,20 +129,41 @@ export default function ReceiptsByCategory({
 		}
 	};
 
-	const handleAdd = (e: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		if (!listId) {
+			throw Error(`Not found list-id`);
+		}
 
-		const element: Omit<ReceiptItem, 'id'> = {
-			...formInputs,
-			category: category.id,
-		};
+		if (!formInputs.id) {
+			const element: Omit<ReceiptItem, 'id'> = {
+				...formInputs,
+				category: category.id,
+			};
 
-		GroupAccountPresenter.receipts.addItem(
-			listId,
-			element,
-			setReceiptsByCategory,
-		);
+			GroupAccountPresenter.receipts.addItem(
+				listId,
+				element,
+				setReceiptsByCategory,
+			);
+		}
+
+		if (formInputs.id) {
+			GroupAccountPresenter.receipts.updateReceipt(
+				listId,
+				formInputs,
+				setReceiptsByCategory,
+			);
+		}
+
 		inputReset();
+	};
+
+	const handleUpdate = (receiptItem: ReceiptItem) => {
+		setFormInputs(receiptItem);
+		onSetDialog(category);
+
+		// listId && GroupAccountPresenter.receipts.updateReceipt(listId, updated, setReceiptsByCategory);
 	};
 
 	function inputReset() {
@@ -176,7 +196,11 @@ export default function ReceiptsByCategory({
 				<ul className=''>
 					{receiptsByCategory &&
 						receiptsByCategory.map(receipt => (
-							<Receipt key={receipt.id} receipt={receipt} />
+							<Receipt
+								onUpdate={handleUpdate}
+								key={receipt.id}
+								receipt={receipt}
+							/>
 						))}
 				</ul>
 				<div className='flex justify-between py-2 text-sm text-brand'>
@@ -194,7 +218,7 @@ export default function ReceiptsByCategory({
 					title={category.name + ' 지출내역 추가'}
 					onCancel={inputReset}
 				>
-					<form name={category.id} onSubmit={handleAdd}>
+					<form name={category.id} onSubmit={handleSubmit}>
 						<section>
 							<Rounded isStretched={true} color='light'>
 								<label htmlFor='user-select'>결제한 사람</label>
@@ -272,7 +296,7 @@ export default function ReceiptsByCategory({
 										<li
 											key={user.uid}
 											className={`border overflow-hidden rounded-lg ${
-												formInputs.exceptedUsers.includes(user.uid)
+												formInputs.exceptedUsers?.includes(user.uid)
 													? 'text-button_disabled'
 													: 'bg-brand/90 text-pureWhite'
 											} `}

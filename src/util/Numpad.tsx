@@ -81,7 +81,7 @@ export default function NumPad({
 			width: '100%',
 		},
 		input__container: {
-			'margin-bottom': '0.5rem',
+			marginBottom: '0.5rem',
 			width: '100%',
 			display: 'flex',
 			height: '2.2rem',

@@ -67,6 +67,16 @@ const GroupAccountPresenter = {
 				.getListsByCategory(listId, category)
 				.then(update);
 		},
+		updateReceipt(
+			listId: string,
+			updated: ReceiptItem,
+			update: Dispatch<SetStateAction<ReceiptItem[]>>,
+		) {
+			database.groupAccounts.receipts.updateItem(listId, updated);
+			update(items =>
+				items.map(item => (item.id === updated.id ? updated : item)),
+			);
+		},
 	},
 };
 

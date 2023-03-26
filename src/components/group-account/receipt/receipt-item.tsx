@@ -1,6 +1,8 @@
 import React from 'react';
 import { MdArrowRightAlt } from 'react-icons/md';
 import { RiErrorWarningLine } from 'react-icons/ri';
+import { BsFillPencilFill } from 'react-icons/bs';
+
 import { useLocation } from 'react-router-dom';
 import { useAuthContext } from '../../../context/AuthContext';
 import {
@@ -10,9 +12,10 @@ import {
 
 interface ReceiptProps {
 	receipt: ReceiptItem;
+	onUpdate: (receipt: ReceiptItem) => void;
 }
 
-export default function Receipt({ receipt }: ReceiptProps) {
+export default function Receipt({ receipt, onUpdate }: ReceiptProps) {
 	const location = useLocation();
 	const { user } = useAuthContext();
 	const { code, date, host, id, isDone, title, userLength, users } =
@@ -25,7 +28,18 @@ export default function Receipt({ receipt }: ReceiptProps) {
 					<div className='basis-20 relative'>
 						<span className='whitespace-nowrap'>{user?.name}</span>
 					</div>
-					<div className=''>{receipt.description}</div>
+					<div className='flex items-center gap-2'>
+						<span className=''>{receipt.description}</span>
+						{(user?.uid === receipt.coordinatorUid || user?.isAdmin) && (
+							<button
+								onClick={() => {
+									onUpdate(receipt);
+								}}
+							>
+								<BsFillPencilFill />
+							</button>
+						)}
+					</div>
 				</div>
 				<div className='ml-2'>
 					{Number(receipt.total)?.toLocaleString('ko') || 0}
