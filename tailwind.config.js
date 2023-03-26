@@ -4,6 +4,7 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
+				placeHolder: '#b3b8bd',
 				brand: '#046241',
 				softBlack: '#55443a',
 				pureWhite: '#ffffff',

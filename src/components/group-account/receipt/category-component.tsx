@@ -199,6 +199,7 @@ export default function ReceiptsByCategory({
 							<Rounded isStretched={true} color='light'>
 								<label htmlFor='user-select'>결제한 사람</label>
 								<select
+									required
 									value={formInputs.coordinatorUid}
 									onChange={e =>
 										handleInputChange('coordinatorUid', e.currentTarget.value)
@@ -264,6 +265,7 @@ export default function ReceiptsByCategory({
 								</div>
 							)}
 							<Rounded isStretched={true} color='light'>
+								<span className='text-placeHolder'>정산에 포함</span>
 								<ul className='w-full flex justify-evenly overflow-x-scroll'>
 									{users.map(user => (
 										<li

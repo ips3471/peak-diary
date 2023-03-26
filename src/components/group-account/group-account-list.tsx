@@ -96,7 +96,7 @@ export default function GroupAccountList({
 					className='relative p-1 text-sm text-brand/70 font-semibold'
 				>
 					<button>입장하기</button>
-					<div className='max-w-xs absolute right-0'>
+					<div className='absolute right-0'>
 						{numpadTarget === item.id && (
 							<NumPad
 								title='참여코드 입력'

@@ -14,6 +14,7 @@ type NumPadStyleObj = {
 	[property: string]: string;
 };
 type NumPadStyles = {
+	container: NumPadStyleObj;
 	numpad__wrapper: NumPadStyleObj;
 	input__container: NumPadStyleObj;
 	numpad__input: NumPadStyleObj;
@@ -68,43 +69,50 @@ export default function NumPad({
 	};
 
 	const styles: NumPadStyles = {
+		container: {
+			display: 'flex',
+			minWidth: '16rem',
+			padding: '0.5rem',
+			'flex-direction': 'column',
+			'justify-content': 'center',
+		},
 		numpad__wrapper: {
 			padding: '0.5rem',
+			width: '100%',
 		},
 		input__container: {
+			'margin-bottom': '0.5rem',
+			width: '100%',
 			display: 'flex',
-			padding: '0 0.5rem',
 			height: '2.2rem',
 			gap: options.buttonGap,
 		},
 		numpad__input: {
-			flex: '1 1 80%',
 			borderRadius: '7px',
-			border: '1px solid #777',
+			border: '3px solid #777',
 			'text-align': 'right',
 			padding: '0 0.5rem',
-			height: '100%',
-			'font-size': '1.1rem',
 			color: type === 'password' ? 'tomato' : 'black',
 		},
 		numpad__input__clear: {
+			width: '100%',
+			padding: '0 1rem',
 			'background-color': options.clearColor,
 			'border-radius': options.buttonRadius,
 			height: '100%',
-			flex: '1 1 20%',
 			cursor: 'pointer',
 		},
 		numpad__container: {
 			display: 'grid',
 			'grid-template-columns': 'repeat(3, 1fr)',
 			gap: options.buttonGap,
-			padding: '0.5rem',
+			border: '1px solid yellow',
 		},
 
 		numpad__pad: {
-			flex: '1 1 1rem',
+			flex: '0 1 1rem',
 			'background-color': options.numColor,
-			'min-height': '2rem',
+			padding: '0.5rem',
 			display: 'flex',
 			'justify-content': 'space-around',
 			'align-items': 'center',
@@ -121,7 +129,7 @@ export default function NumPad({
 	};
 
 	return (
-		<div className={`flex-1 bg-red-100 rounded-lg`}>
+		<div style={styles.container} className={`flex-1 bg-red-100 rounded-lg`}>
 			<header className='text-grey flex justify-between mb-1'>
 				<h1 className=''>{title}</h1>
 				<button type='button' onClick={onCancel} className={'text-xl'}>
@@ -129,11 +137,8 @@ export default function NumPad({
 				</button>
 			</header>
 
-			<article className='numpad__wrapper ' style={styles.numpad__wrapper}>
-				<section
-					style={styles.input__container}
-					className='input__container items-center'
-				>
+			<article style={styles.numpad__wrapper}>
+				<section style={styles.input__container}>
 					<input
 						value={input}
 						style={styles.numpad__input}
@@ -143,20 +148,18 @@ export default function NumPad({
 					/>
 					<button
 						type='button'
-						style={{ ...styles.numpad__pad, ...styles.numpad__input__clear }}
-						className='px-5 numpad__pad numpad__pad__clear'
+						style={styles.numpad__input__clear}
 						onClick={onInputClear}
 					>
 						C
 					</button>
 				</section>
 
-				<div style={styles.numpad__container} className='numpad__container'>
+				<div style={styles.numpad__container}>
 					{PADS.map((num, index) => (
 						<button
 							type='button'
 							style={styles.numpad__pad}
-							className='numpad__pad'
 							key={index}
 							onClick={onInputChange}
 						>
@@ -166,7 +169,6 @@ export default function NumPad({
 					<button
 						type='button'
 						style={{ ...styles.numpad__pad, ...styles.numpad__pad__00 }}
-						className='numpad__pad numpad__pad__00'
 						onClick={onInputChange}
 					>
 						00
@@ -174,7 +176,6 @@ export default function NumPad({
 					<button
 						type='button'
 						style={{ ...styles.numpad__pad, ...styles.numpad__pad__enter }}
-						className='numpad__pad numpad__pad__enter'
 						onClick={handleSubmit}
 					>
 						ENTER
