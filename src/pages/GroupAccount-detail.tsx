@@ -7,6 +7,8 @@ import {
 	GroupAccountItem,
 	ReceiptCategory,
 } from '../types/components/group-account';
+import { BiArrowBack } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
 
 export default function GroupAccountDetail() {
 	const location = useLocation();
@@ -20,17 +22,21 @@ export default function GroupAccountDetail() {
 	const handleDisplayDialog = (target: ReceiptCategory | null) => {
 		setDialogTarget(target);
 	};
+
 	return (
 		<>
 			<BodyContainer>
 				<div className='h-full rounded-lg overflow-y-scroll scrollbar-hide'>
-					<h1
-						className={`${
+					<div
+						className={`p-1 font-bold mb-2 flex items-center ${
 							dialogTarget ? 'blur-sm select-none' : ''
-						} p-1 font-bold mb-2`}
+						}`}
 					>
-						{title}
-					</h1>
+						<Link className='p-2' to={'/group-account'}>
+							<BiArrowBack />
+						</Link>
+						<h1 className={` `}>{title}</h1>
+					</div>
 					<ul>
 						{categories.map((category, index) => {
 							return (
