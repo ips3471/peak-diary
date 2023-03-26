@@ -7,6 +7,7 @@ module.exports = {
 				brand: '#046241',
 				softBlack: '#55443a',
 				pureWhite: '#ffffff',
+				dark: '#2c2f33',
 				grey: '#60666d',
 				button_disabled: '#848687',
 				darkGreen: '#1e3932',

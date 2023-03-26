@@ -11,7 +11,7 @@ interface GroupAccountItemProps {
 	onUpdate: (item: GroupAccountItem) => void;
 }
 
-export default function GroupAccountCard({
+export default function GroupAccountList({
 	user,
 	item,
 	numpadTarget,
@@ -76,11 +76,11 @@ export default function GroupAccountCard({
 						</p>
 					)}
 				</div>
-				<button
+				<div
 					onClick={handlePass}
 					className='relative p-1 text-sm text-brand/70 font-semibold'
 				>
-					<span>입장하기</span>
+					<button>입장하기</button>
 					<div className='max-w-xs absolute right-0'>
 						{numpadTarget === item.id && (
 							<NumPad
@@ -91,7 +91,7 @@ export default function GroupAccountCard({
 							/>
 						)}
 					</div>
-				</button>
+				</div>
 			</section>
 		</li>
 	);

@@ -22,7 +22,6 @@ export type GroupAccountItem = {
 	users: UserProfile[];
 	isDone: boolean;
 	title: string;
-	receipts: ReceiptItem[];
 };
 
 export type ReceiptCategory = {

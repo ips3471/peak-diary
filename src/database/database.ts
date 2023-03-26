@@ -1,4 +1,5 @@
 import {
+	Category,
 	GroupAccountItem,
 	ReceiptItem,
 } from './../types/components/group-account.d';
@@ -23,6 +24,20 @@ import { v4 as uuid } from 'uuid';
 
 const db = getDatabase(firebaseApp);
 const dbRef = ref(db);
+
+type ItemsDirectory = 'lists' | 'receipts';
+
+async function getLists<T>(
+	directory: ItemsDirectory,
+	path: string = '',
+): Promise<T[]> {
+	const snapshot = await get(ref(db, `groupAccounts/${directory}/${path}`));
+	if (snapshot.exists()) {
+		return Object.values(snapshot.val());
+	} else {
+		return [];
+	}
+}
 
 const database = {
 	async isAdmin(user: User | null) {
@@ -123,30 +138,28 @@ const database = {
 			const id = uuid();
 			const code = Math.floor(Math.random() * 9999);
 			const element: GroupAccountItem = { ...form, id, code };
-			set(ref(db, `/groupAccounts/${id}`), element);
+			set(ref(db, `/groupAccounts/lists/${id}`), element);
 			console.log('add group-account in db', element);
 			return element;
 		},
-		async getLists(): Promise<GroupAccountItem[]> {
-			const snapshot = await get(ref(db, `groupAccounts`));
-			if (snapshot.exists()) {
-				return Object.values(snapshot.val());
-			} else {
-				return [];
-			}
-		},
+		getLists: async () => getLists<GroupAccountItem>('lists'),
 		updateList(id: string, item: GroupAccountItem) {
-			update(ref(db, `/groupAccounts/${id}`), item);
+			update(ref(db, `/groupAccounts/lists/${id}`), item);
 			console.log('groupAccount updated', item);
 		},
 		receipts: {
 			async addItem(listId: string, form: Omit<ReceiptItem, 'id'>) {
 				const id = uuid();
 				const element: ReceiptItem = { ...form, id };
-				set(ref(db, `/groupAccounts/${listId}/items/${id}`), element);
+				set(
+					ref(db, `/groupAccounts/receipts/${listId}/${form.category}/${id}`),
+					element,
+				);
 				console.log('add new receipt in db', element);
 				return element;
 			},
+			getListsByCategory: async (listId: string, category: Category) =>
+				getLists<ReceiptItem>('receipts', `${listId}/${category}`),
 		},
 	},
 };

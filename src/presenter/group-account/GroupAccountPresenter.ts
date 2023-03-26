@@ -1,9 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 import {
+	Category,
 	GroupAccountItem,
 	ReceiptItem,
 } from './../../types/components/group-account.d';
 import database from '../../database/database';
+import { ListID } from '../../types/interfaces/interfaces';
 
 const GroupAccountPresenter = {
 	addList(
@@ -16,7 +18,6 @@ const GroupAccountPresenter = {
 		const element: Omit<GroupAccountItem, 'id' | 'code'> = {
 			...form,
 			isDone: false,
-			receipts: [],
 		};
 		database.groupAccounts
 			.addList(element)
@@ -38,14 +39,26 @@ const GroupAccountPresenter = {
 	},
 
 	receipts: {
-		addItem(
-			listId: string,
+		async addItem(
+			listId: ListID,
 			form: Omit<ReceiptItem, 'id'>,
 			update: Dispatch<SetStateAction<ReceiptItem[]>>,
 		) {
+			database.groupAccounts.receipts.addItem(listId, form).then(data =>
+				update(prev => {
+					console.log(prev);
+					return [...prev, data];
+				}),
+			);
+		},
+		async init(
+			listId: string,
+			category: Category,
+			update: Dispatch<SetStateAction<ReceiptItem[]>>,
+		) {
 			database.groupAccounts.receipts
-				.addItem(listId, form)
-				.then(data => update(prev => [...prev, data]));
+				.getListsByCategory(listId, category)
+				.then(update);
 		},
 	},
 };

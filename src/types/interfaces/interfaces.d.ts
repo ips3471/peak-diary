@@ -56,3 +56,5 @@ export type NavMenuItem<T extends NavItemType> = (Route | Login | Profile) & {
 };
 
 export type CheckListTab = CheckListTabItem & { items: CheckListItem[] };
+
+export type ListID = Readonly<Params<string>>;

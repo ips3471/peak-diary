@@ -10,7 +10,7 @@ import FormContainer from '../components/form/form-container';
 import Rounded from '../components/form/rounded';
 import { useAuthContext } from '../context/AuthContext';
 import GroupAccountPresenter from '../presenter/group-account/GroupAccountPresenter';
-import GroupAccountCard from '../components/group-account/group-account-item';
+import GroupAccountList from '../components/group-account/group-account-list';
 
 export default function GroupAccount() {
 	const [accountItems, setAccountItems] = useState<GroupAccountItem[]>([]);
@@ -82,7 +82,7 @@ export default function GroupAccount() {
 					{user &&
 						accountItems &&
 						accountItems.map(item => (
-							<GroupAccountCard
+							<GroupAccountList
 								onUpdate={updateItem}
 								toggleNumpad={handleNumpad}
 								numpadTarget={numpad?.id}
