@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { GroupAccountItem } from '../../types/components/group-account';
 import { UserProfile } from '../../types/components/profile';
 import NumPad from '../../util/Numpad';
+import { CiSquareRemove } from 'react-icons/ci';
 
 interface GroupAccountItemProps {
 	user: UserProfile;
@@ -9,6 +10,7 @@ interface GroupAccountItemProps {
 	numpadTarget?: string;
 	toggleNumpad: (item: GroupAccountItem | null) => void;
 	onUpdate: (item: GroupAccountItem) => void;
+	onDelete: (item: GroupAccountItem) => void;
 }
 
 export default function GroupAccountList({
@@ -17,6 +19,7 @@ export default function GroupAccountList({
 	numpadTarget,
 	toggleNumpad,
 	onUpdate,
+	onDelete,
 }: GroupAccountItemProps) {
 	const navigate = useNavigate();
 
@@ -42,6 +45,11 @@ export default function GroupAccountList({
 		!numpadTarget && toggleNumpad(item);
 	};
 
+	const handleRemoveList = () => {
+		const confirmed = window.confirm(`${item.title} 일정을 삭제할까요?`);
+		confirmed && onDelete(item);
+	};
+
 	const moveToDetail = () =>
 		navigate('/group-account/' + item.id, { state: item });
 
@@ -56,7 +64,14 @@ export default function GroupAccountList({
 					/>
 					<p className='text-sm'>{user?.name || 'null'}</p>
 				</span>
-				<span className='text-sm font-thin'>{item.date}</span>
+				<span className='flex gap-2 items-center'>
+					<span className='text-sm font-thin'>{item.date}</span>
+					{user.uid === item.host && (
+						<button onClick={handleRemoveList} className='text-bodyAccent'>
+							<CiSquareRemove />
+						</button>
+					)}
+				</span>
 			</section>
 			<section className='flex-1 border-b text-sm'>{item.title}</section>
 			<section className='flex justify-between items-center'>

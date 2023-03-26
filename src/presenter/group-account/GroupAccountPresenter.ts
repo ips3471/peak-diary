@@ -37,6 +37,13 @@ const GroupAccountPresenter = {
 			items.map(item => (item.id === updated.id ? updated : item)),
 		);
 	},
+	deleteList(
+		target: GroupAccountItem,
+		update: Dispatch<SetStateAction<GroupAccountItem[]>>,
+	) {
+		database.groupAccounts.deleteList(target.id);
+		update(items => items.filter(item => item.id !== target.id));
+	},
 
 	receipts: {
 		async addItem(

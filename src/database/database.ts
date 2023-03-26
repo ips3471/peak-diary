@@ -147,6 +147,9 @@ const database = {
 			update(ref(db, `/groupAccounts/lists/${id}`), item);
 			console.log('groupAccount updated', item);
 		},
+		deleteList(id: string) {
+			remove(ref(db, `/groupAccounts/lists/${id}`));
+		},
 		receipts: {
 			async addItem(listId: string, form: Omit<ReceiptItem, 'id'>) {
 				const id = uuid();

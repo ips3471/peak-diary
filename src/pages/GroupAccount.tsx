@@ -54,8 +54,12 @@ export default function GroupAccount() {
 		}
 	}, [dialog]);
 
-	const updateItem = (updated: GroupAccountItem) => {
+	const handleUpdateItem = (updated: GroupAccountItem) => {
 		GroupAccountPresenter.updateList(updated, setAccountItems);
+	};
+
+	const handleDeleteItem = (item: GroupAccountItem) => {
+		GroupAccountPresenter.deleteList(item, setAccountItems);
 	};
 
 	const handleNumpad = (item: GroupAccountItem | null) => {
@@ -116,7 +120,8 @@ export default function GroupAccount() {
 						accountItems &&
 						accountItems.map(item => (
 							<GroupAccountList
-								onUpdate={updateItem}
+								onDelete={handleDeleteItem}
+								onUpdate={handleUpdateItem}
 								toggleNumpad={handleNumpad}
 								numpadTarget={numpad?.id}
 								item={item}
