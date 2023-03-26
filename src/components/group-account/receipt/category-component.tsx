@@ -57,7 +57,7 @@ export default function ReceiptsByCategory({
 		description: '',
 		exceptedUsers: [],
 		receiptURL: '',
-		total: '',
+		total: undefined,
 		category: category.id,
 	});
 	const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -68,7 +68,7 @@ export default function ReceiptsByCategory({
 		description: '',
 		exceptedUsers: [],
 		receiptURL: '',
-		total: '',
+		total: undefined,
 		category: category.id,
 	};
 
@@ -111,7 +111,6 @@ export default function ReceiptsByCategory({
 
 	const handleInputChange = (name: keyof ReceiptItem, value: any) => {
 		setFormInputs(formInputs => ({ ...formInputs, [name]: value }));
-		console.log(formInputs);
 	};
 
 	const handleSelectToPays = (uid: string) => {
@@ -180,7 +179,15 @@ export default function ReceiptsByCategory({
 							<Receipt key={receipt.id} receipt={receipt} />
 						))}
 				</ul>
-				<hr className='mt-5' />
+				<div className='flex justify-between py-2 text-sm text-brand'>
+					<span>합계</span>
+					<span>
+						{receiptsByCategory
+							.reduce((sum, curr) => sum + (curr.total || 0), 0)
+							.toLocaleString('ko')}
+					</span>
+				</div>
+				<hr className='' />
 			</li>
 			{isSelected && (
 				<FormContainer

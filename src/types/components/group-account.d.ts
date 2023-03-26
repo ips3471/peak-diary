@@ -6,7 +6,7 @@ type Category = 'driving' | 'eating' | 'shopping' | 'etc' | 'booking';
 export type ReceiptItem = {
 	id: string;
 	category: Category;
-	total?: string | number;
+	total?: number;
 	receiptURL: string;
 	description: string;
 	coordinatorUid: string;
