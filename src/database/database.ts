@@ -161,6 +161,10 @@ const database = {
 				console.log('add new receipt in db', element);
 				return element;
 			},
+
+			deleteItems(listId: string) {
+				remove(ref(db, `/groupAccounts/receipts/${listId}`));
+			},
 			deleteItem(listId: string, item: ReceiptItem) {
 				remove(
 					ref(

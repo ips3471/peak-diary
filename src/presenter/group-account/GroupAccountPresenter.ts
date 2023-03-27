@@ -42,6 +42,7 @@ const GroupAccountPresenter = {
 		update: Dispatch<SetStateAction<GroupAccountItem[]>>,
 	) {
 		database.groupAccounts.deleteList(target.id);
+		database.groupAccounts.receipts.deleteItems(target.id);
 		update(items => items.filter(item => item.id !== target.id));
 	},
 
