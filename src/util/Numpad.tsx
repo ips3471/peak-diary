@@ -73,8 +73,8 @@ export default function NumPad({
 			display: 'flex',
 			minWidth: '16rem',
 			padding: '0.5rem',
-			'flex-direction': 'column',
-			'justify-content': 'center',
+			flexDirection: 'column',
+			justifyContent: 'center',
 		},
 		numpad__wrapper: {
 			padding: '0.5rem',
@@ -90,40 +90,40 @@ export default function NumPad({
 		numpad__input: {
 			borderRadius: '7px',
 			border: '3px solid #777',
-			'text-align': 'right',
+			textAlign: 'right',
 			padding: '0 0.5rem',
 			color: type === 'password' ? 'tomato' : 'black',
 		},
 		numpad__input__clear: {
 			width: '100%',
 			padding: '0 1rem',
-			'background-color': options.clearColor,
-			'border-radius': options.buttonRadius,
+			backgroundColor: options.clearColor,
+			borderRadius: options.buttonRadius,
 			height: '100%',
 			cursor: 'pointer',
 		},
 		numpad__container: {
 			display: 'grid',
-			'grid-template-columns': 'repeat(3, 1fr)',
+			gridTemplateColumns: 'repeat(3, 1fr)',
 			gap: options.buttonGap,
 		},
 
 		numpad__pad: {
 			flex: '0 1 1rem',
-			'background-color': options.numColor,
+			backgroundColor: options.numColor,
 			padding: '0.5rem',
 			display: 'flex',
-			'justify-content': 'space-around',
-			'align-items': 'center',
-			'border-radius': options.buttonRadius,
+			justifyContent: 'space-around',
+			alignItems: 'center',
+			borderRadius: options.buttonRadius,
 			cursor: 'pointer',
 		},
 		numpad__pad__00: {
 			visibility: type === 'currency' ? 'visible' : 'hidden',
-			'pointer-events': type === 'currency' ? 'auto' : 'none',
+			pointerEvents: type === 'currency' ? 'auto' : 'none',
 		},
 		numpad__pad__enter: {
-			'background-color': options.enterColor,
+			backgroundColor: options.enterColor,
 		},
 	};
 
