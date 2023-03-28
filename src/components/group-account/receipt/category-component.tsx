@@ -41,10 +41,17 @@ export default function ReceiptsByCategory({
 	isSelected,
 }: ReceiptItemProps) {
 	const location = useLocation();
-	const { code, date, host, id, isDone, title, userLength, users } =
-		location.state as GroupAccountItem;
+	const {
+		code,
+		date,
+		host,
+		id: listId,
+		isDone,
+		title,
+		userLength,
+		users,
+	} = location.state as GroupAccountItem;
 	const { user: me } = useAuthContext();
-	const { id: listId } = useParams();
 	const [calcState, calcDispatch] = useReducer(calcReducer, { isOpen: false });
 	const [receiptsByCategory, setReceiptsByCategory] = useState<ReceiptItem[]>(
 		[],
@@ -55,7 +62,7 @@ export default function ReceiptsByCategory({
 		description: '',
 		exceptedUsers: [],
 		receiptURL: '',
-		total: undefined,
+		total: 0,
 		category: category.id,
 		id: undefined,
 	});
@@ -67,13 +74,18 @@ export default function ReceiptsByCategory({
 		description: '',
 		exceptedUsers: [],
 		receiptURL: '',
-		total: undefined,
+		total: 0,
 		category: category.id,
 		id: undefined,
 	};
 
 	useEffect(() => {
-		const essentialInputs = ['total', 'coordinatorUid', 'description'];
+		const essentialInputs = [
+			'total',
+			'coordinatorUid',
+			'description',
+			'exceptedUsers',
+		];
 		const mapped = essentialInputs.map(
 			key => formInputs[key as keyof typeof formInputs],
 		);
@@ -82,13 +94,19 @@ export default function ReceiptsByCategory({
 				return val > 0;
 			} else if (typeof val === 'string') {
 				return val.length > 0;
+			} else if (Array.isArray(val)) {
+				return val.length !== users.length;
 			}
 		});
 		setIsFormCompleted(isComplated);
 	}, [formInputs]);
 
 	useEffect(() => {
-		GroupAccountPresenter.receipts.init(id, category.id, setReceiptsByCategory);
+		GroupAccountPresenter.receipts.init(
+			listId,
+			category.id,
+			setReceiptsByCategory,
+		);
 	}, []);
 
 	const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -137,6 +155,7 @@ export default function ReceiptsByCategory({
 
 			GroupAccountPresenter.receipts.addItem(
 				listId,
+				users,
 				element,
 				setReceiptsByCategory,
 			);
