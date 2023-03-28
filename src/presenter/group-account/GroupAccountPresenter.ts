@@ -3,6 +3,7 @@ import {
 	Category,
 	GroupAccountItem,
 	ReceiptItem,
+	UserPayment,
 } from './../../types/components/group-account.d';
 import database from '../../database/database';
 import { ListID } from '../../types/interfaces/interfaces';
@@ -44,6 +45,23 @@ const GroupAccountPresenter = {
 		database.groupAccounts.deleteList(target.id);
 		database.groupAccounts.receipts.deleteItems(target.id);
 		update(items => items.filter(item => item.id !== target.id));
+	},
+
+	payments: {
+		add(listId: string, uid: string) {
+			const defaultForm: UserPayment = {
+				paid: 0,
+				toPay: 0,
+			};
+			database.groupAccounts.userPayments.init(listId, uid, defaultForm);
+		},
+	},
+
+	users: {
+		async findUserProfile(uid: string) {
+			const found = await database.users.get(uid);
+			return found;
+		},
 	},
 
 	receipts: {

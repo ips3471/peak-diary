@@ -3,6 +3,8 @@ import { GroupAccountItem } from '../../types/components/group-account';
 import { UserProfile } from '../../types/components/profile';
 import NumPad from '../../util/Numpad';
 import { CiSquareRemove } from 'react-icons/ci';
+import GroupAccountPresenter from '../../presenter/group-account/GroupAccountPresenter';
+import { useEffect, useMemo, useState } from 'react';
 
 interface GroupAccountItemProps {
 	user: UserProfile;
@@ -21,7 +23,12 @@ export default function GroupAccountList({
 	onUpdate,
 	onDelete,
 }: GroupAccountItemProps) {
+	const [host, setHost] = useState<UserProfile>();
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		GroupAccountPresenter.users.findUserProfile(item.host).then(setHost);
+	}, []);
 
 	const handleEnter = (inputValue: number) => {
 		toggleNumpad(null);
@@ -32,6 +39,8 @@ export default function GroupAccountList({
 			...item,
 			users: item?.users ? [...item.users, user] : [user],
 		};
+
+		GroupAccountPresenter.payments.add(item.id, user.uid);
 
 		onUpdate(updated);
 		moveToDetail();
@@ -59,10 +68,10 @@ export default function GroupAccountList({
 				<span className='flex items-center gap-1'>
 					<img
 						className='w-7 rounded-full'
-						src={user?.photoURL || process.env.PUBLIC_URL + 'logo192.png'}
+						src={host?.photoURL || process.env.PUBLIC_URL + 'logo192.png'}
 						alt='host'
 					/>
-					<p className='text-sm'>{user?.name || 'null'}</p>
+					<p className='text-sm'>{host?.name || ''}</p>
 				</span>
 				<span className='flex gap-2 items-center'>
 					<span className='text-sm font-thin'>{item.date}</span>
