@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
+import ProfilePresenter from '../../presenter/profile/ProfilePresenter';
 import {
 	Category,
 	ReceiptItem,
@@ -11,19 +12,23 @@ import UserPaymentComponent from './user-payment-component';
 interface UserPaymentContainerProps {
 	categoriesMap: Map<Category, ReceiptItem[]>;
 	users: UserProfile[];
+	host: string;
 }
 export type DisplayTarget = 'me' | 'all';
 
 export default function UserPaymentContainer({
 	categoriesMap,
 	users,
+	host,
 }: UserPaymentContainerProps) {
 	const [userPayments, setUserPayment] = useState<UserPayment[]>();
 	const [displayTarget, setDisplayTaget] = useState<DisplayTarget>('me');
 	const displayAll = displayTarget === 'all';
 	const { user } = useAuthContext();
+	const [account, setAccount] = useState<string | null>(null);
 	useEffect(() => {
 		categoriesMap && setUserPayment(initPayment(categoriesMap));
+		ProfilePresenter.get(host).then(host => host && setAccount(host.account));
 	}, []);
 
 	function initPayment(categoriesMap?: Map<Category, ReceiptItem[]>) {
@@ -77,6 +82,12 @@ export default function UserPaymentContainer({
 				))}
 			</ul>
 			<div className=' text-center'>
+				{!displayAll && (
+					<div className='flex justify-between text-grey'>
+						<span>입금계좌</span>
+						<span>{account}</span>
+					</div>
+				)}
 				<button
 					onClick={() => setDisplayTaget(displayAll ? 'me' : 'all')}
 					className='text-brand mt-3 w-full p-4'

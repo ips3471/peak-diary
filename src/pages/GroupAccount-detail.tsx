@@ -110,6 +110,7 @@ export default function GroupAccountDetail() {
 							<UserPaymentContainer
 								categoriesMap={categoriesMap}
 								users={users}
+								host={host}
 							/>
 						)}
 					</FormContainer>
