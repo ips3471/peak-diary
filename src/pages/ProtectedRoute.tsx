@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
+import { BlurContextProvider } from '../context/BlurContext';
 
 export default function ProtectedRoute({
 	children,
@@ -15,7 +16,7 @@ export default function ProtectedRoute({
 		}
 	}, []);
 
-	return <>{children}</>;
+	return <BlurContextProvider>{children}</BlurContextProvider>;
 }
 
 interface ProtectedRouteProps {

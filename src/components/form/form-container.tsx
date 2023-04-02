@@ -13,7 +13,7 @@ export default function FormContainer({
 	onCancel,
 }: FormContainerProps) {
 	return (
-		<article className='fixed w-full left-0 top-1/2 transform -translate-y-1/2 p-6 bg-red-100 rounded-lg z-50'>
+		<article className='flex-1 max-h-full overflow-y-scroll scrollbar-hide fixed w-full left-0 top-1/2 transform -translate-y-1/2 p-6 scale-95 bg-red-100 rounded-2xl z-50'>
 			<section className='text-grey flex justify-between mb-6'>
 				<h1 className=''>{title}</h1>
 				<button onClick={onCancel} className={'text-xl'}>

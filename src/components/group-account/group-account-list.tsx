@@ -4,7 +4,7 @@ import { UserProfile } from '../../types/components/profile';
 import NumPad from '../../util/Numpad';
 import { CiSquareRemove } from 'react-icons/ci';
 import GroupAccountPresenter from '../../presenter/group-account/GroupAccountPresenter';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface GroupAccountItemProps {
 	user: UserProfile;
@@ -39,8 +39,6 @@ export default function GroupAccountList({
 			...item,
 			users: item?.users ? [...item.users, user] : [user],
 		};
-
-		GroupAccountPresenter.payments.add(item.id, user.uid);
 
 		onUpdate(updated);
 		moveToDetail();

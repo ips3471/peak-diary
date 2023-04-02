@@ -6,11 +6,13 @@ type Category = 'driving' | 'eating' | 'shopping' | 'etc' | 'booking';
 export type ReceiptItem = {
 	id?: string;
 	category: Category;
-	total?: number;
+	total: number;
+	paymentToEqual: number;
 	receiptURL: string;
 	description: string;
 	coordinatorUid: string;
-	exceptedUsers: string[];
+	exceptedUsers: UserProfile[];
+	usersToPay: UserProfile[];
 };
 
 export type GroupAccountItem = {
@@ -30,3 +32,11 @@ export type ReceiptCategory = {
 };
 
 export type GroupAccountState = 'in-progress' | 'done';
+
+export type UserPayment = {
+	uid: string;
+	name: string;
+	toPay: number;
+	paid: number;
+	receipts: ReceiptItem[];
+};

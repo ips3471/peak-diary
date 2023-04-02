@@ -30,7 +30,7 @@ type UserInputs = {
 const defaultInputForm = {
 	title: '',
 	date: '',
-	userLength: undefined,
+	userLength: 0,
 };
 
 export default function GroupAccount() {
@@ -41,11 +41,11 @@ export default function GroupAccount() {
 	const [input, setInput] = useState<UserInputs>(defaultInputForm);
 	const { user } = useAuthContext();
 	const [numpad, setNumpad] = useState<GroupAccountItem | null>(null);
-
 	const [calcState, calcDispatch] = useReducer(calcReducer, { isOpen: false });
+	const { init, updateList, deleteList, addList } = GroupAccountPresenter.lists;
 
 	useEffect(() => {
-		GroupAccountPresenter.init(setAccountItems);
+		init(setAccountItems);
 	}, []);
 
 	useEffect(() => {
@@ -55,11 +55,11 @@ export default function GroupAccount() {
 	}, [dialog]);
 
 	const handleUpdateItem = (updated: GroupAccountItem) => {
-		GroupAccountPresenter.updateList(updated, setAccountItems);
+		updateList(updated, setAccountItems);
 	};
 
 	const handleDeleteItem = (item: GroupAccountItem) => {
-		GroupAccountPresenter.deleteList(item, setAccountItems);
+		deleteList(item, setAccountItems);
 	};
 
 	const handleNumpad = (item: GroupAccountItem | null) => {
@@ -80,10 +80,11 @@ export default function GroupAccount() {
 		if (!input.userLength)
 			throw new Error(`Not Found UserLength: ${input.userLength}`);
 
-		GroupAccountPresenter.addList(
+		addList(
 			{ ...input, host: user.uid, users: [user], userLength: input.userLength },
 			setAccountItems,
 		);
+
 		setDialog(false);
 	};
 
@@ -184,7 +185,7 @@ export default function GroupAccount() {
 									spellCheck='false'
 									id='userLength'
 									type='number'
-									value={input.userLength}
+									value={input.userLength || ''}
 									onChange={handleInputChange}
 								/>
 								{

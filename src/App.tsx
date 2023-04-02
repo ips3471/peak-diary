@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './components/navbar/Navbar';
 import { AuthProvider } from './context/AuthContext';
+import { BlurContextProvider } from './context/BlurContext';
 
 function App() {
 	const [menuOpen, setMenuOpen] = useState(false);

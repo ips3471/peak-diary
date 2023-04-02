@@ -48,9 +48,7 @@ export default function Receipt({ receipt, onUpdate }: ReceiptProps) {
 			{receipt && receipt.exceptedUsers?.length > 0 && (
 				<div className='text-orange-700 text-xs flex gap-1 ml-2 items-center'>
 					<RiErrorWarningLine />
-					{receipt.exceptedUsers
-						.map(uid => users?.find(u => u.uid === uid)?.name)
-						.join(', ')}{' '}
+					{receipt.exceptedUsers.map(user => user.name).join(', ')}{' '}
 					<MdArrowRightAlt /> 정산에서 제외
 				</div>
 			)}

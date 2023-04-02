@@ -5,7 +5,7 @@ import {
 } from '../../../types/components/group-account';
 import { AiOutlineDownload, AiOutlinePlus } from 'react-icons/ai';
 import { ImSpinner3 } from 'react-icons/im';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import {
 	ChangeEvent,
 	FormEvent,
@@ -14,7 +14,6 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import GroupAccountPresenter from '../../../presenter/group-account/GroupAccountPresenter';
 import { useAuthContext } from '../../../context/AuthContext';
 import { uploadImage } from '../../../service/cloudinary/cloudinary';
 import FormContainer from '../../form/form-container';
@@ -24,21 +23,30 @@ import NumPad from '../../../util/Numpad';
 import { BsCheck } from 'react-icons/bs';
 import Receipt from './receipt-item';
 import calcReducer from '../../../reducer/calcReducer';
+import { UserProfile } from '../../../types/components/profile';
 
 interface ReceiptItemProps {
 	category: ReceiptCategory;
-	onSetDialog: (target: ReceiptCategory | null) => void;
+	onSetDialog: (target: ReceiptItem | null) => void;
 	isDialogOpen: boolean;
-	isSelected: boolean;
-	onCategoryReset: () => void;
+	// isSelected: boolean;
+	// onCategoryReset: () => void;
+	dialogTarget: ReceiptItem | null;
+	items: ReceiptItem[];
+	onUpdate: (item: ReceiptItem) => void;
+	onDelete: (item: ReceiptItem) => void;
 }
 
 export default function ReceiptsByCategory({
 	category,
 	onSetDialog,
 	isDialogOpen,
-	onCategoryReset,
-	isSelected,
+	// onCategoryReset,
+	// isSelected,
+	items,
+	onUpdate,
+	onDelete,
+	dialogTarget,
 }: ReceiptItemProps) {
 	const location = useLocation();
 	const {
@@ -53,11 +61,8 @@ export default function ReceiptsByCategory({
 	} = location.state as GroupAccountItem;
 	const { user: me } = useAuthContext();
 	const [calcState, calcDispatch] = useReducer(calcReducer, { isOpen: false });
-	const [receiptsByCategory, setReceiptsByCategory] = useState<ReceiptItem[]>(
-		[],
-	);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
-	const [formInputs, setFormInputs] = useState<ReceiptItem>({
+	const defaultForm: ReceiptItem = {
 		coordinatorUid: me?.uid || '',
 		description: '',
 		exceptedUsers: [],
@@ -65,26 +70,23 @@ export default function ReceiptsByCategory({
 		total: 0,
 		category: category.id,
 		id: undefined,
+		paymentToEqual: 0,
+		usersToPay: [],
+	};
+
+	const [formInputs, setFormInputs] = useState<ReceiptItem>({
+		...defaultForm,
+		usersToPay: users,
 	});
 	const [isUploading, setIsUploading] = useState<boolean>(false);
 	const [isFormComplated, setIsFormCompleted] = useState(false);
-
-	const defaultForm = {
-		coordinatorUid: me?.uid || '',
-		description: '',
-		exceptedUsers: [],
-		receiptURL: '',
-		total: 0,
-		category: category.id,
-		id: undefined,
-	};
 
 	useEffect(() => {
 		const essentialInputs = [
 			'total',
 			'coordinatorUid',
 			'description',
-			'exceptedUsers',
+			'usersToPay',
 		];
 		const mapped = essentialInputs.map(
 			key => formInputs[key as keyof typeof formInputs],
@@ -95,19 +97,16 @@ export default function ReceiptsByCategory({
 			} else if (typeof val === 'string') {
 				return val.length > 0;
 			} else if (Array.isArray(val)) {
-				return val.length !== users.length;
+				return val.length > 0;
 			}
 		});
+
 		setIsFormCompleted(isComplated);
 	}, [formInputs]);
 
 	useEffect(() => {
-		GroupAccountPresenter.receipts.init(
-			listId,
-			category.id,
-			setReceiptsByCategory,
-		);
-	}, []);
+		dialogTarget?.category === category.id && setFormInputs(dialogTarget);
+	}, [dialogTarget]);
 
 	const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault();
@@ -124,78 +123,38 @@ export default function ReceiptsByCategory({
 		setFormInputs(formInputs => ({ ...formInputs, [name]: value }));
 	};
 
-	const handleSelectToPays = (uid: string) => {
-		const { exceptedUsers } = formInputs;
-
-		if (exceptedUsers.includes(uid)) {
-			setFormInputs(prev => ({
+	const handleSelectToPays = (user: UserProfile) => {
+		setFormInputs(prev => {
+			const exceptedUsers = formInputs.exceptedUsers?.includes(user)
+				? formInputs.exceptedUsers.filter(u => u !== user)
+				: [...(formInputs?.exceptedUsers || []), user];
+			return {
 				...prev,
-				exceptedUsers: prev.exceptedUsers.filter(u => u !== uid),
-			}));
-		}
-		if (!exceptedUsers.includes(uid)) {
-			setFormInputs(prev => ({
-				...prev,
-				exceptedUsers: [...exceptedUsers, uid],
-			}));
-		}
+				exceptedUsers,
+				usersToPay: users.filter(u => !exceptedUsers.includes(u)),
+			};
+		});
 	};
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (!listId) {
-			throw Error(`Not found list-id`);
-		}
 
-		if (!formInputs.id) {
-			const element: Omit<ReceiptItem, 'id'> = {
-				...formInputs,
-				category: category.id,
-			};
-
-			GroupAccountPresenter.receipts.addItem(
-				listId,
-				users,
-				element,
-				setReceiptsByCategory,
-			);
-		}
-
-		if (formInputs.id) {
-			GroupAccountPresenter.receipts.updateReceipt(
-				listId,
-				formInputs,
-				setReceiptsByCategory,
-			);
-		}
-
-		inputReset();
+		onUpdate(formInputs);
+		onSetDialog(null);
 	};
 
 	const handleDelete = () => {
-		listId &&
-			GroupAccountPresenter.receipts.deleteItem(
-				listId,
-				formInputs,
-				setReceiptsByCategory,
-			);
-		inputReset();
+		onDelete(formInputs);
+		onSetDialog(null);
 	};
 
 	const handleUpdate = (receiptItem: ReceiptItem) => {
-		setFormInputs(receiptItem);
-		onSetDialog(category);
+		onSetDialog(receiptItem);
 	};
-
-	function inputReset() {
-		onCategoryReset();
-		setFormInputs(defaultForm);
-	}
 
 	return (
 		<>
 			<li
-				key={category.id}
 				className={`mb-6 bg-pureWhite/50 p-2 rounded-md ${
 					isDialogOpen ? 'blur-sm select-none' : ''
 				}`}
@@ -204,7 +163,7 @@ export default function ReceiptsByCategory({
 					<h1 className=' text-brand font-medium mb-1'>{category.name}</h1>
 					<button
 						onClick={() => {
-							onSetDialog(category);
+							onSetDialog({ ...defaultForm, usersToPay: users });
 						}}
 						className={`${
 							isDialogOpen ? 'pointer-events-none' : ''
@@ -215,29 +174,28 @@ export default function ReceiptsByCategory({
 					</button>
 				</div>
 				<ul className=''>
-					{receiptsByCategory &&
-						receiptsByCategory.map(receipt => (
-							<Receipt
-								onUpdate={handleUpdate}
-								key={receipt.id}
-								receipt={receipt}
-							/>
-						))}
+					{items.map(receipt => (
+						<Receipt
+							onUpdate={handleUpdate}
+							key={receipt.id}
+							receipt={receipt}
+						/>
+					))}
 				</ul>
 				<div className='flex justify-between py-2 text-sm text-brand'>
 					<span>합계</span>
 					<span>
-						{receiptsByCategory
+						{items
 							.reduce((sum, curr) => sum + (curr.total || 0), 0)
 							.toLocaleString('ko')}
 					</span>
 				</div>
 				<hr className='' />
 			</li>
-			{isSelected && (
+			{dialogTarget?.category === category.id && (
 				<FormContainer
 					title={category.name + ' 지출내역 추가'}
-					onCancel={inputReset}
+					onCancel={() => onSetDialog(null)}
 				>
 					<form name={category.id} onSubmit={handleSubmit}>
 						<section>
@@ -279,7 +237,7 @@ export default function ReceiptsByCategory({
 									autoComplete='disable'
 									name='total'
 									placeholder='금액'
-									value={formInputs.total?.toLocaleString('ko')}
+									value={formInputs.total ? formInputs.total : ''}
 									onChange={e =>
 										handleInputChange('total', e.currentTarget.value)
 									}
@@ -317,15 +275,17 @@ export default function ReceiptsByCategory({
 										<li
 											key={user.uid}
 											className={`border overflow-hidden rounded-lg ${
-												formInputs.exceptedUsers?.includes(user.uid)
-													? 'text-button_disabled'
-													: 'bg-brand/90 text-pureWhite'
+												formInputs.usersToPay
+													.map(users => users.uid)
+													.includes(user.uid)
+													? 'bg-brand/90 text-pureWhite'
+													: 'text-button_disabled'
 											} `}
 										>
 											<button
 												className='p-2'
 												type='button'
-												onClick={() => handleSelectToPays(user.uid)}
+												onClick={() => handleSelectToPays(user)}
 											>
 												{user.name}
 											</button>
