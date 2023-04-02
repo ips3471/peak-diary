@@ -5,23 +5,37 @@ import { MdOutlinePhotoCameraFront } from 'react-icons/md';
 import Rounded from '../components/form/rounded';
 import { UserProfile } from '../types/components/profile';
 
+type ProfileInputs = {
+	name: string;
+	account: string | null;
+};
+
 export default function Profile() {
 	const { user, update } = useAuthContext();
-	const [input, setInput] = useState<string>('');
+	const [input, setInput] = useState<ProfileInputs>();
 
 	useEffect(() => {
-		user && setInput(user.name);
+		user &&
+			setInput({
+				name: user.name,
+				account: user.account,
+			});
 	}, []);
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const { value } = e.currentTarget;
-		setInput(value);
+		const { id, value } = e.currentTarget;
+		setInput(prev => ({ ...(prev || { name: '', account: '' }), [id]: value }));
 	};
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		if (!user) throw new Error(`User Not Found`);
+		if (!input?.name) return;
 		e.preventDefault();
-		const updated: UserProfile = { ...user, name: input };
+		const updated: UserProfile = {
+			...user,
+			name: input.name,
+			account: input?.account,
+		};
 		update(updated);
 	};
 
@@ -47,7 +61,19 @@ export default function Profile() {
 						spellCheck='false'
 						id='name'
 						type='text'
-						value={input}
+						value={input?.name}
+						onChange={handleChange}
+					/>
+				</Rounded>
+				<Rounded isStretched={false} color='light'>
+					<input
+						autoComplete='disable'
+						required
+						placeholder='계좌번호'
+						spellCheck='false'
+						id='account'
+						type='text'
+						value={input?.account || ''}
 						onChange={handleChange}
 					/>
 				</Rounded>

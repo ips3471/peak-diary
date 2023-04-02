@@ -3,11 +3,9 @@ import {
 	Category,
 	GroupAccountItem,
 	ReceiptItem,
-	UserPayment,
 } from './../../types/components/group-account.d';
 import database from '../../database/database';
 import { ListID } from '../../types/interfaces/interfaces';
-import { UserProfile } from '../../types/components/profile';
 import { v4 as uuid } from 'uuid';
 
 type SetReceipts = Dispatch<

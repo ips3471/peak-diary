@@ -1,4 +1,3 @@
-import React from 'react';
 import { MdArrowRightAlt } from 'react-icons/md';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { BsFillPencilFill } from 'react-icons/bs';

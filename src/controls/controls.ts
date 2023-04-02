@@ -29,7 +29,7 @@ const controls: Controls = {
 			},
 			{
 				id: '3',
-				title: '공동정산',
+				title: '그룹정산',
 				path: 'group-account',
 				type: 'route',
 				isPrivate: true,

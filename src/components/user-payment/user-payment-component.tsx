@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
 import { UserPayment } from '../../types/components/group-account';
 import { AiFillPlusCircle, AiFillMinusCircle } from 'react-icons/ai';
-import { useAuthContext } from '../../context/AuthContext';
 import { DisplayTarget } from './user-payment-container';
 
 interface UserPaymentProps {

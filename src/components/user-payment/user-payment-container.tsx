@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
-import { useBlurContext } from '../../context/BlurContext';
 import {
 	Category,
 	ReceiptItem,

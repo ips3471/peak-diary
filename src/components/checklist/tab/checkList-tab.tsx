@@ -1,14 +1,6 @@
-import React, {
-	ChangeEvent,
-	FormEvent,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
 import TabItem from './tab-item';
 import { BsFillPencilFill } from 'react-icons/bs';
 import { CheckListTab } from '../../../types/interfaces/interfaces';
-import PromptDialog from '../../dialog/prompt';
 
 interface TabProps {
 	onSelect: (id: string) => void;

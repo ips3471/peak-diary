@@ -14,7 +14,7 @@ import GroupAccountPresenter from '../presenter/group-account/GroupAccountPresen
 import UserPaymentContainer from '../components/user-payment/user-payment-container';
 import Rounded from '../components/form/rounded';
 import FormContainer from '../components/form/form-container';
-import { BlurContextProvider, useBlurContext } from '../context/BlurContext';
+import { useBlurContext } from '../context/BlurContext';
 
 export default function GroupAccountDetail() {
 	const location = useLocation();
@@ -57,20 +57,20 @@ export default function GroupAccountDetail() {
 	return (
 		<>
 			<BodyContainer onBlur={isBlured}>
-				<div className='h-full rounded-lg overflow-y-scroll scrollbar-hide'>
-					<div
-						className={`p-1 font-bold mb-2 flex items-center ${
-							dialogTarget ? 'blur-sm select-none' : ''
-						}`}
-					>
-						<Link className='p-2' to={'/group-account'}>
-							<BiArrowBack />
-						</Link>
-						<h1 className={` `}>{title}</h1>
-					</div>
-					<ul>
-						{categoriesMap &&
-							categories.map(receiptCategory => (
+				{categoriesMap && (
+					<div className='h-full rounded-lg overflow-y-scroll scrollbar-hide'>
+						<div
+							className={`p-1 font-bold mb-2 flex items-center ${
+								dialogTarget ? 'blur-sm select-none' : ''
+							}`}
+						>
+							<Link className='p-2' to={'/group-account'}>
+								<BiArrowBack />
+							</Link>
+							<h1 className={` `}>{title}</h1>
+						</div>
+						<ul>
+							{categories.map(receiptCategory => (
 								<ReceiptsByCategory
 									key={receiptCategory.id}
 									onSetDialog={handleDisplayDialog}
@@ -82,19 +82,20 @@ export default function GroupAccountDetail() {
 									onDelete={handleDelete}
 								/>
 							))}
-					</ul>
-					<Rounded color='light' isStretched={true}>
-						<button
-							onClick={() => {
-								setDisplayResult(true);
-								handleBlur(true);
-							}}
-							className='p-1 w-full'
-						>
-							정산결과 확인하기
-						</button>
-					</Rounded>
-				</div>
+						</ul>
+						<Rounded color='light' isStretched={true}>
+							<button
+								onClick={() => {
+									setDisplayResult(true);
+									handleBlur(true);
+								}}
+								className='p-1 w-full'
+							>
+								정산결과 확인하기
+							</button>
+						</Rounded>
+					</div>
+				)}
 			</BodyContainer>
 			{displayResult && (
 				<>
