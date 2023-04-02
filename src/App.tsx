@@ -15,13 +15,15 @@ function App() {
 		<div className='h-full w-full flex flex-col '>
 			<AuthProvider>
 				<Navbar menuOpen={menuOpen} toggleMenuOpen={toggleMenuOpen} />
-				<div
-					className={`transition-[filter] ${
-						menuOpen && 'blur-sm'
-					} flex-1 overflow-hidden`}
-				>
-					<Outlet />
-				</div>
+				<BlurContextProvider>
+					<div
+						className={`transition-[filter] ${
+							menuOpen && 'blur-sm'
+						} flex-1 overflow-hidden`}
+					>
+						<Outlet />
+					</div>
+				</BlurContextProvider>
 			</AuthProvider>
 		</div>
 	);

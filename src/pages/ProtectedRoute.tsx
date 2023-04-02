@@ -16,7 +16,7 @@ export default function ProtectedRoute({
 		}
 	}, []);
 
-	return <BlurContextProvider>{children}</BlurContextProvider>;
+	return <>{children}</>;
 }
 
 interface ProtectedRouteProps {
