@@ -19,7 +19,15 @@ const router = createBrowserRouter([
 		element: <App />,
 		errorElement: <NotFound />,
 		children: [
-			{ index: true, path: '/', element: <Home /> },
+			{
+				index: true,
+				path: '/',
+				element: (
+					<>
+						<Home />
+					</>
+				),
+			},
 			{
 				path: '/checklist',
 				element: (
