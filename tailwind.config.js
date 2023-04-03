@@ -14,7 +14,7 @@ module.exports = {
 				darkGreen: '#1e3932',
 				body: '#fef2f2',
 				bodyAccent: '#fc3f3f',
-				input_light: '#ffffff',
+				input_light: '#f7dfdf',
 				input_dark: '#60666d',
 			},
 			backgroundColor: {

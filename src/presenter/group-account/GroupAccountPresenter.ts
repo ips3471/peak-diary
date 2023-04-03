@@ -45,6 +45,18 @@ const GroupAccountPresenter = {
 				items.map(item => (item.id === updated.id ? updated : item)),
 			);
 		},
+		async updateState(
+			listId: string,
+			update: Dispatch<SetStateAction<boolean>>,
+		) {
+			const found = await database.groupAccounts.lists.getList(listId);
+			console.log(found);
+			database.groupAccounts.lists.updateList(found.id, {
+				...found,
+				isDone: true,
+			});
+			update(prev => true);
+		},
 		deleteList(
 			target: GroupAccountItem,
 			update: Dispatch<SetStateAction<GroupAccountItem[]>>,

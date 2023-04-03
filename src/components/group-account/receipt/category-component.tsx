@@ -155,7 +155,7 @@ export default function ReceiptsByCategory({
 	return (
 		<>
 			<li
-				className={`mb-6 bg-pureWhite/50 p-2 rounded-md ${
+				className={`mb-6 shadow-sm p-2 rounded-md ${
 					isDialogOpen ? 'blur-sm select-none' : ''
 				}`}
 			>
@@ -190,7 +190,6 @@ export default function ReceiptsByCategory({
 							.toLocaleString('ko')}
 					</span>
 				</div>
-				<hr className='' />
 			</li>
 			{dialogTarget?.category === category.id && (
 				<FormContainer

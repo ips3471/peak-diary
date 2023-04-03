@@ -88,6 +88,15 @@ export default function GroupAccount() {
 		setDialog(false);
 	};
 
+	function filterListType(list: GroupAccountItem) {
+		if (activeState === 'in-progress') {
+			return !list.isDone;
+		}
+		if (activeState === 'done') {
+			return list.isDone;
+		}
+	}
+
 	return (
 		<>
 			<BodyContainer onBlur={dialog}>
@@ -119,17 +128,19 @@ export default function GroupAccount() {
 				<ul>
 					{user &&
 						accountItems &&
-						accountItems.map(item => (
-							<GroupAccountList
-								onDelete={handleDeleteItem}
-								onUpdate={handleUpdateItem}
-								toggleNumpad={handleNumpad}
-								numpadTarget={numpad?.id}
-								item={item}
-								user={user}
-								key={item.id}
-							/>
-						))}
+						accountItems
+							.filter(filterListType)
+							.map(item => (
+								<GroupAccountList
+									onDelete={handleDeleteItem}
+									onUpdate={handleUpdateItem}
+									toggleNumpad={handleNumpad}
+									numpadTarget={numpad?.id}
+									item={item}
+									user={user}
+									key={item.id}
+								/>
+							))}
 				</ul>
 			</BodyContainer>
 			{dialog && (

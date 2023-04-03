@@ -25,6 +25,16 @@ export default function GroupAccountList({
 }: GroupAccountItemProps) {
 	const [host, setHost] = useState<UserProfile>();
 	const navigate = useNavigate();
+	const {
+		code,
+		date,
+		id,
+		isDone,
+		title,
+		userLength,
+		users,
+		host: histId,
+	} = item;
 
 	useEffect(() => {
 		GroupAccountPresenter.users.findUserProfile(item.host).then(setHost);
@@ -33,11 +43,11 @@ export default function GroupAccountList({
 	const handleEnter = (inputValue: number) => {
 		toggleNumpad(null);
 
-		if (inputValue !== item.code) return;
+		if (inputValue !== code) return;
 
 		const updated: GroupAccountItem = {
 			...item,
-			users: item?.users ? [...item.users, user] : [user],
+			users: item?.users ? [...users, user] : [user],
 		};
 
 		onUpdate(updated);
@@ -45,7 +55,7 @@ export default function GroupAccountList({
 	};
 
 	const handlePass = () => {
-		const uids = item.users?.map(user => user.uid) || [];
+		const uids = users?.map(user => user.uid) || [];
 		if (uids.includes(user.uid)) {
 			moveToDetail();
 		}
@@ -53,15 +63,14 @@ export default function GroupAccountList({
 	};
 
 	const handleRemoveList = () => {
-		const confirmed = window.confirm(`${item.title} 일정을 삭제할까요?`);
+		const confirmed = window.confirm(`${title} 일정을 삭제할까요?`);
 		confirmed && onDelete(item);
 	};
 
-	const moveToDetail = () =>
-		navigate('/group-account/' + item.id, { state: item });
+	const moveToDetail = () => navigate('/group-account/' + id, { state: item });
 
 	return (
-		<li className='flex flex-col p-2 w-full bg-pureWhite/50 py-1 h-28 mb-3 rounded-lg gap-1'>
+		<li className='flex flex-col p-2 w-full bg-pureWhite/20 shadow-sm py-1 h-28 mb-3 rounded-lg gap-1'>
 			<section className='flex justify-between mb-1 items-center'>
 				<span className='flex items-center gap-1'>
 					<img
@@ -72,39 +81,43 @@ export default function GroupAccountList({
 					<p className='text-sm'>{host?.name || ''}</p>
 				</span>
 				<span className='flex gap-2 items-center'>
-					<span className='text-sm font-thin'>{item.date}</span>
-					{user.uid === item.host && (
+					<span className='text-sm font-thin'>{date}</span>
+					{user.uid === histId && (
 						<button onClick={handleRemoveList} className='text-bodyAccent'>
 							<CiSquareRemove />
 						</button>
 					)}
 				</span>
 			</section>
-			<section className='flex-1 border-b text-sm'>{item.title}</section>
+			<section className='flex-1 border-b text-sm'>{title}</section>
 			<section className='flex justify-between items-center'>
 				<div className='text-sm flex gap-2'>
-					<p>
-						<span>참여인원 </span>
-						<span className='text-brand/80 text-base font-semibold'>
-							{item.users?.length || 0}/{item.userLength}
-						</span>
-					</p>
-					{item.host === user.uid && (
+					{!isDone && (
+						<p>
+							<span>참여인원 </span>
+							<span className='text-brand/80 text-base font-semibold'>
+								{users?.length || 0}/{userLength}
+							</span>
+						</p>
+					)}
+					{histId === user.uid && !isDone && (
 						<p>
 							<span>참여코드 </span>
 							<span className='text-brand/80 text-base font-semibold'>
-								{item.code}
+								{code}
 							</span>
 						</p>
 					)}
 				</div>
 				<div
 					onClick={handlePass}
-					className='relative p-1 text-sm text-brand/70 font-semibold'
+					className={`relative p-1 text-sm ${
+						isDone ? 'text-grey' : 'text-brand/70'
+					} font-semibold`}
 				>
 					<button>입장하기</button>
 					<div className='absolute right-0'>
-						{numpadTarget === item.id && (
+						{numpadTarget === id && (
 							<NumPad
 								title='참여코드 입력'
 								onCancel={() => toggleNumpad(null)}

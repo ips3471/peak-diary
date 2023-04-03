@@ -15,6 +15,7 @@ import UserPaymentContainer from '../components/user-payment/user-payment-contai
 import Rounded from '../components/form/rounded';
 import FormContainer from '../components/form/form-container';
 import { useBlurContext } from '../context/BlurContext';
+import { useAuthContext } from '../context/AuthContext';
 
 export default function GroupAccountDetail() {
 	const location = useLocation();
@@ -31,7 +32,9 @@ export default function GroupAccountDetail() {
 		userLength,
 		users,
 	} = location.state as GroupAccountItem;
+	const { user } = useAuthContext();
 	const { update, init, remove } = GroupAccountPresenter.receipts;
+	const [isFinished, setIsFinished] = useState(isDone);
 
 	const [categoriesMap, setCategoriesMap] =
 		useState<Map<Category, ReceiptItem[]>>();
@@ -48,6 +51,10 @@ export default function GroupAccountDetail() {
 
 	const handleDelete = (receipt: ReceiptItem) => {
 		remove(listId, receipt, setCategoriesMap);
+	};
+
+	const handleFinish = () => {
+		GroupAccountPresenter.lists.updateState(listId, setIsFinished);
 	};
 
 	useEffect(() => {
@@ -67,9 +74,15 @@ export default function GroupAccountDetail() {
 							<Link className='p-2' to={'/group-account'}>
 								<BiArrowBack />
 							</Link>
-							<h1 className={` `}>{title}</h1>
+							<h1 className={` `}>
+								{title} {isDone ? '(완료)' : ''}
+							</h1>
 						</div>
-						<ul>
+						<ul
+							className={`shadow-sm ${
+								isFinished ? 'opacity-50' : 'opacity-100'
+							}`}
+						>
 							{categories.map(receiptCategory => (
 								<ReceiptsByCategory
 									key={receiptCategory.id}
@@ -94,6 +107,19 @@ export default function GroupAccountDetail() {
 								정산결과 확인하기
 							</button>
 						</Rounded>
+						{user?.uid === host && !isFinished && (
+							<Rounded color='light' isStretched={true}>
+								<button
+									onClick={() => {
+										const confimed = window.confirm('정산을 끝낼까요?');
+										confimed && handleFinish();
+									}}
+									className='p-1 w-full'
+								>
+									정산 끝내기
+								</button>
+							</Rounded>
+						)}
 					</div>
 				)}
 			</BodyContainer>

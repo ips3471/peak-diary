@@ -149,6 +149,14 @@ const database = {
 				return element;
 			},
 			getLists: async () => getLists<GroupAccountItem>('lists'),
+			async getList(listId: string): Promise<GroupAccountItem> {
+				const snapshot = await get(ref(db, `groupAccounts/lists/${listId}`));
+				if (snapshot.exists()) {
+					return snapshot.val();
+				} else {
+					throw new Error('Not Found');
+				}
+			},
 			updateList(id: string, item: GroupAccountItem) {
 				update(ref(db, `/groupAccounts/lists/${id}`), item);
 				console.log('groupAccount updated', item);

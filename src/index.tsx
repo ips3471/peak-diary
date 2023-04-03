@@ -22,11 +22,7 @@ const router = createBrowserRouter([
 			{
 				index: true,
 				path: '/',
-				element: (
-					<>
-						<Home />
-					</>
-				),
+				element: <Home />,
 			},
 			{
 				path: '/checklist',
