@@ -24,20 +24,31 @@ export default function UserPaymentComponent({
 				display ? 'visible' : 'hidden'
 			} bg-pureWhite/10 shadow-sm rounded-lg p-1`}
 		>
-			<h2 className='text-center text-xl'>{name}</h2>
-			<div className='my-2 '>
-				<ul>
+			<h2 className='text-center text-xl mb-2'>{name}</h2>
+			<div className='my-1 '>
+				<header className='flex justify-between font-semibold'>
+					<div className='w-2/6'>사용처</div>
+					<div className='w-4/6 flex justify-end'>
+						<span className='inline-block basis-1/2 text-right'>
+							지불한 금액
+						</span>
+						<span className='inline-block basis-1/2 text-right'>
+							내야할 금액
+						</span>
+					</div>
+				</header>
+				<ul className='border-y py-1 my-1'>
 					{receipts.map(r => (
 						<li key={r.id} className=''>
 							<div className='flex justify-between'>
-								<div className=''>{r.description}</div>
-								<div className=''>
+								<div className='w-2/6'>{r.description}</div>
+								<div className='w-4/6 flex justify-end'>
 									{r.coordinatorUid === uid && (
-										<span className='inline-block text-bodyAccent mr-2'>
+										<span className='inline-block basis-1/2 text-right text-bodyAccent'>
 											-{r.total.toLocaleString('ko')}
 										</span>
 									)}
-									<span className='inline-block w-16 text-right'>
+									<span className='inline-block text-right basis-1/2'>
 										{r.paymentToEqual.toLocaleString('ko')}
 									</span>
 								</div>
@@ -46,7 +57,7 @@ export default function UserPaymentComponent({
 					))}
 				</ul>
 			</div>
-			<div className='flex flex-col p-2'>
+			<div className='flex flex-col p-1'>
 				<span className='flex items-center gap-1'>
 					<AiFillPlusCircle className='text-brand/90' /> 총 지불한 금액:{' '}
 					{paid.toLocaleString('ko')}
