@@ -24,7 +24,7 @@ module.exports = {
 				darkGreen: '#1e3932',
 			},
 			padding: {
-				side: '2rem',
+				side: '1.5rem',
 				checkList: '1rem',
 				container: '1rem',
 				input: '0.75rem',

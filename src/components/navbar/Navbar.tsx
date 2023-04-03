@@ -46,9 +46,9 @@ const Navbar = ({ toggleMenuOpen, menuOpen }: NavbarProps) => {
 		<header className=' border-b border-gray-300 z-50 opacity-90'>
 			<div className='flex justify-between px-side py-4'>
 				<Link to={'/'} className={'text-3xl text-brand'}>
-					<h1 className='whitespace-nowrap mr-16'>
-						<span>〽Peak</span>
-						<span className='hidden md:inline'>Diary</span>{' '}
+					<h1 className='flex items-center'>
+						<img alt='logo' src='/img/logo.png' width='32px' />
+						<span className=' font-serif md:inline'>Diary</span>{' '}
 					</h1>
 				</Link>
 				{/*
