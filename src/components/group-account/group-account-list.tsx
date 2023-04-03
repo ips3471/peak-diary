@@ -44,6 +44,9 @@ export default function GroupAccountList({
 		toggleNumpad(null);
 
 		if (inputValue !== code) return;
+		if (userLength === users.length) {
+			return alert('정원초과');
+		}
 
 		const updated: GroupAccountItem = {
 			...item,
@@ -57,7 +60,10 @@ export default function GroupAccountList({
 	const handlePass = () => {
 		const uids = users?.map(user => user.uid) || [];
 		if (uids.includes(user.uid)) {
-			moveToDetail();
+			return moveToDetail();
+		}
+		if (isDone) {
+			return alert('정산이 마감되어 참여가 제한됩니다');
 		}
 		!numpadTarget && toggleNumpad(item);
 	};
