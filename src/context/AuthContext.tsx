@@ -35,7 +35,9 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
 
 	useEffect(() => {
 		auth.onUserStateChanged(async user => {
-			if (!user) return;
+			if (!user) {
+				return setUser(null);
+			}
 			const userFound = await ProfilePresenter.get(user.uid);
 
 			if (userFound) {

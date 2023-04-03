@@ -12,6 +12,7 @@ export default function Home() {
 						title='체크리스트'
 						description='한번더 확인!'
 						path='/checklist'
+						requireSignIn={true}
 					/>
 				</NavButtonContainer>
 
@@ -20,6 +21,7 @@ export default function Home() {
 						title='그룹정산'
 						description='정확하고 깔끔하게'
 						path='/group-account'
+						requireSignIn={true}
 					/>
 				</NavButtonContainer>
 				<section></section>
