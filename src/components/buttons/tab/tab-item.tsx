@@ -17,7 +17,7 @@ export default function TabItem({
 	return (
 		<section className='flex-1'>
 			<button
-				className='pb-2 text-brand font-medium'
+				className='pb-2 text-brand font-medium w-full'
 				onClick={() => setState(state)}
 			>
 				{text}
