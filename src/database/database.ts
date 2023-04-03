@@ -136,17 +136,15 @@ const database = {
 	},
 	groupAccounts: {
 		lists: {
-			async addList(form: Omit<GroupAccountItem, 'id' | 'code'>) {
-				const id = uuid();
-				const code = Math.floor(Math.random() * 9999);
-				const element: GroupAccountItem = { ...form, id, code };
-				set(ref(db, `/groupAccounts/lists/${id}`), element);
-				set(ref(db, `/groupAccounts/payments/${id}/${element.host}`), {
+			async addList(form: GroupAccountItem) {
+				const { id, host } = form;
+				set(ref(db, `/groupAccounts/lists/${id}`), form);
+				set(ref(db, `/groupAccounts/payments/${id}/${host}`), {
 					paid: 0,
 					toPay: 0,
 				});
-				console.log('add group-account in db', element);
-				return element;
+				console.log('add group-account in db', form);
+				return form;
 			},
 			getLists: async () => getLists<GroupAccountItem>('lists'),
 			async getList(listId: string): Promise<GroupAccountItem> {
@@ -166,65 +164,6 @@ const database = {
 			},
 		},
 		userPayments: {
-			/* 			async findUserPayment(listId: string, uid: string) {
-				const userPayment = await database.groupAccounts.userPayments.findByUid(
-					listId,
-					uid,
-				);
-				if (!userPayment) {
-					throw new Error(`User not Found: ${uid}`);
-				}
-				return userPayment;
-			},
-			async getAll(listId: string) {
-				return get(ref(db, `/groupAccounts/payments/${listId}`)).then(
-					snapshot => {
-						if (snapshot.exists()) {
-							return snapshot.val() as UserPayments;
-						}
-					},
-				);
-			}, */
-			/* 			init(listId: string, uid: string, form: UserPayment) {
-				set(ref(db, `/groupAccounts/payments/${listId}/${uid}`), form);
-				console.log('add new payments in db', form);
-			}, */
-			/* 			update(listId: string, uid: string, updated: UserPayment) {
-				update(ref(db, `/groupAccounts/payments/${listId}/${uid}`), updated);
-				console.log('payments updated', uid, updated);
-				return updated;
-			}, */
-			/* async increment(
-				listId: string,
-				uid: string,
-				type: 'toPay' | 'paid',
-				value: number,
-			) {
-				const userPayment = await this.findUserPayment(listId, uid);
-				const updated = { ...userPayment, [type]: userPayment[type] + value };
-				await update(
-					ref(db, `/groupAccounts/payments/${listId}/${uid}`),
-					updated,
-				);
-				console.log(`increment-${type} payments updated`, uid, updated);
-				return updated;
-			},
-			async decrement(
-				listId: string,
-				uid: string,
-				type: 'toPay' | 'paid',
-				value: number,
-			) {
-				const userPayment = await this.findUserPayment(listId, uid);
-				const updated = { ...userPayment, [type]: userPayment[type] - value };
-				await update(
-					ref(db, `/groupAccounts/payments/${listId}/${uid}`),
-					updated,
-				);
-				console.log(`decrement-${type} payments updated`, uid, updated);
-				return updated;
-			}, */
-
 			async findByUid(listId: string, uid: string) {
 				return get(ref(db, `/groupAccounts/payments/${listId}/${uid}`)).then(
 					snapshot => {
@@ -270,6 +209,8 @@ const database = {
 				remove(ref(db, `/groupAccounts/receipts/${listId}`));
 			},
 			async getAll(listId: string) {
+				console.log('get all receipts from DB');
+
 				return get(ref(db, `${this.refRoot}/${listId}`)).then(snapshot => {
 					if (snapshot.exists()) {
 						return snapshot.val();

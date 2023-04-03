@@ -8,6 +8,7 @@ type NumPadOptions = {
 	enterColor: string;
 	buttonRadius: string;
 	buttonGap: string;
+	padTextColor: string;
 };
 
 type NumPadStyleObj = {
@@ -35,11 +36,12 @@ interface NumPadProps {
 
 const PADS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 const defaultOptions = {
-	numColor: '#7fffd4',
-	clearColor: '#7fffd4',
+	numColor: '#046241',
+	clearColor: '#046241',
 	enterColor: 'tomato',
 	buttonRadius: '10px',
 	buttonGap: '0.25rem',
+	padTextColor: 'rgba(255,255,255,0.9)',
 };
 
 export default function NumPad({
@@ -101,6 +103,7 @@ export default function NumPad({
 			borderRadius: options.buttonRadius,
 			height: '100%',
 			cursor: 'pointer',
+			color: options.padTextColor,
 		},
 		numpad__container: {
 			display: 'grid',
@@ -117,6 +120,7 @@ export default function NumPad({
 			alignItems: 'center',
 			borderRadius: options.buttonRadius,
 			cursor: 'pointer',
+			color: options.padTextColor,
 		},
 		numpad__pad__00: {
 			visibility: type === 'currency' ? 'visible' : 'hidden',

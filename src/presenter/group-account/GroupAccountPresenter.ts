@@ -7,6 +7,7 @@ import {
 import database from '../../database/database';
 import { ListID } from '../../types/interfaces/interfaces';
 import { v4 as uuid } from 'uuid';
+import controls from '../../controls/controls';
 
 type SetReceipts = Dispatch<
 	React.SetStateAction<Map<Category, ReceiptItem[]> | undefined>
@@ -23,10 +24,15 @@ const GroupAccountPresenter = {
 			>,
 			update: Dispatch<SetStateAction<GroupAccountItem[]>>,
 		) {
-			const element: Omit<GroupAccountItem, 'id' | 'code'> = {
+			const id = uuid();
+			const code = Math.floor(Math.random() * 9999);
+			const element: GroupAccountItem = {
 				...form,
 				isDone: false,
+				id,
+				code,
 			};
+
 			database.groupAccounts.lists.addList(element).then(data => {
 				update(prev => [...prev, data]);
 			});
@@ -105,6 +111,8 @@ const GroupAccountPresenter = {
 		},
 
 		async init(listId: ListID, update: SetReceipts) {
+			console.log('init receipts in presenter');
+
 			receipts.getAll(listId).then(categories => {
 				if (categories) {
 					const map = new Map();
@@ -112,6 +120,14 @@ const GroupAccountPresenter = {
 						map.set(category, Object.values(categories[category]));
 					});
 					update(map);
+				} else {
+					const defaultMap = controls.receiptCategory.reduce(
+						(form, category) => {
+							return form.set(category.id, []);
+						},
+						new Map(),
+					);
+					update(defaultMap);
 				}
 			});
 		},

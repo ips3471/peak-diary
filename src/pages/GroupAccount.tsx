@@ -226,7 +226,7 @@ export default function GroupAccount() {
 						</section>
 						<section className='flex justify-between text-center'>
 							<button
-								className='flex-1 text-body bg-brand/70 rounded-2xl py-3 font-semibold'
+								className='flex-1 text-body bg-brand/80 rounded-2xl py-3 font-semibold'
 								type='submit'
 							>
 								만들기

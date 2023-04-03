@@ -58,6 +58,8 @@ export default function GroupAccountDetail() {
 	};
 
 	useEffect(() => {
+		console.log('render groupAccoult-detail');
+
 		init(listId, setCategoriesMap);
 	}, []);
 
