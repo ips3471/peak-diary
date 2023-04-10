@@ -24,7 +24,7 @@ export default function Receipt({ receipt, onUpdate }: ReceiptProps) {
 		<li key={receipt.id}>
 			<div className='flex justify-between text-sm text-dark/90'>
 				<div className='flex flex-1 gap-2'>
-					<div className='basis-20 relative'>
+					<div className='w-1/5 relative overflow-x-hidden'>
 						<span className='whitespace-nowrap'>{user?.name}</span>
 					</div>
 					<div className='flex items-center gap-2'>

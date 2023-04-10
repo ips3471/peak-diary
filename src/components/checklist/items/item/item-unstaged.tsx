@@ -1,24 +1,23 @@
-import { CheckListItem } from '../../types/interfaces/interfaces';
 import { MdDeleteOutline } from 'react-icons/md';
 import { GrAdd } from 'react-icons/gr';
+import { CheckListItem } from '../../../../types/components/checklist';
 
 interface ListItemProps {
 	item: CheckListItem;
 	onDelete: (list: CheckListItem) => void;
-	onUpdate: (list: CheckListItem) => void;
+	onMove: (list: CheckListItem) => void;
 }
 
 export default function UnstagedItem({
 	item,
 	onDelete,
-	onUpdate,
+	onMove,
 }: ListItemProps) {
+	console.log('render unstaged-item');
+
 	return (
 		<li className='flex px-checkList p-1'>
-			<button
-				className='p-1'
-				onClick={() => onUpdate({ ...item, staged: true })}
-			>
+			<button className='p-1' onClick={() => onMove(item)}>
 				<GrAdd />
 			</button>
 

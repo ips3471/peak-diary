@@ -11,7 +11,7 @@ export default function BodyContainer({
 }: BodyContainerProps) {
 	return (
 		<div
-			className={`bg-body h-full flex flex-col p-container transition-all ${
+			className={`bg-body overflow-scroll scrollbar-hide h-full flex flex-col p-container transition-all ${
 				onBlur ? 'blur-sm pointer-events-none' : ''
 			}`}
 		>

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { GroupAccountState } from '../../../types/components/group-account';
 
 interface TabItemProps {

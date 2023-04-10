@@ -16,21 +16,20 @@ import {
 } from 'react';
 import { useAuthContext } from '../../../context/AuthContext';
 import { uploadImage } from '../../../service/cloudinary/cloudinary';
-import FormContainer from '../../form/form-container';
-import Rounded from '../../form/rounded';
+import FormContainer from '../../forms/form-container';
+import Rounded from '../../forms/rounded';
 import { BiCalculator } from 'react-icons/bi';
 import NumPad from '../../../util/Numpad';
 import { BsCheck } from 'react-icons/bs';
 import Receipt from './receipt-item';
 import calcReducer from '../../../reducer/calcReducer';
 import { UserProfile } from '../../../types/components/profile';
+import LoadingSpinner from '../../forms/loading-spinner';
 
 interface ReceiptItemProps {
 	category: ReceiptCategory;
 	onSetDialog: (target: ReceiptItem | null) => void;
 	isDialogOpen: boolean;
-	// isSelected: boolean;
-	// onCategoryReset: () => void;
 	dialogTarget: ReceiptItem | null;
 	items: ReceiptItem[];
 	onUpdate: (item: ReceiptItem) => void;
@@ -41,24 +40,13 @@ export default function ReceiptsByCategory({
 	category,
 	onSetDialog,
 	isDialogOpen,
-	// onCategoryReset,
-	// isSelected,
 	items,
 	onUpdate,
 	onDelete,
 	dialogTarget,
 }: ReceiptItemProps) {
 	const location = useLocation();
-	const {
-		code,
-		date,
-		host,
-		id: listId,
-		isDone,
-		title,
-		userLength,
-		users,
-	} = location.state as GroupAccountItem;
+	const { users } = location.state as GroupAccountItem;
 	const { user: me } = useAuthContext();
 	const [calcState, calcDispatch] = useReducer(calcReducer, { isOpen: false });
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -221,6 +209,7 @@ export default function ReceiptsByCategory({
 									className='w-full'
 									required
 									autoComplete='disable'
+									spellCheck='false'
 									name='description'
 									placeholder='사용처'
 									value={formInputs.description}
@@ -234,6 +223,7 @@ export default function ReceiptsByCategory({
 								<input
 									required
 									autoComplete='disable'
+									spellCheck='false'
 									name='total'
 									placeholder='금액'
 									value={formInputs.total ? formInputs.total : ''}
@@ -301,9 +291,7 @@ export default function ReceiptsByCategory({
 									} py-1 px-2 text-pureWhite/95 text-sm`}
 								>
 									{isUploading ? (
-										<span className='animate-[spin_0.5s_ease-in-out_infinite]'>
-											<ImSpinner3 />
-										</span>
+										<LoadingSpinner />
 									) : (
 										<>
 											{!formInputs.receiptURL && <AiOutlineDownload />}

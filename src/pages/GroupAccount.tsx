@@ -1,10 +1,4 @@
-import React, {
-	ChangeEvent,
-	FormEvent,
-	useEffect,
-	useReducer,
-	useState,
-} from 'react';
+import { ChangeEvent, FormEvent, useEffect, useReducer, useState } from 'react';
 import BodyContainer from '../components/body/container';
 import TabItem from '../components/buttons/tab/tab-item';
 import {
@@ -12,8 +6,8 @@ import {
 	GroupAccountState,
 } from '../types/components/group-account';
 import { AiOutlinePlus } from 'react-icons/ai';
-import FormContainer from '../components/form/form-container';
-import Rounded from '../components/form/rounded';
+import FormContainer from '../components/forms/form-container';
+import Rounded from '../components/forms/rounded';
 import { useAuthContext } from '../context/AuthContext';
 import GroupAccountPresenter from '../presenter/group-account/GroupAccountPresenter';
 import GroupAccountList from '../components/group-account/group-account-list';

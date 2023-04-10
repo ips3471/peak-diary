@@ -6,6 +6,14 @@ type Controls = {
 		items: NavMenuItem<NavItemType>[];
 	};
 	receiptCategory: ReceiptCategory[];
+	checklist: {
+		tab: {
+			defaultDialog: {
+				input: string | null;
+				isActive: boolean;
+			};
+		};
+	};
 };
 
 const controls: Controls = {
@@ -60,6 +68,14 @@ const controls: Controls = {
 		{ id: 'driving', name: '유류비/톨비' },
 		{ id: 'etc', name: '기타' },
 	],
+	checklist: {
+		tab: {
+			defaultDialog: {
+				input: null,
+				isActive: false,
+			},
+		},
+	},
 };
 
 export default controls;

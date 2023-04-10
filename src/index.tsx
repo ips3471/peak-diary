@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import CheckList from './pages/CheckList';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Admin from './pages/Admin';
@@ -12,6 +11,7 @@ import Diary from './pages/Diary';
 import Profile from './pages/Profile';
 import GroupAccount from './pages/GroupAccount';
 import GroupAccountDetail from './pages/GroupAccount-detail';
+import CheckListPage from './pages/CheckList';
 
 const router = createBrowserRouter([
 	{
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
 				path: '/checklist',
 				element: (
 					<ProtectedRoute requireAdmin={false}>
-						<CheckList />
+						<CheckListPage />
 					</ProtectedRoute>
 				),
 			},

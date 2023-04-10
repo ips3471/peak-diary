@@ -1,4 +1,3 @@
-import React from 'react';
 import BodyContainer from '../components/body/container';
 import NavButton from '../components/home/nav-button';
 import NavButtonContainer from '../components/home/nav-button-container';

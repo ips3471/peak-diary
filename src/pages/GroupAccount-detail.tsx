@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import BodyContainer from '../components/body/container';
 import ReceiptsByCategory from '../components/group-account/receipt/category-component';
@@ -12,24 +12,19 @@ import { BiArrowBack } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 import GroupAccountPresenter from '../presenter/group-account/GroupAccountPresenter';
 import UserPaymentContainer from '../components/user-payment/user-payment-container';
-import Rounded from '../components/form/rounded';
-import FormContainer from '../components/form/form-container';
-import { useBlurContext } from '../context/BlurContext';
+import Rounded from '../components/forms/rounded';
+import FormContainer from '../components/forms/form-container';
 import { useAuthContext } from '../context/AuthContext';
 
 export default function GroupAccountDetail() {
 	const location = useLocation();
 	const categories = controls.receiptCategory;
 	const [dialogTarget, setDialogTarget] = useState<ReceiptItem | null>(null);
-	const { isBlured, handleBlur } = useBlurContext();
 	const {
-		code,
-		date,
 		host,
 		id: listId,
 		isDone,
 		title,
-		userLength,
 		users,
 	} = location.state as GroupAccountItem;
 	const { user } = useAuthContext();
@@ -65,7 +60,7 @@ export default function GroupAccountDetail() {
 
 	return (
 		<>
-			<BodyContainer onBlur={isBlured}>
+			<BodyContainer>
 				{categoriesMap && (
 					<div className='h-full rounded-lg overflow-y-scroll scrollbar-hide'>
 						<div
@@ -102,7 +97,6 @@ export default function GroupAccountDetail() {
 							<button
 								onClick={() => {
 									setDisplayResult(true);
-									handleBlur(true);
 								}}
 								className='p-1 w-full'
 							>
@@ -130,7 +124,6 @@ export default function GroupAccountDetail() {
 					<FormContainer
 						onCancel={() => {
 							setDisplayResult(false);
-							handleBlur(false);
 						}}
 						title='그룹정산 명세서'
 					>

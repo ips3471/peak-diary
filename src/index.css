@@ -205,7 +205,8 @@ select {
 }
 .checkbox-wrapper-11 label::before {
 	height: 2px;
-	width: 8px;
+	width: 6px;
+	height: 2px;
 	left: -27px;
 	background: var(--check);
 	border-radius: 2px;

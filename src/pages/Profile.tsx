@@ -1,8 +1,8 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import BodyContainer from '../components/body/container';
 import { useAuthContext } from '../context/AuthContext';
 import { MdOutlinePhotoCameraFront } from 'react-icons/md';
-import Rounded from '../components/form/rounded';
+import Rounded from '../components/forms/rounded';
 import { UserProfile } from '../types/components/profile';
 
 type ProfileInputs = {

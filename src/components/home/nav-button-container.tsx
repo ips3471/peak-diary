@@ -1,5 +1,4 @@
-import React, { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import { ReactNode } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
 
 interface NavButtonContainerProps {
@@ -15,7 +14,6 @@ export default function NavButtonContainer({
 	return (
 		<section
 			onClick={() => {
-				console.log('click container');
 				if (!user?.uid) {
 					return window.alert('로그인이 필요한 서비스입니다');
 				}
