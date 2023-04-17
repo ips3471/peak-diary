@@ -1,9 +1,9 @@
 import { useAuthContext } from '../context/AuthContext';
-import InitTabsByUser from '../components/checklist/tab/init/init-by-user';
-import { CheckListController } from '../controller/checklist';
+import InitTabs from '../components/checklist/init/init-by-user';
+import { CheckListTabController } from '../controller/checklist/checklist-tab';
 
 export default function CheckListPage() {
 	const { user } = useAuthContext();
-	const controller = user && new CheckListController(user.uid);
-	return <>{controller && <InitTabsByUser tabController={controller} />}</>;
+	const controller = user && new CheckListTabController(user.uid);
+	return <>{controller && <InitTabs tabController={controller} />}</>;
 }

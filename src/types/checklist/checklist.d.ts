@@ -5,10 +5,6 @@ export type CheckListTab = {
 	name: string;
 	items: CheckListItem[];
 };
-export type CheckListDialog<T> = {
-	input: T | null;
-	isActive: boolean;
-};
 export type CheckListItem = {
 	id: string;
 	name: string;
@@ -20,7 +16,7 @@ export type UpdateState<T> = Dispatch<SetStateAction<T[]>>;
 
 export type ChecklistState = CheckListTab | CheckListItem;
 
-export type CheckListTabAction =
+/* export type CheckListTabAction =
 	| UpdateTabAction
 	| DeleteTabAction
 	| InitTabAction;
@@ -28,39 +24,15 @@ export type CheckListTabAction =
 export type CheckListItemAction =
 	| UpdateItemAction
 	| DeleteItemAction
-	| InitItemAction;
+	| InitItemAction; */
 
-export type CheckListTabReducer = Reducer<CheckListTab[], CheckListTabAction>;
-export type CheckListItemReducer = Reducer<
-	CheckListItem[],
-	CheckListItemAction
->;
+// export type CheckListTabReducer = Reducer<CheckListTab[], CheckListTabAction>;
+// export type CheckListItemReducer = Reducer<
+// 	CheckListItem[],
+// 	CheckListItemAction
+// >;
 export type CheckListReducer<T> = Reducer<T[], CheckListAction<T>>;
 
-type UpdateTabAction = {
-	type: 'update-tab';
-	payload: CheckListTab;
-};
-type DeleteTabAction = {
-	type: 'delete-tab';
-	payload: string;
-};
-type InitTabAction = {
-	type: 'init-tab';
-	payload: CheckListTab[];
-};
-type InitItemAction = {
-	type: 'init-item';
-	payload: CheckListItem[];
-};
-type UpdateItemAction = {
-	type: 'update-item';
-	payload: CheckListItem;
-};
-type DeleteItemAction = {
-	type: 'delete-item';
-	payload: string;
-};
 type CheckListTabActionType = 'update-tab' | 'delete-tab' | 'init-tab';
 
 type CheckListItemActionType = 'update-item' | 'delete-item' | 'init-item';

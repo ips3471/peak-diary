@@ -2,7 +2,7 @@ import {
 	GroupAccountItem,
 	ReceiptCategory,
 	ReceiptItem,
-} from '../../../types/components/group-account';
+} from '../../../types/group-account/group-account';
 import { AiOutlineDownload, AiOutlinePlus } from 'react-icons/ai';
 import { ImSpinner3 } from 'react-icons/im';
 import { useLocation } from 'react-router-dom';
@@ -181,6 +181,7 @@ export default function ReceiptsByCategory({
 			</li>
 			{dialogTarget?.category === category.id && (
 				<FormContainer
+					onSubmit={() => {}}
 					title={category.name + ' 지출내역 추가'}
 					onCancel={() => onSetDialog(null)}
 				>

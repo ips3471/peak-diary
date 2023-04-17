@@ -6,7 +6,7 @@ import User from '../buttons/user/User';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { AiOutlineClose } from 'react-icons/ai';
 import controls from '../../controls/controls';
-import { NavMenuItem } from '../../types/interfaces/interfaces';
+import { NavMenuItem } from '../../types/interfaces/global';
 
 interface NavbarProps {
 	toggleMenuOpen: () => void;

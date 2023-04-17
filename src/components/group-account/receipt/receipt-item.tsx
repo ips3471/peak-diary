@@ -7,7 +7,7 @@ import { useAuthContext } from '../../../context/AuthContext';
 import {
 	GroupAccountItem,
 	ReceiptItem,
-} from '../../../types/components/group-account';
+} from '../../../types/group-account/group-account';
 
 interface ReceiptProps {
 	receipt: ReceiptItem;

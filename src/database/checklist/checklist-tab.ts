@@ -1,4 +1,4 @@
-import { UserDB } from './../types/models/model.d';
+import { UserDB } from '../../types/models/model';
 import {
 	getDatabase,
 	get,
@@ -8,8 +8,8 @@ import {
 	remove,
 	Database,
 } from 'firebase/database';
-import { firebaseApp } from '../service/firebase/firebase';
-import { CheckListTab } from '../types/components/checklist';
+import { firebaseApp } from '../../service/firebase/firebase';
+import { CheckListTab } from '../../types/checklist/checklist';
 
 class CheckListDatabase {
 	private userRef: string;

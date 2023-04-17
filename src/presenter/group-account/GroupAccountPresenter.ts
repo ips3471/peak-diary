@@ -3,9 +3,9 @@ import {
 	Category,
 	GroupAccountItem,
 	ReceiptItem,
-} from './../../types/components/group-account.d';
+} from '../../types/group-account/group-account';
 import database from '../../database/database';
-import { ListID } from '../../types/interfaces/interfaces';
+import { ListID } from '../../types/interfaces/global';
 import { v4 as uuid } from 'uuid';
 import controls from '../../controls/controls';
 

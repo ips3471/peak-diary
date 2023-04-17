@@ -3,9 +3,9 @@ import {
 	CheckListItem,
 	CheckListReducer,
 	CheckListTab,
-} from '../../../../types/components/checklist';
+} from '../../../../types/checklist/checklist';
 import checkListReducer from '../../../../reducer/checklist/checklist';
-import { CheckListItemController } from '../../../../controller/checklist-item';
+import { CheckListItemController } from '../../../../controller/checklist/checklist-item';
 import FilteredItems from './filtered/filtered-by-state';
 
 interface TabProps {

@@ -1,5 +1,5 @@
 import { MdOutlineArrowDropDownCircle } from 'react-icons/md';
-import { CheckListItem } from '../../../../types/components/checklist';
+import { CheckListItem } from '../../../../types/checklist/checklist';
 
 interface StagedItemProps {
 	item: CheckListItem;

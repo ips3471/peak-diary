@@ -1,0 +1,64 @@
+import { v4 as uuid } from 'uuid';
+import {
+	GroupAccountSchedule,
+	ScheduleProgress,
+	UpdateReducer,
+	User,
+} from '../../types/group-account/group-account';
+import GroupAccountScheduleDatabase from '../../database/group-account/group-account-schedule';
+import { FormInputs } from '../../components/group-account/dialog/form';
+
+class GroupAccountScheduleController {
+	db: GroupAccountScheduleDatabase;
+	user: User;
+	state: ScheduleProgress;
+	constructor(user: User, state: ScheduleProgress) {
+		this.db = new GroupAccountScheduleDatabase(state);
+		this.state = state;
+		this.user = user;
+	}
+
+	initSchedules(dispatch: UpdateReducer<GroupAccountSchedule>) {
+		this.db
+			.getSchedules()
+			.then(data => dispatch({ type: 'init', payload: data }));
+	}
+
+	addSchedule(form: FormInputs, dispatch: UpdateReducer<GroupAccountSchedule>) {
+		const { date, title, userLength } = form;
+		const element: GroupAccountSchedule = {
+			id: uuid(),
+			date: date.toString(),
+			host: this.user.uid,
+			isDone: false,
+			title: title.toString(),
+			userLength: Number(userLength),
+			users: [this.user],
+			code: Math.floor(Math.random() * 9999),
+		};
+		this.db.addSchedule(element);
+		dispatch({ type: 'add', payload: element });
+		return element;
+	}
+
+	/* updateSchedule(
+		input: string,
+		schedule: GroupAccountSchedule,
+		dispatch: UpdateReducer<GroupAccountSchedule>,
+	) {
+		const updated: GroupAccountSchedule = { ...schedule, name: input };
+		this.db.updateSchedule(updated);
+		dispatch({ type: 'update', payload: updated });
+		return updated;
+	} */
+
+	deleteSchedule(
+		schedule: GroupAccountSchedule,
+		dispatch: UpdateReducer<GroupAccountSchedule>,
+	) {
+		this.db.deleteSchedule(schedule.id);
+		dispatch({ type: 'delete', payload: schedule.id });
+	}
+}
+
+export default GroupAccountScheduleController;

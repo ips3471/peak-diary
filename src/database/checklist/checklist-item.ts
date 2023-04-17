@@ -1,6 +1,6 @@
 import { Database, ref, remove, update } from 'firebase/database';
-import { CheckListItem } from '../types/components/checklist';
-import { UserDB } from '../types/models/model';
+import { CheckListItem } from '../../types/checklist/checklist';
+import { UserDB } from '../../types/models/model';
 
 class CheckListItemDatabase {
 	private tabRef: string;

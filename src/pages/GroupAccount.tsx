@@ -1,10 +1,10 @@
 import { ChangeEvent, FormEvent, useEffect, useReducer, useState } from 'react';
 import BodyContainer from '../components/body/container';
-import TabItem from '../components/buttons/tab/tab-item';
+import ScheduleProgressStateBtn from '../components/buttons/tab/tab-item';
 import {
 	GroupAccountItem,
-	GroupAccountState,
-} from '../types/components/group-account';
+	GroupAccountProgress,
+} from '../types/group-account/group-account';
 import { AiOutlinePlus } from 'react-icons/ai';
 import FormContainer from '../components/forms/form-container';
 import Rounded from '../components/forms/rounded';
@@ -30,7 +30,7 @@ const defaultInputForm = {
 export default function GroupAccount() {
 	const [accountItems, setAccountItems] = useState<GroupAccountItem[]>([]);
 	const [activeState, setActiveState] =
-		useState<GroupAccountState>('in-progress');
+		useState<GroupAccountProgress>('in-progress');
 	const [dialog, setDialog] = useState(false);
 	const [input, setInput] = useState<UserInputs>(defaultInputForm);
 	const { user } = useAuthContext();
@@ -94,20 +94,6 @@ export default function GroupAccount() {
 	return (
 		<>
 			<BodyContainer onBlur={dialog}>
-				<nav className='flex mb-1 justify-between text-center'>
-					<TabItem
-						active={activeState}
-						setState={setActiveState}
-						text={'진행중'}
-						state='in-progress'
-					/>
-					<TabItem
-						active={activeState}
-						setState={setActiveState}
-						text={'마감'}
-						state='done'
-					/>
-				</nav>
 				<header className='flex justify-end mb-3'>
 					<button
 						onClick={() => setDialog(true)}
@@ -119,26 +105,11 @@ export default function GroupAccount() {
 						<span className={`text-zinc-900 text-xs font-medium `}>만들기</span>
 					</button>
 				</header>
-				<ul>
-					{user &&
-						accountItems &&
-						accountItems
-							.filter(filterListType)
-							.map(item => (
-								<GroupAccountList
-									onDelete={handleDeleteItem}
-									onUpdate={handleUpdateItem}
-									toggleNumpad={handleNumpad}
-									numpadTarget={numpad?.id}
-									item={item}
-									user={user}
-									key={item.id}
-								/>
-							))}
-				</ul>
+				<ul></ul>
 			</BodyContainer>
 			{dialog && (
 				<FormContainer
+					onSubmit={() => {}}
 					onCancel={() => setDialog(false)}
 					title='새로운 모임정산'
 				>

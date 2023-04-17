@@ -1,10 +1,7 @@
 import { memo, useState } from 'react';
 import Toggle from 'react-toggle';
-import {
-	CheckListItem,
-	UpdateState,
-} from '../../../types/components/checklist';
-import { CheckListItemController } from '../../../controller/checklist-item';
+import { CheckListItem, UpdateState } from '../../../types/checklist/checklist';
+import { CheckListItemController } from '../../../controller/checklist/checklist-item';
 import AddFormInput from './addForm-input';
 
 interface AddFormProps {

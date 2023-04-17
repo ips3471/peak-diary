@@ -2,7 +2,7 @@ import { createContext, useState, useContext, useEffect } from 'react';
 import {
 	AuthContextProviderProps,
 	AuthContextValue,
-} from '../../types/interfaces/interfaces';
+} from '../../types/interfaces/global';
 // import { fakeUser } from './user';
 
 /* interface FakeAuthContextProviderProps extends AuthContextProviderProps {

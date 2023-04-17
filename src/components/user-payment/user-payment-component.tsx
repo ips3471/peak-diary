@@ -1,4 +1,4 @@
-import { UserPayment } from '../../types/components/group-account';
+import { UserPayment } from '../../types/group-account/group-account';
 import { AiFillPlusCircle, AiFillMinusCircle } from 'react-icons/ai';
 import { DisplayTarget } from './user-payment-container';
 

@@ -1,32 +1,28 @@
 import { useEffect, useReducer, useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { BsFillPencilFill } from 'react-icons/bs';
-import BodyContainer from '../../../body/container';
-import InitItemsByTab from '../../items/init/init-by-tab';
-import { CheckListController } from '../../../../controller/checklist';
-import { CheckListItemController } from '../../../../controller/checklist-item';
-import controls from '../../../../controls/controls';
-import checkListReducer from '../../../../reducer/checklist/checklist';
+import BodyContainer from '../../body/container';
+import InitItemsByTab from '../items/init/init-by-tab';
+import { CheckListTabController } from '../../../controller/checklist/checklist-tab';
+import { CheckListItemController } from '../../../controller/checklist/checklist-item';
+import checkListReducer from '../../../reducer/checklist/checklist';
 import {
-	CheckListDialog,
 	CheckListReducer,
 	CheckListTab,
-} from '../../../../types/components/checklist';
-import PromptDialog from '../dialog/prompt';
+} from '../../../types/checklist/checklist';
+import ChecklistTabForm from '../tab/dialog/prompt';
 
 interface CheckListProps {
-	tabController: CheckListController;
+	tabController: CheckListTabController;
 }
 
-export default function InitTabsByUser({ tabController }: CheckListProps) {
+export default function InitChecklist({ tabController }: CheckListProps) {
 	const [checkListTabs, dispatch] = useReducer<CheckListReducer<CheckListTab>>(
 		checkListReducer,
 		[],
 	);
 	const [selectedTab, setSelectedTab] = useState<CheckListTab | null>(null);
-	const [dialog, setDialog] = useState<CheckListDialog<string>>(
-		controls.checklist.tab.defaultDialog,
-	);
+	const [dialog, setDialog] = useState<boolean>(false);
 	console.log('render checklist app');
 
 	useEffect(() => {
@@ -34,7 +30,7 @@ export default function InitTabsByUser({ tabController }: CheckListProps) {
 	}, [selectedTab]);
 
 	const resetDialog = () => {
-		setDialog({ input: null, isActive: false });
+		setDialog(false);
 	};
 
 	const handleSelect = (tabId: string) => {
@@ -65,11 +61,9 @@ export default function InitTabsByUser({ tabController }: CheckListProps) {
 			: null;
 	}, [selectedTab]);
 
-	const isOverride = !!selectedTab;
-
 	return (
 		<>
-			<BodyContainer onBlur={dialog.isActive}>
+			<BodyContainer onBlur={dialog}>
 				<header className='flex sm:hidden w-full bg-red-50 text-center'>
 					<select
 						onChange={e => {
@@ -86,9 +80,7 @@ export default function InitTabsByUser({ tabController }: CheckListProps) {
 						))}
 					</select>
 					<button
-						onClick={() =>
-							setDialog({ input: selectedTab?.name || null, isActive: true })
-						}
+						onClick={() => setDialog(true)}
 						className='text-grey pl-4 p-2'
 					>
 						<BsFillPencilFill />
@@ -102,15 +94,13 @@ export default function InitTabsByUser({ tabController }: CheckListProps) {
 						/>
 					)}
 				</main>
-				{dialog.isActive &&
+				{dialog &&
 					createPortal(
-						<PromptDialog
-							dialog={dialog}
+						<ChecklistTabForm
+							selectedTab={selectedTab}
 							onSubmit={handleSubmit}
 							onDelete={handleDelete}
-							title={isOverride ? '탭 이름 수정' : '새로운 탭 생성'}
 							onCancel={resetDialog}
-							type={isOverride ? '수정' : '생성'}
 						/>,
 						document.body,
 					)}
@@ -118,3 +108,15 @@ export default function InitTabsByUser({ tabController }: CheckListProps) {
 		</>
 	);
 }
+
+/* 
+<PromptDialog
+							dialog={dialog}
+							onSubmit={handleSubmit}
+							onDelete={handleDelete}
+							title={isOverride ? '탭 이름 수정' : '새로운 탭 생성'}
+							onCancel={resetDialog}
+							hasDeleteBtn={isOverride}
+							// type={isOverride ? '수정' : '생성'}
+						/>,
+*/

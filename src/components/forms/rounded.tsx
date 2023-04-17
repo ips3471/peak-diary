@@ -13,9 +13,9 @@ export default function Rounded({
 }: RoundedContainerProps) {
 	return (
 		<div
-			className={` relative mb-1 flex justify-between p-input rounded-lg overflow-hidden shadow-sm ${
+			className={` relative flex justify-between p-input rounded-lg overflow-hidden mb-4 shadow-sm ${
 				color === 'light'
-					? 'bg-input_light/60'
+					? 'bg-input_light/10'
 					: 'bg-input_dark/50 text-pureWhite/80'
 			} ${isStretched ? 'flex-1' : 'w-min'}`}
 		>

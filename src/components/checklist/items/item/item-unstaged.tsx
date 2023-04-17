@@ -1,6 +1,6 @@
 import { MdDeleteOutline } from 'react-icons/md';
 import { GrAdd } from 'react-icons/gr';
-import { CheckListItem } from '../../../../types/components/checklist';
+import { CheckListItem } from '../../../../types/checklist/checklist';
 
 interface ListItemProps {
 	item: CheckListItem;

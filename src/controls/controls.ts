@@ -1,5 +1,8 @@
-import { ReceiptCategory } from '../types/components/group-account';
-import { NavItemType, NavMenuItem } from '../types/interfaces/interfaces';
+import {
+	ReceiptCategory,
+	ScheduleProgress,
+} from '../types/group-account/group-account';
+import { NavItemType, NavMenuItem } from '../types/interfaces/global';
 
 type Controls = {
 	menu: {
@@ -12,6 +15,11 @@ type Controls = {
 				input: string | null;
 				isActive: boolean;
 			};
+		};
+	};
+	groupAccount: {
+		header: {
+			progressStates: ScheduleProgress[];
 		};
 	};
 };
@@ -74,6 +82,11 @@ const controls: Controls = {
 				input: null,
 				isActive: false,
 			},
+		},
+	},
+	groupAccount: {
+		header: {
+			progressStates: ['pending', 'done'],
 		},
 	},
 };

@@ -3,7 +3,7 @@ import {
 	GroupAccountItem,
 	ReceiptItem,
 	UserPayment,
-} from './../types/components/group-account.d';
+} from '../types/group-account/group-account';
 import { UserProfile } from './../types/components/profile.d';
 import { User } from 'firebase/auth';
 import {

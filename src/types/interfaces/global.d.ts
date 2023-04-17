@@ -35,3 +35,8 @@ export type NavMenuItem<T extends NavItemType> = (Route | Login | Profile) & {
 };
 
 export type ListID = Readonly<Params<string>>;
+
+export type FormDialog<T> = {
+	input: T | null;
+	isActive: boolean;
+};

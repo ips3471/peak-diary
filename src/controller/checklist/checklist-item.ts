@@ -1,8 +1,8 @@
-import { UpdateState } from './../types/components/checklist.d';
-import { CheckListItem, CheckListTab } from '../types/components/checklist';
+import { UpdateState } from '../../types/checklist/checklist';
+import { CheckListItem, CheckListTab } from '../../types/checklist/checklist';
 import { v4 as uuid } from 'uuid';
-import CheckListItemDatabase from '../database/checklist-item';
-import { UserDB } from '../types/models/model';
+import CheckListItemDatabase from '../../database/checklist/checklist-item';
+import { UserDB } from '../../types/models/model';
 
 export class CheckListItemController {
 	private db: CheckListItemDatabase;

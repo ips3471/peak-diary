@@ -9,9 +9,9 @@ import Admin from './pages/Admin';
 import ProtectedRoute from './pages/ProtectedRoute';
 import Diary from './pages/Diary';
 import Profile from './pages/Profile';
-import GroupAccount from './pages/GroupAccount';
 import GroupAccountDetail from './pages/GroupAccount-detail';
 import CheckListPage from './pages/CheckList';
+import GroupAccountPage from './pages/group-account-page';
 
 const router = createBrowserRouter([
 	{
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
 				path: '/group-account',
 				element: (
 					<ProtectedRoute requireAdmin={false}>
-						<GroupAccount />
+						<GroupAccountPage />
 					</ProtectedRoute>
 				),
 			},

@@ -5,7 +5,7 @@ import {
 	Category,
 	ReceiptItem,
 	UserPayment,
-} from '../../types/components/group-account';
+} from '../../types/group-account/group-account';
 import { UserProfile } from '../../types/components/profile';
 import UserPaymentComponent from './user-payment-component';
 

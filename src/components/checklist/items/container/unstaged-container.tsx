@@ -1,9 +1,9 @@
 import { memo } from 'react';
-import { CheckListItemController } from '../../../../controller/checklist-item';
+import { CheckListItemController } from '../../../../controller/checklist/checklist-item';
 import {
 	CheckListItem,
 	UpdateState,
-} from '../../../../types/components/checklist';
+} from '../../../../types/checklist/checklist';
 import UnstagedItem from '../item/item-unstaged';
 
 interface UnstagedContainerProps {

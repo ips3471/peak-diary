@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { GroupAccountItem } from '../../types/components/group-account';
+import { GroupAccountItem } from '../../types/group-account/group-account';
 import { UserProfile } from '../../types/components/profile';
 import NumPad from '../../util/Numpad';
 import { CiSquareRemove } from 'react-icons/ci';
@@ -9,8 +9,6 @@ import { useEffect, useState } from 'react';
 interface GroupAccountItemProps {
 	user: UserProfile;
 	item: GroupAccountItem;
-	numpadTarget?: string;
-	toggleNumpad: (item: GroupAccountItem | null) => void;
 	onUpdate: (item: GroupAccountItem) => void;
 	onDelete: (item: GroupAccountItem) => void;
 }
@@ -18,12 +16,11 @@ interface GroupAccountItemProps {
 export default function GroupAccountList({
 	user,
 	item,
-	numpadTarget,
-	toggleNumpad,
 	onUpdate,
 	onDelete,
 }: GroupAccountItemProps) {
 	const [host, setHost] = useState<UserProfile>();
+	const [openCalc, setOpenCalc] = useState(false);
 	const navigate = useNavigate();
 	const {
 		code,
@@ -33,7 +30,7 @@ export default function GroupAccountList({
 		title,
 		userLength,
 		users,
-		host: histId,
+		host: hostId,
 	} = item;
 
 	useEffect(() => {
@@ -41,7 +38,9 @@ export default function GroupAccountList({
 	}, []);
 
 	const handleEnter = (inputValue: number) => {
-		toggleNumpad(null);
+		console.log('handle enter');
+
+		setOpenCalc(false);
 
 		if (inputValue !== code) return;
 		if (userLength === users.length) {
@@ -58,6 +57,8 @@ export default function GroupAccountList({
 	};
 
 	const handlePass = () => {
+		console.log('handle pass');
+
 		const uids = users?.map(user => user.uid) || [];
 		if (uids.includes(user.uid)) {
 			return moveToDetail();
@@ -65,7 +66,13 @@ export default function GroupAccountList({
 		if (isDone) {
 			return alert('정산이 마감되어 참여가 제한됩니다');
 		}
-		!numpadTarget && toggleNumpad(item);
+		toggleCalc();
+	};
+
+	const toggleCalc = () => {
+		console.log('toggle calc');
+
+		setOpenCalc(prev => !prev);
 	};
 
 	const handleRemoveList = () => {
@@ -88,7 +95,7 @@ export default function GroupAccountList({
 				</span>
 				<span className='flex gap-2 items-center'>
 					<span className='text-sm font-thin'>{date}</span>
-					{user.uid === histId && (
+					{user.uid === hostId && (
 						<button onClick={handleRemoveList} className='text-bodyAccent'>
 							<CiSquareRemove />
 						</button>
@@ -106,7 +113,7 @@ export default function GroupAccountList({
 							</span>
 						</p>
 					)}
-					{histId === user.uid && !isDone && (
+					{hostId === user.uid && !isDone && (
 						<p>
 							<span>참여코드 </span>
 							<span className='text-brand/80 text-base font-semibold'>
@@ -116,17 +123,16 @@ export default function GroupAccountList({
 					)}
 				</div>
 				<div
-					onClick={handlePass}
 					className={`relative p-1 text-sm ${
 						isDone ? 'text-grey' : 'text-brand/70'
 					} font-semibold`}
 				>
-					<button>입장하기</button>
+					<button onClick={handlePass}>입장하기</button>
 					<div className='absolute right-0'>
-						{numpadTarget === id && (
+						{openCalc && (
 							<NumPad
 								title='참여코드 입력'
-								onCancel={() => toggleNumpad(null)}
+								onCancel={toggleCalc}
 								type='password'
 								onSubmit={handleEnter}
 							/>

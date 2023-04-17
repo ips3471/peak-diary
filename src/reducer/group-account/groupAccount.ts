@@ -1,11 +1,11 @@
 import {
-	CheckListAction,
-	ChecklistState,
-} from '../../types/checklist/checklist';
+	GroupAccountAction,
+	GroupAccountState,
+} from '../../types/group-account/group-account';
 
-export default function checkListReducer<
-	T extends ChecklistState,
-	A extends CheckListAction<T>,
+export default function groupAccountReducer<
+	T extends GroupAccountState,
+	A extends GroupAccountAction<T>,
 >(state: T[], action: A) {
 	const { type, payload } = action;
 

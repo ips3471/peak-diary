@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { CheckListItemController } from '../../../../../controller/checklist-item';
-import { CheckListItem } from '../../../../../types/components/checklist';
+import { CheckListItemController } from '../../../../../controller/checklist/checklist-item';
+import { CheckListItem } from '../../../../../types/checklist/checklist';
 import StagedContainer from '../../container/staged-container';
 import UnstagedContainer from '../../container/unstaged-container';
 import AddForm from '../../../add-form/addForm';

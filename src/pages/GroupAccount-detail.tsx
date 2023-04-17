@@ -7,7 +7,7 @@ import {
 	Category,
 	GroupAccountItem,
 	ReceiptItem,
-} from '../types/components/group-account';
+} from '../types/group-account/group-account';
 import { BiArrowBack } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 import GroupAccountPresenter from '../presenter/group-account/GroupAccountPresenter';
@@ -122,6 +122,7 @@ export default function GroupAccountDetail() {
 			{displayResult && (
 				<>
 					<FormContainer
+						onSubmit={() => {}}
 						onCancel={() => {
 							setDisplayResult(false);
 						}}

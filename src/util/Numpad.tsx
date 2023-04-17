@@ -90,6 +90,7 @@ export default function NumPad({
 			gap: options.buttonGap,
 		},
 		numpad__input: {
+			flex: '1 1 0',
 			borderRadius: '7px',
 			border: '3px solid #777',
 			textAlign: 'right',
@@ -97,7 +98,7 @@ export default function NumPad({
 			color: type === 'password' ? 'tomato' : 'black',
 		},
 		numpad__input__clear: {
-			width: '100%',
+			width: '5rem',
 			padding: '0 1rem',
 			backgroundColor: options.clearColor,
 			borderRadius: options.buttonRadius,

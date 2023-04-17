@@ -1,31 +1,28 @@
-import { Dispatch, SetStateAction } from 'react';
-import { GroupAccountState } from '../../../types/components/group-account';
+import { ScheduleProgress } from '../../../types/group-account/group-account';
 
 interface TabItemProps {
-	state: GroupAccountState;
-	active: GroupAccountState;
-	setState: Dispatch<SetStateAction<GroupAccountState>>;
-	text: string;
+	state: ScheduleProgress;
+	onClick: (state: ScheduleProgress) => void;
+	activeState: ScheduleProgress;
 }
 
-export default function TabItem({
-	text,
-	setState,
+export default function ScheduleProgressStateBtn({
+	onClick,
 	state,
-	active,
+	activeState,
 }: TabItemProps) {
 	return (
 		<section className='flex-1'>
 			<button
-				className='pb-2 text-brand font-medium w-full'
-				onClick={() => setState(state)}
+				className={`pb-2 ${
+					state === activeState ? 'text-brand' : ''
+				} font-medium w-full`}
+				onClick={() => onClick(state)}
 			>
-				{text}
+				{state === 'pending' ? '진행중' : '마감'}
 			</button>
 			<div
-				className={` ${
-					state === active ? 'visible' : 'invisible'
-				} w-full h-0.5 bg-brand`}
+				className={`w-full h-0.5 ${state === activeState ? 'bg-brand' : ''}`}
 			></div>
 		</section>
 	);

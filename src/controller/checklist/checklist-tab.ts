@@ -1,8 +1,8 @@
-import CheckListDatabase from '../database/checklist';
-import { CheckListTab, UpdateReducer } from '../types/components/checklist';
+import CheckListDatabase from '../../database/checklist/checklist-tab';
+import { CheckListTab, UpdateReducer } from '../../types/checklist/checklist';
 import { v4 as uuid } from 'uuid';
 
-export class CheckListController {
+export class CheckListTabController {
 	db: CheckListDatabase;
 	constructor(userId: string) {
 		this.db = new CheckListDatabase(userId);
