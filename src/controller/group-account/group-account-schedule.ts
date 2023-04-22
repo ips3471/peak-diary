@@ -1,12 +1,12 @@
 import { v4 as uuid } from 'uuid';
 import {
-	GroupAccountSchedule,
 	ScheduleProgress,
 	UpdateReducer,
 	User,
 } from '../../types/group-account/group-account';
 import GroupAccountScheduleDatabase from '../../database/group-account/group-account-schedule';
 import { FormInputs } from '../../components/group-account/dialog/form';
+import { ScheduleData } from '../../types/models/model';
 
 class GroupAccountScheduleController {
 	db: GroupAccountScheduleDatabase;
@@ -18,22 +18,22 @@ class GroupAccountScheduleController {
 		this.user = user;
 	}
 
-	initSchedules(dispatch: UpdateReducer<GroupAccountSchedule>) {
+	initSchedules(dispatch: UpdateReducer<ScheduleData>) {
 		this.db
 			.getSchedules()
 			.then(data => dispatch({ type: 'init', payload: data }));
 	}
 
-	addSchedule(form: FormInputs, dispatch: UpdateReducer<GroupAccountSchedule>) {
+	addSchedule(form: FormInputs, dispatch: UpdateReducer<ScheduleData>) {
 		const { date, title, userLength } = form;
-		const element: GroupAccountSchedule = {
+		const element: ScheduleData = {
 			id: uuid(),
 			date: date.toString(),
 			host: this.user.uid,
 			isDone: false,
 			title: title.toString(),
 			userLength: Number(userLength),
-			users: [this.user],
+			users: [this.user.uid],
 			code: Math.floor(Math.random() * 9999),
 		};
 		this.db.addSchedule(element);
@@ -41,20 +41,22 @@ class GroupAccountScheduleController {
 		return element;
 	}
 
-	/* updateSchedule(
-		input: string,
-		schedule: GroupAccountSchedule,
-		dispatch: UpdateReducer<GroupAccountSchedule>,
-	) {
-		const updated: GroupAccountSchedule = { ...schedule, name: input };
+	updateSchedule(item: ScheduleData, dispatch: UpdateReducer<ScheduleData>) {
+		const updated: ScheduleData = {
+			...item,
+			users:
+				item?.users?.length > 0
+					? [...item.users, this.user.uid]
+					: [this.user.uid],
+		};
 		this.db.updateSchedule(updated);
 		dispatch({ type: 'update', payload: updated });
 		return updated;
-	} */
+	}
 
 	deleteSchedule(
-		schedule: GroupAccountSchedule,
-		dispatch: UpdateReducer<GroupAccountSchedule>,
+		schedule: ScheduleData,
+		dispatch: UpdateReducer<ScheduleData>,
 	) {
 		this.db.deleteSchedule(schedule.id);
 		dispatch({ type: 'delete', payload: schedule.id });

@@ -1,10 +1,8 @@
-import {
-	GroupAccountAction,
-	GroupAccountState,
-} from '../../types/group-account/group-account';
+import { GroupAccountAction } from '../../types/group-account/group-account';
+import { ScheduleData } from '../../types/models/model';
 
 export default function groupAccountReducer<
-	T extends GroupAccountState,
+	T extends ScheduleData,
 	A extends GroupAccountAction<T>,
 >(state: T[], action: A) {
 	const { type, payload } = action;

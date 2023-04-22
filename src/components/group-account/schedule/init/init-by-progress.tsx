@@ -1,14 +1,13 @@
 import { useEffect, useReducer } from 'react';
 import GroupAccountScheduleController from '../../../../controller/group-account/group-account-schedule';
-import {
-	GroupAccountReducer,
-	GroupAccountSchedule,
-} from '../../../../types/group-account/group-account';
+import { GroupAccountReducer } from '../../../../types/group-account/group-account';
 import groupAccountReducer from '../../../../reducer/group-account/groupAccount';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { createPortal } from 'react-dom';
 import ScheduleForm, { FormInputs } from '../../dialog/form';
 import GroupAccountList from '../../group-account-list';
+import { useNavigate } from 'react-router-dom';
+import { ScheduleData } from '../../../../types/models/model';
 
 interface ScheduleByProgressProps {
 	controller: GroupAccountScheduleController;
@@ -21,17 +20,27 @@ export default function ScheduleByProgress({
 	onToggleDialog,
 	openDialog,
 }: ScheduleByProgressProps) {
-	const [schedules, dispatch] = useReducer<
-		GroupAccountReducer<GroupAccountSchedule>
-	>(groupAccountReducer, []);
-	const { addSchedule, deleteSchedule } = controller;
+	const [schedules, dispatch] = useReducer<GroupAccountReducer<ScheduleData>>(
+		groupAccountReducer,
+		[],
+	);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		controller.initSchedules(dispatch);
 	}, [controller]);
 
 	const handleSubmit = (data: FormInputs) => {
-		addSchedule(data, dispatch);
+		controller.addSchedule(data, dispatch);
+	};
+
+	const moveToDetail = (item: ScheduleData) => {
+		navigate('/group-account/' + item.id, {
+			state: {
+				item,
+				user: controller.user,
+			},
+		});
 	};
 
 	return (
@@ -51,9 +60,12 @@ export default function ScheduleByProgress({
 				{schedules.map(s => (
 					<GroupAccountList
 						item={s}
-						onDelete={() => deleteSchedule(s, dispatch)}
-						onUpdate={() => {}}
+						onDelete={() => controller.deleteSchedule(s, dispatch)}
+						onPass={(item: ScheduleData) => {
+							controller.updateSchedule(item, dispatch);
+						}}
 						user={controller.user}
+						onMove={moveToDetail}
 					/>
 				))}
 			</ul>

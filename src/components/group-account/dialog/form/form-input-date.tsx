@@ -1,40 +1,32 @@
 import { useMemo, useState } from 'react';
 import Rounded from '../../../forms/rounded';
-import { InputItem } from '../form';
-
-type Options = {
-	colorMode: 'light' | 'dark';
-	isStretch: boolean;
-	textSize: 'text-xs' | 'text-sm' | 'text-lg';
-};
+import {
+	ColorMode,
+	IsStretched,
+	TextSize,
+} from '../../../../types/group-account/group-account';
 
 interface FormInputDateProps {
 	name: string;
 	min?: string;
 	max?: string;
-	options?: Options;
+	colorMode?: ColorMode;
+	isStretched?: IsStretched;
+	textSize?: TextSize;
 }
-
-const defaultOptions: Options = {
-	colorMode: 'light',
-	isStretch: true,
-	textSize: 'text-xs',
-};
 
 export default function FormInputDate({
 	name,
 	min,
 	max,
-	options = defaultOptions,
+	colorMode = 'light',
+	isStretched = true,
+	textSize = 'text-sm',
 }: FormInputDateProps) {
 	const [input, setInput] = useState<string>();
 
-	const { colorMode, isStretch, textSize } = useMemo(() => {
-		return options;
-	}, [options]);
-
 	return (
-		<Rounded color={colorMode} isStretched={isStretch}>
+		<Rounded color={colorMode} isStretched={isStretched}>
 			<input
 				required
 				name={name}

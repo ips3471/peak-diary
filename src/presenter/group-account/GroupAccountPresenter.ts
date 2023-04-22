@@ -1,16 +1,16 @@
 import { Dispatch, SetStateAction } from 'react';
 import {
-	Category,
-	GroupAccountItem,
+	CategoryId,
 	ReceiptItem,
 } from '../../types/group-account/group-account';
 import database from '../../database/database';
 import { ListID } from '../../types/interfaces/global';
 import { v4 as uuid } from 'uuid';
 import controls from '../../controls/controls';
+import { ScheduleData } from '../../types/models/model';
 
 type SetReceipts = Dispatch<
-	React.SetStateAction<Map<Category, ReceiptItem[]> | undefined>
+	React.SetStateAction<Map<CategoryId, ReceiptItem[]> | undefined>
 >;
 
 const { lists, receipts } = database.groupAccounts;
@@ -19,14 +19,14 @@ const GroupAccountPresenter = {
 	lists: {
 		addList(
 			form: Pick<
-				GroupAccountItem,
+				ScheduleData,
 				'title' | 'date' | 'host' | 'userLength' | 'users'
 			>,
-			update: Dispatch<SetStateAction<GroupAccountItem[]>>,
+			update: Dispatch<SetStateAction<ScheduleData[]>>,
 		) {
 			const id = uuid();
 			const code = Math.floor(Math.random() * 9999);
-			const element: GroupAccountItem = {
+			const element: ScheduleData = {
 				...form,
 				isDone: false,
 				id,
@@ -38,13 +38,13 @@ const GroupAccountPresenter = {
 			});
 		},
 
-		async init(update: Dispatch<SetStateAction<GroupAccountItem[]>>) {
+		async init(update: Dispatch<SetStateAction<ScheduleData[]>>) {
 			database.groupAccounts.lists.getLists().then(items => update(items));
 		},
 
 		updateList(
-			updated: GroupAccountItem,
-			update: Dispatch<SetStateAction<GroupAccountItem[]>>,
+			updated: ScheduleData,
+			update: Dispatch<SetStateAction<ScheduleData[]>>,
 		) {
 			database.groupAccounts.lists.updateList(updated.id, updated);
 			update(items =>
@@ -64,8 +64,8 @@ const GroupAccountPresenter = {
 			update(prev => true);
 		},
 		deleteList(
-			target: GroupAccountItem,
-			update: Dispatch<SetStateAction<GroupAccountItem[]>>,
+			target: ScheduleData,
+			update: Dispatch<SetStateAction<ScheduleData[]>>,
 		) {
 			database.groupAccounts.lists.deleteList(target.id);
 			database.groupAccounts.receipts.deleteAll(target.id);
@@ -82,7 +82,7 @@ const GroupAccountPresenter = {
 	},
 
 	receipts: {
-		update(listId: ListID, form: ReceiptItem, update: SetReceipts) {
+		/* 		update(listId: ListID, form: ReceiptItem, update: SetReceipts) {
 			const { usersToPay } = form;
 			const total = Number(form.total);
 
@@ -108,7 +108,7 @@ const GroupAccountPresenter = {
 						: [...receipts, hasId],
 				);
 			});
-		},
+		}, */
 
 		async init(listId: ListID, update: SetReceipts) {
 			console.log('init receipts in presenter');
@@ -132,7 +132,7 @@ const GroupAccountPresenter = {
 			});
 		},
 
-		remove(listId: string, receipt: ReceiptItem, update: SetReceipts) {
+		/* remove(listId: string, receipt: ReceiptItem, update: SetReceipts) {
 			receipts.deleteItem(listId, receipt);
 			update(prevMap => {
 				if (!prevMap) {
@@ -148,7 +148,7 @@ const GroupAccountPresenter = {
 					receipts.filter(r => r.id !== receipt.id),
 				);
 			});
-		},
+		} */
 	},
 };
 

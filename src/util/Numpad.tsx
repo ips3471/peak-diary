@@ -37,7 +37,7 @@ interface NumPadProps {
 const PADS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 const defaultOptions = {
 	numColor: '#046241',
-	clearColor: '#046241',
+	clearColor: 'tomato',
 	enterColor: 'tomato',
 	buttonRadius: '10px',
 	buttonGap: '0.25rem',
@@ -52,6 +52,7 @@ export default function NumPad({
 	title,
 }: NumPadProps) {
 	const [input, setInput] = useState<string>('');
+	console.log(title);
 
 	const handleSubmit = () => {
 		const value = Number(input);
@@ -84,21 +85,20 @@ export default function NumPad({
 		},
 		input__container: {
 			marginBottom: '0.5rem',
-			width: '100%',
 			display: 'flex',
 			height: '2.2rem',
 			gap: options.buttonGap,
 		},
 		numpad__input: {
-			flex: '1 1 0',
+			width: '70%',
+			paddingRight: '1rem',
 			borderRadius: '7px',
 			border: '3px solid #777',
 			textAlign: 'right',
-			padding: '0 0.5rem',
 			color: type === 'password' ? 'tomato' : 'black',
 		},
 		numpad__input__clear: {
-			width: '5rem',
+			width: '33%',
 			padding: '0 1rem',
 			backgroundColor: options.clearColor,
 			borderRadius: options.buttonRadius,

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
-import ProfilePresenter from '../../presenter/profile/ProfilePresenter';
 import {
-	Category,
+	CategoryId,
 	ReceiptItem,
 	UserPayment,
 } from '../../types/group-account/group-account';
@@ -10,9 +9,9 @@ import { UserProfile } from '../../types/components/profile';
 import UserPaymentComponent from './user-payment-component';
 
 interface UserPaymentContainerProps {
-	categoriesMap: Map<Category, ReceiptItem[]>;
+	categoriesMap: Map<CategoryId, ReceiptItem[]>;
 	users: UserProfile[];
-	host: string;
+	host: UserProfile;
 }
 export type DisplayTarget = 'me' | 'all';
 
@@ -25,15 +24,11 @@ export default function UserPaymentContainer({
 	const [displayTarget, setDisplayTaget] = useState<DisplayTarget>('me');
 	const displayAll = displayTarget === 'all';
 	const { user } = useAuthContext();
-	const [account, setAccount] = useState<string | null>(null);
 	useEffect(() => {
 		categoriesMap && setUserPayment(initPayment(categoriesMap));
-		ProfilePresenter.get(host).then(host => host && setAccount(host.account));
 	}, []);
 
-	function initPayment(categoriesMap?: Map<Category, ReceiptItem[]>) {
-		if (!categoriesMap) return;
-
+	function initPayment(categoriesMap: Map<CategoryId, ReceiptItem[]>) {
 		const paymentContainer: UserPayment[] = users.map(user => ({
 			uid: user.uid,
 			name: user.name,
@@ -43,16 +38,17 @@ export default function UserPaymentContainer({
 		}));
 
 		const categories = Object.fromEntries(categoriesMap);
+
 		const accumulated = Object.values(categories).reduce((acc, curr) => {
 			return acc.concat(curr);
 		}, []);
 
 		const calculated = accumulated.reduce((acc, curr) => {
-			const { coordinatorUid, paymentToEqual, total, usersToPay } = curr;
+			const { coordinator, paymentToEqual, total, usersToPay } = curr;
 			return acc.map(userPayment => {
 				let updated = { ...userPayment };
 				updated =
-					userPayment.uid === coordinatorUid
+					userPayment.uid === coordinator.uid
 						? { ...updated, paid: updated.paid + total }
 						: updated;
 
@@ -83,12 +79,13 @@ export default function UserPaymentContainer({
 			</ul>
 			<div className=' text-center'>
 				{!displayAll && (
-					<div className='flex justify-between text-grey'>
+					<div className='flex justify-between text-sm text-grey'>
 						<span>입금계좌</span>
-						<span>{account}</span>
+						<span>{host.account}</span>
 					</div>
 				)}
 				<button
+					type='button'
 					onClick={() => setDisplayTaget(displayAll ? 'me' : 'all')}
 					className='text-brand mt-3 w-full p-4'
 				>

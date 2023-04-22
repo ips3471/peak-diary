@@ -1,49 +1,48 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Rounded from '../../../forms/rounded';
-import { InputItem } from '../form';
-
-type Options = {
-	colorMode: 'light' | 'dark';
-	isStretch: boolean;
-	textSize: 'text-xs' | 'text-sm' | 'text-lg';
-};
+import {
+	ColorMode,
+	IsStretched,
+	TextSize,
+} from '../../../../types/group-account/group-account';
 
 interface FormInputTextProps {
 	name: string;
 	placeholder: string;
-	options?: Options;
+	initialValue: string;
+	colorMode?: ColorMode;
+	isStretched?: IsStretched;
+	textSize?: TextSize;
+	isFocused?: boolean;
 }
-
-const defaultOptions: Options = {
-	colorMode: 'light',
-	isStretch: true,
-	textSize: 'text-xs',
-};
 
 export default function FormInputText({
 	name,
 	placeholder,
-	options = defaultOptions,
+	initialValue,
+	colorMode = 'light',
+	isStretched = true,
+	textSize = 'text-sm',
+	isFocused = false,
 }: FormInputTextProps) {
-	const [input, setInput] = useState<string | number>();
+	const [input, setInput] = useState<string | number>(initialValue);
 
-	const { colorMode, isStretch, textSize } = useMemo(() => {
-		return options;
-	}, [options]);
+	const inputRef = useRef<HTMLInputElement>(null);
 
-	const type = useMemo(() => {
-		return typeof input === 'number' ? 'number' : 'text';
-	}, []);
-
+	useEffect(() => {
+		if (!isFocused || !inputRef.current) return;
+		inputRef.current.focus();
+	}, [isFocused]);
 	return (
-		<Rounded color={colorMode} isStretched={isStretch}>
+		<Rounded color={colorMode} isStretched={isStretched}>
 			<input
+				ref={inputRef}
 				required
 				name={name}
 				className={`py-2 ${textSize}`}
 				autoComplete='disable'
 				spellCheck='false'
-				type={type}
+				type='text'
 				value={input}
 				placeholder={placeholder}
 				onChange={e => setInput(e.currentTarget.value)}

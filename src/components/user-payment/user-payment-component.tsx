@@ -24,7 +24,7 @@ export default function UserPaymentComponent({
 				display ? 'visible' : 'hidden'
 			} bg-pureWhite/10 shadow-sm rounded-lg p-1`}
 		>
-			<h2 className='text-center text-xl mb-2'>{name}</h2>
+			<h2 className='text-center text-lg mb-4'> {name}의 정산내역</h2>
 			<div className='my-1 '>
 				<header className='flex justify-between font-semibold'>
 					<div className='w-2/6'>사용처</div>
@@ -43,12 +43,12 @@ export default function UserPaymentComponent({
 							<div className='flex justify-between'>
 								<div className='w-2/6'>{r.description}</div>
 								<div className='w-4/6 flex justify-end'>
-									{r.coordinatorUid === uid && (
-										<span className='inline-block basis-1/2 text-right text-bodyAccent'>
-											-{r.total.toLocaleString('ko')}
+									{r.coordinator.uid === uid && (
+										<span className='self-center inline-block basis-1/2 text-right text-bodyAccent'>
+											{r.total.toLocaleString('ko')}
 										</span>
 									)}
-									<span className='inline-block text-right basis-1/2'>
+									<span className='self-center inline-block text-right basis-1/2'>
 										{r.paymentToEqual.toLocaleString('ko')}
 									</span>
 								</div>
@@ -66,13 +66,15 @@ export default function UserPaymentComponent({
 					<AiFillMinusCircle className='text-bodyAccent/80' />총 내야할 금액:{' '}
 					{toPay.toLocaleString('ko')}
 				</span>
-				<span className='mt-1'>
-					총 정산 금액:{' '}
-					<span
-						className={`${toPay - paid > 0 ? 'text-accent' : 'text-brand'}`}
-					>
-						{Math.abs(toPay - paid).toLocaleString('ko') +
-							`${paid - toPay > 0 ? '(환급)' : ''}`}
+				<span
+					className={`${toPay - paid > 0 ? 'text-accent' : 'text-brand'} mt-1`}
+				>
+					{paid - toPay > 0 ? '환급받을 금액' : '입금할 금액'}:
+					<span className='ml-1'>
+						{Math.abs(toPay - paid).toLocaleString('ko', {
+							style: 'currency',
+							currency: 'krw',
+						})}
 					</span>
 				</span>
 			</div>

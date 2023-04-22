@@ -1,18 +1,15 @@
+import { ReceiptData, ScheduleData } from './../models/model.d';
 import { Reducer, SetStateAction, Dispatch } from 'react';
 import { UserProfile } from '../components/profile';
 import { AuthUser } from '../../context/AuthContext';
+import { ScheduleData } from '../models/model';
 
-type Category = 'driving' | 'eating' | 'shopping' | 'etc' | 'booking';
-
-/* export type ScheduleFormInputs = {
-	title: string;
-	date: string;
-	userLength: number;
-}; */
-
+export type CategoryId = 'driving' | 'eating' | 'shopping' | 'etc' | 'booking';
+export type ReceiptCategory = {
+	id: CategoryId;
+	name: string;
+};
 export type ScheduleProgress = 'pending' | 'done';
-
-export type GroupAccountState = GroupAccountSchedule | GroupAccountItem;
 
 export type UpdateReducer<T> = Dispatch<GroupAccountAction<T>>;
 export type UpdateState<T> = Dispatch<SetStateAction<T[]>>;
@@ -50,44 +47,19 @@ type AddAction<T> = {
 	payload: T;
 };
 
-export type GroupAccountSchedule = {
-	id: string;
-	code: number;
-	date: string;
-	host: string;
-	userLength: number;
+export interface GroupAccountSchedule extends ScheduleData {
+	receipts?: ReceiptItem[];
 	users: UserProfile[];
-	isDone: boolean;
-	title: string;
-};
+}
 
-export type ReceiptItem = {
-	id?: string;
-	category: Category;
-	total: number;
-	paymentToEqual: number;
-	receiptURL: string;
-	description: string;
-	coordinatorUid: string;
+export interface ReceiptItem extends ReceiptData {
+	category: ReceiptCategory;
+	coordinator: UserProfile;
 	exceptedUsers: UserProfile[];
 	usersToPay: UserProfile[];
-};
+}
 
-export type GroupAccountItem = {
-	id: string;
-	code: number;
-	date: string;
-	host: string;
-	userLength: number;
-	users: UserProfile[];
-	isDone: boolean;
-	title: string;
-};
-
-export type ReceiptCategory = {
-	id: Category;
-	name: string;
-};
+export type ReceiptAddForm = Omit<ReceiptData, 'id', 'paymentToEqual'>;
 
 export type GroupAccountProgress = 'in-progress' | 'done';
 
@@ -98,3 +70,7 @@ export type UserPayment = {
 	paid: number;
 	receipts: ReceiptItem[];
 };
+
+export type ColorMode = 'light' | 'dark';
+export type IsStretched = boolean;
+export type TextSize = 'text-xs' | 'text-sm' | 'text-lg';

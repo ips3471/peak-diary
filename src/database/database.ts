@@ -1,6 +1,5 @@
 import {
-	Category,
-	GroupAccountItem,
+	CategoryId,
 	ReceiptItem,
 	UserPayment,
 } from '../types/group-account/group-account';
@@ -17,6 +16,7 @@ import {
 } from 'firebase/database';
 import { firebaseApp } from '../service/firebase/firebase';
 import { v4 as uuid } from 'uuid';
+import { ScheduleData } from '../types/models/model';
 
 const db = getDatabase(firebaseApp);
 const dbRef = ref(db);
@@ -61,7 +61,7 @@ const database = {
 	},
 	groupAccounts: {
 		lists: {
-			async addList(form: GroupAccountItem) {
+			async addList(form: ScheduleData) {
 				const { id, host } = form;
 				set(ref(db, `/groupAccounts/lists/${id}`), form);
 				set(ref(db, `/groupAccounts/payments/${id}/${host}`), {
@@ -71,8 +71,8 @@ const database = {
 				console.log('add group-account in db', form);
 				return form;
 			},
-			getLists: async () => getLists<GroupAccountItem>('lists'),
-			async getList(listId: string): Promise<GroupAccountItem> {
+			getLists: async () => getLists<ScheduleData>('lists'),
+			async getList(listId: string): Promise<ScheduleData> {
 				const snapshot = await get(ref(db, `groupAccounts/lists/${listId}`));
 				if (snapshot.exists()) {
 					return snapshot.val();
@@ -80,7 +80,7 @@ const database = {
 					throw new Error('Not Found');
 				}
 			},
-			updateList(id: string, item: GroupAccountItem) {
+			updateList(id: string, item: ScheduleData) {
 				update(ref(db, `/groupAccounts/lists/${id}`), item);
 				console.log('groupAccount updated', item);
 			},
@@ -160,7 +160,7 @@ const database = {
 				);
 				console.log('receipt-item updated', item);
 			},
-			getListsByCategory: async (listId: string, category: Category) =>
+			getListsByCategory: async (listId: string, category: CategoryId) =>
 				getLists<ReceiptItem>('receipts', `${listId}/${category}`),
 		},
 	},

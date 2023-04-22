@@ -1,3 +1,4 @@
+import { CategoryId } from './../types/group-account/group-account.d';
 import {
 	ReceiptCategory,
 	ScheduleProgress,
@@ -20,6 +21,13 @@ type Controls = {
 	groupAccount: {
 		header: {
 			progressStates: ScheduleProgress[];
+		};
+		main: {
+			receipt: {
+				dialog: {
+					categoryNames: { [key in CategoryId]: string };
+				};
+			};
 		};
 	};
 };
@@ -87,6 +95,19 @@ const controls: Controls = {
 	groupAccount: {
 		header: {
 			progressStates: ['pending', 'done'],
+		},
+		main: {
+			receipt: {
+				dialog: {
+					categoryNames: {
+						booking: '예약/티켓',
+						driving: '주유/톨비',
+						eating: '식당/카페',
+						etc: '기타',
+						shopping: '마트/편의점',
+					},
+				},
+			},
 		},
 	},
 };

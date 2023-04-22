@@ -1,27 +1,27 @@
-import { useNavigate } from 'react-router-dom';
-import { GroupAccountItem } from '../../types/group-account/group-account';
 import { UserProfile } from '../../types/components/profile';
 import NumPad from '../../util/Numpad';
 import { CiSquareRemove } from 'react-icons/ci';
 import GroupAccountPresenter from '../../presenter/group-account/GroupAccountPresenter';
 import { useEffect, useState } from 'react';
+import { ScheduleData } from '../../types/models/model';
 
 interface GroupAccountItemProps {
 	user: UserProfile;
-	item: GroupAccountItem;
-	onUpdate: (item: GroupAccountItem) => void;
-	onDelete: (item: GroupAccountItem) => void;
+	item: ScheduleData;
+	onPass: (item: ScheduleData) => void;
+	onDelete: (item: ScheduleData) => void;
+	onMove: (item: ScheduleData) => void;
 }
 
 export default function GroupAccountList({
 	user,
 	item,
-	onUpdate,
+	onPass,
 	onDelete,
+	onMove,
 }: GroupAccountItemProps) {
 	const [host, setHost] = useState<UserProfile>();
 	const [openCalc, setOpenCalc] = useState(false);
-	const navigate = useNavigate();
 	const {
 		code,
 		date,
@@ -43,25 +43,19 @@ export default function GroupAccountList({
 		setOpenCalc(false);
 
 		if (inputValue !== code) return;
-		if (userLength === users.length) {
+		if (userLength === users?.length) {
 			return alert('정원초과');
 		}
 
-		const updated: GroupAccountItem = {
-			...item,
-			users: item?.users ? [...users, user] : [user],
-		};
-
-		onUpdate(updated);
-		moveToDetail();
+		onPass(item);
+		onMove(item);
 	};
 
 	const handlePass = () => {
 		console.log('handle pass');
 
-		const uids = users?.map(user => user.uid) || [];
-		if (uids.includes(user.uid)) {
-			return moveToDetail();
+		if (users?.includes(user.uid)) {
+			return onMove(item);
 		}
 		if (isDone) {
 			return alert('정산이 마감되어 참여가 제한됩니다');
@@ -79,8 +73,6 @@ export default function GroupAccountList({
 		const confirmed = window.confirm(`${title} 일정을 삭제할까요?`);
 		confirmed && onDelete(item);
 	};
-
-	const moveToDetail = () => navigate('/group-account/' + id, { state: item });
 
 	return (
 		<li className='flex flex-col p-2 w-full bg-pureWhite/20 shadow-sm py-1 h-28 mb-3 rounded-lg gap-1'>
