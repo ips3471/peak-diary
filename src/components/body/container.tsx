@@ -12,7 +12,7 @@ export default function BodyContainer({
 	return (
 		<div
 			className={`bg-body overflow-scroll scrollbar-hide h-full flex flex-col p-container transition-all ${
-				onBlur ? 'blur-sm pointer-events-none' : ''
+				onBlur ? 'blur-sm pointer-events-none bg-[rgba(0,0,0,0.2)]' : ''
 			}`}
 		>
 			{children}
