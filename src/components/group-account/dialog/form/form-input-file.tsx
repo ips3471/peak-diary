@@ -6,12 +6,13 @@ import { uploadImage } from '../../../../service/cloudinary/cloudinary';
 
 interface FormFileProps {
 	name: string;
+	url?: string;
+	updateUrl: (url: string) => void;
 }
 
-export default function FormFile({ name }: FormFileProps) {
+export default function FormFile({ name, url, updateUrl }: FormFileProps) {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [isUploading, setIsUploading] = useState(false);
-	const [url, setUrl] = useState();
 
 	const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault();
@@ -19,7 +20,7 @@ export default function FormFile({ name }: FormFileProps) {
 		if (file) {
 			setIsUploading(true);
 			uploadImage(file)
-				.then(url => setUrl(url))
+				.then(updateUrl)
 				.then(() => setIsUploading(false));
 		}
 	};
@@ -40,16 +41,16 @@ export default function FormFile({ name }: FormFileProps) {
 						{url ? <BsCheck /> : '영수증 첨부'}
 					</>
 				)}
+				<input
+					ref={fileInputRef}
+					className='w-0 '
+					type='file'
+					name={name}
+					accept='image/*'
+					// value={url}
+					onChange={handleFileChange}
+				/>
 			</button>
-			<input
-				ref={fileInputRef}
-				className='w-0'
-				type='file'
-				name={name}
-				accept='image/*'
-				value={url}
-				onChange={handleFileChange}
-			/>
 		</>
 	);
 }

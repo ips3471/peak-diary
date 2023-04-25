@@ -7,8 +7,9 @@ import FormInputText from '../../dialog/form/form-input-text';
 import { UserProfile } from '../../../../types/components/profile';
 import FormSelect from '../../dialog/form/form-select';
 import FormSelectUsers from '../../dialog/form/select-users/form-select-users';
-import controls from '../../../../controls/controls';
 import FormInputNumber from '../../dialog/form/form-input-number';
+import FormInputFile from '../../dialog/form/form-input-file';
+import { useState } from 'react';
 
 interface AddReceiptFormProps {
 	onCancel: () => void;
@@ -27,7 +28,11 @@ export default function AddReceiptForm({
 	onDelete,
 	onUpdate,
 }: AddReceiptFormProps) {
-	const { category, coordinator, description, total, usersToPay } = item;
+	const { category, coordinator, description, total, usersToPay, receiptURL } =
+		item;
+	const [url, setUrl] = useState<string>(receiptURL || '');
+
+	const updateUrl = (url: string) => setUrl(url);
 
 	const handleSubmit = (data: any) => {
 		const included: string[] = Object.entries(data)
@@ -40,13 +45,14 @@ export default function AddReceiptForm({
 			alert('최소 한명 이상은 정산대상에 포함되어야 합니다');
 			return;
 		}
+
 		const form: ReceiptAddForm = {
 			usersToPay: included,
 			category,
 			coordinator: data.coordinator,
 			description: data.description,
 			total: data.total,
-			receiptURL: data.receiptURL,
+			receiptURL: data.file ? url : '',
 		};
 
 		item.id ? onUpdate(item, form) : onAdd(form);
@@ -61,7 +67,7 @@ export default function AddReceiptForm({
 			onCancel={onCancel}
 			submitName={item.id ? '수정' : '생성'}
 		>
-			<section>
+			<>
 				<FormSelect
 					name='coordinator'
 					initialValue={coordinator.uid}
@@ -83,7 +89,10 @@ export default function AddReceiptForm({
 					/>
 				</div>
 				<FormSelectUsers users={users} usersToPay={usersToPay} />
-			</section>
+				<div className='mb-3'>
+					<FormInputFile name='file' url={url} updateUrl={updateUrl} />
+				</div>
+			</>
 		</FormContainer>
 	);
 }
