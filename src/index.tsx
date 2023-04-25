@@ -9,10 +9,9 @@ import Admin from './pages/Admin';
 import ProtectedRoute from './pages/ProtectedRoute';
 import Diary from './pages/Diary';
 import Profile from './pages/Profile';
-import GroupAccountDetail from './components/group-account/detail/detail';
 import CheckListPage from './pages/CheckList';
 import GroupAccountPage from './pages/group-account/schedule';
-import ScheduleDetail from './pages/group-account/schedule-detail';
+import ScheduleDetail from './components/group-account/schedule-detail';
 
 const router = createBrowserRouter([
 	{

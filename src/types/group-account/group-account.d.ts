@@ -59,15 +59,18 @@ export interface ReceiptItem extends ReceiptData {
 	usersToPay: UserProfile[];
 }
 
+export type CategoryItems = {
+	[category in CategoryId]?: ReceiptItem[];
+};
+
 export type ReceiptAddForm = Omit<ReceiptData, 'id', 'paymentToEqual'>;
 
 export type GroupAccountProgress = 'in-progress' | 'done';
 
 export type UserPayment = {
-	uid: string;
-	name: string;
 	toPay: number;
 	paid: number;
+	user: UserProfile;
 	receipts: ReceiptItem[];
 };
 

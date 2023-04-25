@@ -31,6 +31,8 @@ class GroupAccountScheduleDatabase {
 	async getSchedules(): Promise<ScheduleData[]> {
 		const snapshot = await get(ref(this.db, this.ref));
 		if (snapshot.exists()) {
+			console.log('get schedules from db', Object.values(snapshot.val()));
+
 			return Object.values(snapshot.val());
 		} else {
 			return [];

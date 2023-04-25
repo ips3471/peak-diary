@@ -46,7 +46,7 @@ export default function ScheduleForm({
 				<FormInputNumber
 					calcTitle='인원 입력'
 					name='userLength'
-					initialValue={0}
+					initialValue={undefined}
 					placeholder='모임인원'
 					isStretched={false}
 				/>

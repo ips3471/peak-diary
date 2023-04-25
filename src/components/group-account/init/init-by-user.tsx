@@ -24,6 +24,8 @@ export default function InitGroupAccounts({ user }: GroupAccountProps) {
 	};
 
 	const ScheduleController = useMemo(() => {
+		console.log('컨트롤러를 업데이트');
+
 		return new GroupAccountScheduleController(user, selectedProgress);
 	}, [selectedProgress]);
 

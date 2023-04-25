@@ -10,6 +10,7 @@ import {
 import {
 	CategoryId,
 	ReceiptItem,
+	ScheduleProgress,
 } from '../../types/group-account/group-account';
 import { firebaseApp } from '../../service/firebase/firebase';
 import { ReceiptData, ScheduleData } from '../../types/models/model';
@@ -22,9 +23,15 @@ class GroupAccountDetailDatabase {
 	db: Database;
 	ref: string;
 
-	constructor(scheduleItem: ScheduleData) {
-		this.ref = `groupAccounts/pending/${scheduleItem.id}/receipts`;
+	constructor(scheduleItem: ScheduleData, state: ScheduleProgress) {
+		this.ref = `groupAccounts/${state}/${scheduleItem.id}/receipts`;
 		this.db = getDatabase(firebaseApp);
+	}
+
+	finishSchedule(item: ScheduleData) {
+		remove(ref(this.db, `groupAccounts/pending/${item.id}`));
+		set(ref(this.db, `groupAccounts/done/${item.id}`), item);
+		console.log('finish schedule in db', item);
 	}
 
 	addReceipt(receipt: ReceiptData) {
@@ -45,6 +52,8 @@ class GroupAccountDetailDatabase {
 	async getReceipts(): Promise<FirebaseCloudData | undefined> {
 		const snapshot = await get(ref(this.db, `${this.ref}`));
 		if (snapshot.exists()) {
+			console.log('get schedules from db', snapshot.val());
+
 			return snapshot.val();
 		}
 	}

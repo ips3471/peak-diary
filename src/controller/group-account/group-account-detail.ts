@@ -2,37 +2,46 @@ import { v4 as uuid } from 'uuid';
 import {
 	CategoryId,
 	ReceiptAddForm,
-	ReceiptCategory,
 	ReceiptItem,
+	ScheduleProgress,
 	User,
 } from '../../types/group-account/group-account';
 import GroupAccountDetailDatabase from '../../database/group-account/group-account-detail';
 import { ReceiptData, ScheduleData } from '../../types/models/model';
-import { Dispatch } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import ProfilePresenter from '../../presenter/profile/ProfilePresenter';
 import { UserProfile } from '../../types/components/profile';
 import controls from '../../controls/controls';
 
-type SetReceipts = Dispatch<
-	React.SetStateAction<Map<CategoryId, ReceiptItem[]>>
->;
+type SetReceipts = Dispatch<SetStateAction<Map<CategoryId, ReceiptItem[]>>>;
 
 class GroupAccountDetailController {
 	db: GroupAccountDetailDatabase;
 	user: User;
 	item: ScheduleData;
 	userProfiles: UserProfile[];
-	constructor(item: ScheduleData, user: User, userProfiles: UserProfile[]) {
-		this.db = new GroupAccountDetailDatabase(item);
+	state: ScheduleProgress;
+	constructor(
+		item: ScheduleData,
+		user: User,
+		userProfiles: UserProfile[],
+		state: ScheduleProgress,
+	) {
+		this.db = new GroupAccountDetailDatabase(item, state);
 		this.user = user;
 		this.item = item;
 		this.userProfiles = userProfiles;
+		this.state = state;
 	}
 
 	async getUserProfile(uid: string) {
 		const res = await ProfilePresenter.get(uid);
 		if (!res) throw new Error('user profile not exist');
 		return res;
+	}
+
+	finishItem() {
+		this.db.finishSchedule({ ...this.item, isDone: true });
 	}
 
 	async initReceipts(update: SetReceipts) {

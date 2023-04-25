@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { ChangeEvent, useReducer, useState } from 'react';
 import Rounded from '../../../forms/rounded';
 import {
 	ColorMode,
@@ -36,6 +36,7 @@ export default function FormInputNumber({
 			<div className='flex'>
 				<input
 					required
+					readOnly
 					name={name}
 					className={`py-2 ${textSize}`}
 					autoComplete='disable'
@@ -43,11 +44,7 @@ export default function FormInputNumber({
 					type='number'
 					value={input}
 					placeholder={placeholder}
-					onChange={e =>
-						setInput(
-							e.currentTarget.value ? Number(e.currentTarget.value) : undefined,
-						)
-					}
+					onChange={e => setInput(Number(e.target.value))}
 				/>
 				{!calcState.isOpen && (
 					<button

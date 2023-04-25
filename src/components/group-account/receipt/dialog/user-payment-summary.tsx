@@ -1,24 +1,32 @@
+import { useMemo } from 'react';
+import { calculateUserPayment } from '../../../../api/group-account/calculate-user-payment';
 import { UserProfile } from '../../../../types/components/profile';
-import {
-	CategoryId,
-	ReceiptItem,
-} from '../../../../types/group-account/group-account';
+import { CategoryItems } from '../../../../types/group-account/group-account';
 import FormContainer from '../../../forms/form-container';
-import UserPaymentContainer from '../../../user-payment/user-payment-container';
+import UserPaymentContainer from '../../detail/payment-result/payment-container/payment-container';
 
 interface UserPaymentSummaryProps {
 	onClose: () => void;
-	categoriesMap: Map<CategoryId, ReceiptItem[]>;
-	allUsers: UserProfile[];
+	userProfiles: UserProfile[];
+	items: CategoryItems;
 	host: UserProfile;
 }
 
 export default function UserPaymentSummary({
 	onClose,
-	categoriesMap,
-	allUsers,
+	userProfiles,
 	host,
+	items,
 }: UserPaymentSummaryProps) {
+	console.log('render');
+
+	const userPayments = useMemo(
+		() => calculateUserPayment(userProfiles, items),
+		[items],
+	);
+
+	console.log(userPayments);
+
 	return (
 		<FormContainer
 			submitName='확인'
@@ -26,12 +34,8 @@ export default function UserPaymentSummary({
 			onCancel={onClose}
 			title='그룹정산 명세서'
 		>
-			{categoriesMap && (
-				<UserPaymentContainer
-					categoriesMap={categoriesMap}
-					users={allUsers}
-					host={host}
-				/>
+			{userPayments && (
+				<UserPaymentContainer userPayments={userPayments} host={host} />
 			)}
 		</FormContainer>
 	);

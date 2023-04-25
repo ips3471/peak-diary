@@ -5,7 +5,7 @@ import NavButtonContainer from '../components/home/nav-button-container';
 export default function Home() {
 	return (
 		<BodyContainer>
-			<article className='grid grid-cols-4 h-full gap-1'>
+			<article className='grid grid-cols-4 h-full gap-2'>
 				<NavButtonContainer backgroundTailwindStyle="bg-[url('/public/img/logo-checklist.png')]">
 					<NavButton
 						title='체크리스트'

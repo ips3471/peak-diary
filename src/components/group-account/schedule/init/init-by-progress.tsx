@@ -39,6 +39,7 @@ export default function ScheduleByProgress({
 			state: {
 				item,
 				user: controller.user,
+				isDone: controller.state,
 			},
 		});
 	};
