@@ -1,10 +1,12 @@
+import { memo } from 'react';
+
 interface PaymentComponentItemValuesProps {
 	total: number;
 	equalValue: number;
 	isCoordinator: boolean;
 }
 
-export default function PaymentComponentItemValues({
+function PaymentComponentItemValues({
 	total,
 	isCoordinator,
 	equalValue,
@@ -26,3 +28,4 @@ export default function PaymentComponentItemValues({
 		</>
 	);
 }
+export default memo(PaymentComponentItemValues);

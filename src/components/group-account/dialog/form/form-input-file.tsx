@@ -47,7 +47,6 @@ export default function FormFile({ name, url, updateUrl }: FormFileProps) {
 					type='file'
 					name={name}
 					accept='image/*'
-					// value={url}
 					onChange={handleFileChange}
 				/>
 			</button>

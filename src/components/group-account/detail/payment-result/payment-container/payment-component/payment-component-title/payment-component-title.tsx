@@ -11,7 +11,8 @@ function PaymentComponentTitle({ name, isMe }: PaymentComponentTitleProps) {
 
 	return (
 		<h2 className='text-center text-lg mb-4 tracking-wider'>
-			<span className='text-grey underline'>{text}</span>의 정산내역
+			<span className={` ${isMe ? '' : 'text-grey underline'}`}>{text}</span>의
+			정산내역
 		</h2>
 	);
 }

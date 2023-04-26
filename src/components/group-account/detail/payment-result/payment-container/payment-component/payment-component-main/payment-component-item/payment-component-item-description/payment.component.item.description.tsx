@@ -1,10 +1,33 @@
+import { memo } from 'react';
+
 interface PaymentComponentItemDescriptionProps {
 	description: string;
+	url?: string;
+	id: string;
+	onOpenImage: (id: string) => void;
 }
 
-export default function PaymentComponentItemDescription({
+function PaymentComponentItemDescription({
 	description,
+	url,
+	id,
+	onOpenImage,
 }: PaymentComponentItemDescriptionProps) {
-	console.log('render');
-	return <>{description}</>;
+	console.log('render', description);
+	const handleClick = () => {
+		if (url) {
+			onOpenImage(id);
+		}
+	};
+	return (
+		<>
+			<p
+				onClick={handleClick}
+				className={`line-clamp-1 ${url ? 'underline text-brand/80' : ''}`}
+			>
+				{description}
+			</p>
+		</>
+	);
 }
+export default memo(PaymentComponentItemDescription);
