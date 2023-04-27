@@ -13,9 +13,7 @@ export default function FormSelectUsers({
 }: FormSelectUsersProps) {
 	return (
 		<Rounded isStretched={true} color='light'>
-			<span className='text-placeHolder text-sm w-20 self-center'>
-				정산대상
-			</span>
+			<span className='text-softBlack text-sm w-20 self-center'>정산대상</span>
 			<ul className='w-full scrollbar-hide flex justify-end overflow-x-scroll gap-2'>
 				{users.map(user => (
 					<FormSelectUserItem

@@ -4,10 +4,12 @@ import {
 	ScheduleProgress,
 } from '../types/group-account/group-account';
 import { NavItemType, NavMenuItem } from '../types/interfaces/global';
+import { NavItem } from '../types/navbar/navbar';
 
 type Controls = {
-	menu: {
+	navbar: {
 		items: NavMenuItem<NavItemType>[];
+		links: NavItem[];
 	};
 	receiptCategory: ReceiptCategory[];
 	checklist: {
@@ -33,7 +35,29 @@ type Controls = {
 };
 
 const controls: Controls = {
-	menu: {
+	navbar: {
+		links: [
+			{
+				id: 'home',
+				name: '홈',
+				url: '/',
+			},
+			{
+				id: 'personal',
+				name: '마이',
+				url: '/personal',
+			},
+			{
+				id: 'benefit',
+				name: '혜택',
+				url: '/benefit',
+			},
+			{
+				id: 'more',
+				name: '더보기',
+				url: '/more',
+			},
+		],
 		items: [
 			{
 				id: '1',

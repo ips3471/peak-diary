@@ -21,7 +21,7 @@ export default function FormSelectUserItem({
 			<input className='w-0' checked={check} type='checkbox' name={user.uid} />
 
 			<button
-				className='p-2'
+				className='p-2 text-sm'
 				type='button'
 				onClick={() => setCheck(prev => !prev)}
 			>

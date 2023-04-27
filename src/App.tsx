@@ -14,14 +14,14 @@ function App() {
 		<>
 			<div className='h-full w-full flex flex-col '>
 				<AuthProvider>
-					<Navbar menuOpen={menuOpen} toggleMenuOpen={toggleMenuOpen} />
 					<div
-						className={`transition-[filter] ${
+						className={` transition-[filter] ${
 							menuOpen && 'blur-sm'
 						} flex-1 overflow-hidden`}
 					>
 						<Outlet />
 					</div>
+					<Navbar menuOpen={menuOpen} toggleMenuOpen={toggleMenuOpen} />
 				</AuthProvider>
 			</div>
 		</>

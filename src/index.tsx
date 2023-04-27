@@ -57,6 +57,30 @@ const router = createBrowserRouter([
 				),
 			},
 			{
+				path: '/personal',
+				element: (
+					<ProtectedRoute requireAdmin={false}>
+						<div>personal page</div>
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: '/benefit',
+				element: (
+					<ProtectedRoute requireAdmin={false}>
+						<div>benefit page</div>
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: '/more',
+				element: (
+					<ProtectedRoute requireAdmin={false}>
+						<div>more page</div>
+					</ProtectedRoute>
+				),
+			},
+			{
 				path: '/group-account',
 				element: (
 					<ProtectedRoute requireAdmin={false}>

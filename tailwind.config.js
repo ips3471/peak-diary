@@ -4,6 +4,17 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
+				natural: {
+					100: '#ECFCFF',
+					200: '#E6F4F1',
+					300: '#00BFDC',
+					400: '#00A8D5',
+				},
+				navbar: {
+					wrapper: '#ffffff',
+					active: '#00A8D5',
+					disable: '#95B0B7',
+				},
 				placeHolder: '#b3b8bd',
 				brand: '#046241',
 				softBlack: '#55443a',
