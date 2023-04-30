@@ -4,7 +4,6 @@ import { useAuthContext } from '../context/AuthContext';
 import { MdOutlinePhotoCameraFront } from 'react-icons/md';
 import Rounded from '../components/forms/rounded';
 import { UserProfile } from '../types/components/profile';
-import NavigateHeader from '../components/main/header/navigate-header';
 
 type ProfileInputs = {
 	name: string;
@@ -41,10 +40,7 @@ export default function Profile() {
 	};
 
 	return (
-		<BodyContainer>
-			<header>
-				<NavigateHeader title='회원정보' />
-			</header>
+		<BodyContainer title='회원정보'>
 			<form className='flex flex-col' onSubmit={handleSubmit}>
 				<section className='text-right'>
 					<button type='submit'>저장</button>

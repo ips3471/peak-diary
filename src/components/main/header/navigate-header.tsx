@@ -11,7 +11,7 @@ export default function NavigateHeader({
 	url = '/',
 }: NavigateHeaderProps) {
 	return (
-		<div className='text-center pb-2'>
+		<div className='text-center bg-pureWhite pb- py-4 shadow-md'>
 			<Link
 				to={url}
 				className='text-main-brand  text-2xl absolute left-0 top-0 p-4'
