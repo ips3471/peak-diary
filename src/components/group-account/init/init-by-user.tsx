@@ -30,7 +30,7 @@ export default function InitGroupAccounts({ user }: GroupAccountProps) {
 	}, [selectedProgress]);
 
 	return (
-		<BodyContainer onBlur={openDialog}>
+		<BodyContainer title='그룹정산' onBlur={openDialog}>
 			<nav className='flex mb-1 justify-between text-center'>
 				{controls.groupAccount.header.progressStates.map(state => (
 					<ScheduleProgressStateBtn

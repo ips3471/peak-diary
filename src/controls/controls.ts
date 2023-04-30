@@ -5,8 +5,14 @@ import {
 } from '../types/group-account/group-account';
 import { NavItemType, NavMenuItem } from '../types/interfaces/global';
 import { NavItem } from '../types/navbar/navbar';
+import { HomeGridItem } from '../types/models/model';
 
 type Controls = {
+	home: {
+		content: {
+			gridItems: HomeGridItem[];
+		};
+	};
 	navbar: {
 		items: NavMenuItem<NavItemType>[];
 		links: NavItem[];
@@ -35,6 +41,26 @@ type Controls = {
 };
 
 const controls: Controls = {
+	home: {
+		content: {
+			gridItems: [
+				{
+					backgroundTailwindStyle: "bg-[url('/public/img/logo-checklist.png')]",
+					title: '체크리스트',
+					description: '한번더 확인!',
+					path: '/checklist',
+				},
+				{
+					backgroundTailwindStyle:
+						"bg-[url('/public/img/logo-group-account.png')]",
+					title: '그룹정산',
+					description: '정확하고 깔끔하게',
+					path: '/group-account',
+				},
+			],
+		},
+	},
+
 	navbar: {
 		links: [
 			{

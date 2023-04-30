@@ -5,6 +5,13 @@ export type FirebaseRoots = 'admins' | 'checklists' | 'groupAccounts' | 'users';
 
 export type UserDB = { db: Database; userRef: string };
 
+export type HomeGridItem = {
+	backgroundTailwindStyle: string;
+	title: string;
+	description: string;
+	path: string;
+};
+
 export interface ReceiptData {
 	id: string;
 	category: Category;

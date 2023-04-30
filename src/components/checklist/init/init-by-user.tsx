@@ -63,7 +63,7 @@ export default function InitChecklist({ tabController }: CheckListProps) {
 
 	return (
 		<>
-			<BodyContainer onBlur={dialog}>
+			<BodyContainer title='체크리스트' onBlur={dialog}>
 				<header className='flex sm:hidden w-full bg-red-50 text-center'>
 					<select
 						onChange={e => {

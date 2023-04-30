@@ -1,5 +1,4 @@
 import { Outlet } from 'react-router-dom';
-import Navbar from './components/navbar/Navbar';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -10,7 +9,6 @@ function App() {
 					<div className={` transition-[filter] flex-1 overflow-hidden`}>
 						<Outlet />
 					</div>
-					<Navbar />
 				</AuthProvider>
 			</div>
 		</>
