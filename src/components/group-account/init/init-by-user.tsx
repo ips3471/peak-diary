@@ -4,7 +4,7 @@ import {
 	User,
 } from '../../../types/group-account/group-account';
 import controls from '../../../controls/controls';
-import BodyContainer from '../../body/container';
+import BodyContainer from '../../body/main-container';
 import ScheduleProgressStateBtn from '../../buttons/tab/tab-item';
 import ScheduleByProgress from '../schedule/init/init-by-progress';
 import GroupAccountScheduleController from '../../../controller/group-account/group-account-schedule';

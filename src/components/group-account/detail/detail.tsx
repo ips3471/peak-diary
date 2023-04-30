@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import BodyContainer from '../../body/container';
+import BodyContainer from '../../body/main-container';
 import ReceiptsByCategory from './container/category-component/category-component';
 import controls from '../../../controls/controls';
 import {

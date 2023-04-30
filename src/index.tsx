@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Home from './pages/Home';
+import Home from './pages/home/Home';
 import NotFound from './pages/NotFound';
 import Admin from './pages/Admin';
 import ProtectedRoute from './pages/ProtectedRoute';
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
 				path: '/personal',
 				element: (
 					<ProtectedRoute requireAdmin={false}>
-						<div>personal page</div>
+						<NotFound />
 					</ProtectedRoute>
 				),
 			},
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
 				path: '/benefit',
 				element: (
 					<ProtectedRoute requireAdmin={false}>
-						<div>benefit page</div>
+						<NotFound />
 					</ProtectedRoute>
 				),
 			},
@@ -76,7 +76,7 @@ const router = createBrowserRouter([
 				path: '/more',
 				element: (
 					<ProtectedRoute requireAdmin={false}>
-						<div>more page</div>
+						<NotFound />
 					</ProtectedRoute>
 				),
 			},

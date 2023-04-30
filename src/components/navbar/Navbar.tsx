@@ -1,10 +1,7 @@
 import controls from '../../controls/controls';
 import LinksContainer from './links/links-container';
 
-interface NavbarProps {
-	toggleMenuOpen: () => void;
-	menuOpen: boolean;
-}
+interface NavbarProps {}
 
 const Navbar = ({}: NavbarProps) => {
 	console.log('render');

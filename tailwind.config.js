@@ -15,6 +15,13 @@ module.exports = {
 					active: '#00A8D5',
 					disable: '#95B0B7',
 				},
+				main: {
+					brand: '#00A8D5',
+					dark: '#324B51',
+					light: '#95B0B7',
+					point: '#C3A0E4',
+					accent: '#8D6CAC',
+				},
 				placeHolder: '#b3b8bd',
 				brand: '#046241',
 				softBlack: '#55443a',

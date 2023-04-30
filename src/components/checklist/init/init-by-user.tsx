@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { BsFillPencilFill } from 'react-icons/bs';
-import BodyContainer from '../../body/container';
+import BodyContainer from '../../body/main-container';
 import InitItemsByTab from '../items/init/init-by-tab';
 import { CheckListTabController } from '../../../controller/checklist/checklist-tab';
 import { CheckListItemController } from '../../../controller/checklist/checklist-item';
