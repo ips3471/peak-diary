@@ -4,6 +4,7 @@ import { useAuthContext } from '../context/AuthContext';
 import { MdOutlinePhotoCameraFront } from 'react-icons/md';
 import Rounded from '../components/forms/rounded';
 import { UserProfile } from '../types/components/profile';
+import { useNavigate } from 'react-router-dom';
 
 type ProfileInputs = {
 	name: string;
@@ -11,8 +12,14 @@ type ProfileInputs = {
 };
 
 export default function Profile() {
+	const [profileImage, setProfileImage] = useState('');
+	const { logout } = useAuthContext();
+	const navigate = useNavigate();
 	const { user, update } = useAuthContext();
-	const [input, setInput] = useState<ProfileInputs>();
+	const [input, setInput] = useState<ProfileInputs>({
+		account: '',
+		name: '',
+	});
 
 	useEffect(() => {
 		user &&
@@ -20,6 +27,16 @@ export default function Profile() {
 				name: user.name,
 				account: user.account,
 			});
+	}, []);
+
+	useEffect(() => {
+		user?.photoURL &&
+			fetch(user.photoURL)
+				.then(res => res.blob())
+				.then(image => {
+					const localUrl = URL.createObjectURL(image);
+					setProfileImage(localUrl);
+				});
 	}, []);
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +56,14 @@ export default function Profile() {
 		update(updated);
 	};
 
+	const handleLogout = () => {
+		const confirmed = window.confirm('정말로 로그아웃 하시겠습니까?');
+		if (confirmed) {
+			logout();
+			navigate('/welcome');
+		}
+	};
+
 	return (
 		<BodyContainer title='회원정보'>
 			<form className='flex flex-col' onSubmit={handleSubmit}>
@@ -48,7 +73,7 @@ export default function Profile() {
 				<section className='relative w-16 mb-3'>
 					<img
 						className='rounded-full'
-						src={user?.photoURL || process.env.PUBLIC_URL + 'logo192.png'}
+						src={profileImage || './img/profile-holder.svg'}
 					/>
 					<span className='absolute right-0 bottom-0 text-base border rounded-full bg-brand border-brand text-pureWhite p-1'>
 						<MdOutlinePhotoCameraFront />
@@ -78,6 +103,14 @@ export default function Profile() {
 					/>
 				</Rounded>
 			</form>
+			<section>
+				<button
+					onClick={handleLogout}
+					className='text-left bg-main-dark rounded-md p-2 text-pureWhite'
+				>
+					로그아웃
+				</button>
+			</section>
 		</BodyContainer>
 	);
 }
