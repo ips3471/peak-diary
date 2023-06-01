@@ -5,6 +5,7 @@ import { MdOutlinePhotoCameraFront } from 'react-icons/md';
 import Rounded from '../components/forms/rounded';
 import { UserProfile } from '../types/components/profile';
 import { useNavigate } from 'react-router-dom';
+import { useImage } from '../hooks/useImage';
 
 type ProfileInputs = {
 	name: string;
@@ -12,7 +13,6 @@ type ProfileInputs = {
 };
 
 export default function Profile() {
-	const [profileImage, setProfileImage] = useState('');
 	const { logout } = useAuthContext();
 	const navigate = useNavigate();
 	const { user, update } = useAuthContext();
@@ -29,15 +29,7 @@ export default function Profile() {
 			});
 	}, []);
 
-	useEffect(() => {
-		user?.photoURL &&
-			fetch(user.photoURL)
-				.then(res => res.blob())
-				.then(image => {
-					const localUrl = URL.createObjectURL(image);
-					setProfileImage(localUrl);
-				});
-	}, []);
+	const profileImage = useImage(user?.photoURL || './img/profile-holder.svg');
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { id, value } = e.currentTarget;
@@ -71,10 +63,7 @@ export default function Profile() {
 					<button type='submit'>저장</button>
 				</section>
 				<section className='relative w-16 mb-3'>
-					<img
-						className='rounded-full'
-						src={profileImage || './img/profile-holder.svg'}
-					/>
+					<img className='rounded-full' src={profileImage} />
 					<span className='absolute right-0 bottom-0 text-base border rounded-full bg-brand border-brand text-pureWhite p-1'>
 						<MdOutlinePhotoCameraFront />
 					</span>
