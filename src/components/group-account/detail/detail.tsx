@@ -63,7 +63,7 @@ export default function GroupAccountDetailPage({
 		<>
 			<BodyContainer onBlur={!!dialogTarget || displayResult}>
 				<div className='h-full rounded-lg overflow-y-scroll scrollbar-hide'>
-					<div className={`p-1 font-bold mb-2 flex items-center`}>
+					<div className={`font-bold mb-2 flex items-center`}>
 						<DetailHeader isDone={isFinished} title={title} />
 					</div>
 					{categoriesMap && !isFinished && (

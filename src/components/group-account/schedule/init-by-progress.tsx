@@ -1,13 +1,13 @@
 import { useEffect, useReducer } from 'react';
-import GroupAccountScheduleController from '../../../../controller/group-account/group-account-schedule';
-import { GroupAccountReducer } from '../../../../types/group-account/group-account';
-import groupAccountReducer from '../../../../reducer/group-account/groupAccount';
+import GroupAccountScheduleController from '../../../controller/group-account/group-account-schedule';
+import { GroupAccountReducer } from '../../../types/group-account/group-account';
+import groupAccountReducer from '../../../reducer/group-account/groupAccount';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { createPortal } from 'react-dom';
-import ScheduleForm, { FormInputs } from '../../dialog/form';
-import GroupAccountList from '../../group-account-list';
+import ScheduleForm, { FormInputs } from '../dialog/form';
+import GroupAccountList from './schedule-item/group-account-list';
 import { useNavigate } from 'react-router-dom';
-import { ScheduleData } from '../../../../types/models/model';
+import { ScheduleData } from '../../../types/models/model';
 
 interface ScheduleByProgressProps {
 	controller: GroupAccountScheduleController;
@@ -60,6 +60,7 @@ export default function ScheduleByProgress({
 			<ul>
 				{schedules.map(s => (
 					<GroupAccountList
+						key={s.id}
 						item={s}
 						onDelete={() => controller.deleteSchedule(s, dispatch)}
 						onPass={(item: ScheduleData) => {

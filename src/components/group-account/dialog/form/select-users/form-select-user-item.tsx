@@ -18,7 +18,13 @@ export default function FormSelectUserItem({
 				check ? 'bg-brand/90 text-pureWhite' : 'text-button_disabled'
 			} `}
 		>
-			<input className='w-0' checked={check} type='checkbox' name={user.uid} />
+			<input
+				className='w-0'
+				readOnly
+				checked={check}
+				type='checkbox'
+				name={user.uid}
+			/>
 
 			<button
 				className='p-2 text-sm'

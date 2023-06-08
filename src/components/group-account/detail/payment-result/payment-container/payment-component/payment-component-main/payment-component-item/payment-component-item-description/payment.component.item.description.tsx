@@ -23,7 +23,9 @@ function PaymentComponentItemDescription({
 		<>
 			<p
 				onClick={handleClick}
-				className={`line-clamp-1 ${url ? 'underline text-brand/80' : ''}`}
+				className={`line-clamp-1 ${
+					url ? 'underline text-brand/80' : ''
+				} cursor-pointer`}
 			>
 				{description}
 			</p>

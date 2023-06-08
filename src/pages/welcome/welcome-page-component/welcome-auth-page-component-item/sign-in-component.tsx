@@ -1,13 +1,22 @@
-import { Link } from 'react-router-dom';
-import InputText from '../../../../components/sign-in/form/input-text/input-text';
-import ButtonSubmit from '../../../../components/sign-in/form/button/button-submit';
+import { Link, useNavigate } from 'react-router-dom';
 import SignInDivider from '../../../../components/sign-in/divider/sign-in-divider';
 import ButtonSocialLogin from '../../../../components/sign-in/form/button/button-socialLogin';
+import { useAuthContext } from '../../../../context/AuthContext';
+import { SignInForm } from '../../../../types/sign-in/signIn';
+import WelcomeFormComponent from './welcome-form-component/welcome-form-component';
 
 interface SignInProps {}
 
 export default function SignInComponent({}: SignInProps) {
-	const handleSubmit = () => {};
+	const navigate = useNavigate();
+	const { loginByEmail, user } = useAuthContext();
+	if (user) {
+		navigate('/');
+	}
+
+	const handleSubmit = (form: SignInForm) => {
+		form && loginByEmail(form);
+	};
 	return (
 		<div className='relative bg-pureWhite py-16 shadow-md rounded-t-3xl flex-1'>
 			<div className='w-12 rounded-full left-4 top-4 absolute  overflow-hidden shadow-md'>
@@ -24,16 +33,7 @@ export default function SignInComponent({}: SignInProps) {
 			</header>
 			<main className='p-6'>
 				<section>
-					<form onSubmit={handleSubmit}>
-						<InputText name='email' label='e-mail' />
-						<InputText name='password' type='password' />
-					</form>
-				</section>
-				<section className='text-right mb-2 py-1 text-main-accent'>
-					<Link to={'/forgot'}>비밀번호를 찾으시나요?</Link>
-				</section>
-				<section>
-					<ButtonSubmit name='로그인' />
+					<WelcomeFormComponent type='sign-in' onSubmit={handleSubmit} />
 				</section>
 				<section className='flex text-main-dark/80'>
 					<SignInDivider />
